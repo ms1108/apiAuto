@@ -1,7 +1,5 @@
 package utils;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
@@ -19,12 +17,11 @@ public class PropertiesUtil {
         } catch (IOException e) {
         }
     }
-
-    public static String getProperty(String key) {
-        String value = props.getProperty(key.trim());
-        if (StringUtils.isBlank(value)) {
-            return null;
-        }
+    public static void set(String key, String value) {
+        props.setProperty(key, value);
+    }
+    public static String get(String key) {
+        String value = props.getProperty(key.trim(),"");
         return value.trim();
     }
 

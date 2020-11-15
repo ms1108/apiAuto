@@ -1,37 +1,41 @@
 package business.loginTest.service_constant;
 
-import base.*;
+import base.ApiMethod;
+import base.IServiceMap;
 import config.header.BaseHeaders;
 import config.header.DefaultHeaders;
 
-import java.util.Map;
-
 public enum LoginService implements IServiceMap {
-    Login("/login", "login"),
-    Config("/depend", "depend"),
-    Upload("/upload", ApiMethod.UPLOAD, "upload");
+    Login("/test", "business/login/login.json", "business/login"),
+    Config("/depend", "", "depend"),
+    Upload("/upload", ApiMethod.UPLOAD, "", "upload"),
+    List("/list", ApiMethod.GET, "", "list")
+    ;
 
-    LoginService(String uri, String des) {
-        this(uri, ApiMethod.POST, des);
+
+    LoginService(String uri, String jsonSchemaPath, String des) {
+        this(uri, ApiMethod.POST, jsonSchemaPath, des);
     }
 
-    LoginService(String uri, String des, Class<? extends BaseHeaders> headers) {
-        this(uri, ApiMethod.POST, des, headers);
+    LoginService(String uri, String jsonSchemaPath, String des, Class<? extends BaseHeaders> headers) {
+        this(uri, ApiMethod.POST, jsonSchemaPath, des, headers);
     }
 
-    LoginService(String uri, ApiMethod methodAndRequestType, String des) {
-        this(uri, methodAndRequestType, des, DefaultHeaders.class);
+    LoginService(String uri, ApiMethod methodAndRequestType, String jsonSchemaPath, String des) {
+        this(uri, methodAndRequestType, jsonSchemaPath, des, DefaultHeaders.class);
     }
 
-    LoginService(String uri, ApiMethod methodAndRequestType, String des, Class<? extends BaseHeaders> headers) {
+    LoginService(String uri, ApiMethod methodAndRequestType, String jsonSchemaPath, String des, Class<? extends BaseHeaders> headers) {
         this.uri = uri;
         this.methodAndRequestType = methodAndRequestType;
+        this.jsonSchemaPath = jsonSchemaPath;
         this.des = des;
         this.headers = headers;
     }
 
     private String uri;
     private ApiMethod methodAndRequestType;
+    private String jsonSchemaPath;
     private String des;
     private Class<? extends BaseHeaders> headers;
 
@@ -49,6 +53,11 @@ public enum LoginService implements IServiceMap {
     @Override
     public Class<? extends BaseHeaders> getHeaders() {
         return headers;
+    }
+
+    @Override
+    public String getJsonSchemaPath() {
+        return jsonSchemaPath;
     }
 
     @Override

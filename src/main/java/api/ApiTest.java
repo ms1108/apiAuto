@@ -3,11 +3,12 @@ package api;
 import base.BaseCase;
 import base.BaseData;
 import base.IServiceMap;
-import business.loginTest.service_constant.LoginService;
+import businessWf.loginWF.service_constant.LoginWFService;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
+import org.testng.Assert;
+import utils.RandomUtil;
 import utils.ReportUtil;
 
 import java.util.Map;
@@ -29,6 +30,8 @@ public class ApiTest {
     }
 
     public Response apiTest(RequestData requestData) {
+        //换行
+        ReportUtil.log("");
         if (requestData.getStepDes() == null) {
             ReportUtil.log("Des     : " + requestData.getDes());
         } else {
@@ -59,26 +62,35 @@ public class ApiTest {
         }
         //发送请求
         Response response = specification.request(requestData.getMethodAndRequestType().getApiMethod(), requestData.getUri());
-        ValidatableResponse validatableResponse = response.then();
-        ReportUtil.log("res     : " + response.getBody().asString());
 
-        //默认断言
-        if (requestData.isDefaultAssert()) {
-            requestData.getBaseAsserts().assets(response);
-        }
         //存储请求
         BaseData.req.put(requestData.getUri(), from(requestData.getParam()));
         //存储响应
         BaseData.res.put(requestData.getUri(), response);
 
-        String ContentTypeHeader = response.getHeader("Content-Typ");
+        //下载文件
+        String ContentTypeHeader = response.getHeader("Content-Type");
+        String res = response.getBody().asString();
         if (ContentTypeHeader != null && (ContentTypeHeader.contains("download")
                 || ContentTypeHeader.contains("octet-stream"))) {
-            String loadFilePath = System.getProperty("user.dir") + "/download";
-            writeFile(response.asInputStream(), loadFilePath);
+            String fileType = "";
+            String headerDisposition = response.getHeader("Content-disposition");
+            if (headerDisposition != null) {
+                fileType = headerDisposition.substring(headerDisposition.lastIndexOf("."), headerDisposition.length() - 1);
+            }
+            String contentPath = "src/main/resources/download/" + RandomUtil.getStringRandom() + fileType;
+            Assert.assertTrue(writeFile(response.getBody().asInputStream(), contentPath), "下载文件失败");
+            res = "{\"filePath\":\"" + contentPath + "\"}";
         }
+        ReportUtil.log("res     : " + res);
+
+        //断言
+        if (requestData.isOpenDefaultAssert() && requestData.getAssertMethod() != null) {
+            requestData.getAssertMethod().assets(requestData, response);
+        }
+
         //保存token
-        if (requestData.getUri().equals(LoginService.Login.getUri())
+        if (requestData.getUri().equals(LoginWFService.LoginWF.getUri())
                 && response.statusCode() == 200
                 && response.path(defaultAssertPath) == defaultAssertValue) {
             BaseData.token = response.path("data.token");

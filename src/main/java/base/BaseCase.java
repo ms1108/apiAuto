@@ -1,12 +1,15 @@
 package base;
 
 import api.ApiTest;
-import config.asserts.BaseAsserts;
-import config.asserts.DefaultSuccessAssert;
+import config.asserts.AssertMethod;
+import config.asserts.SuccessAssertDefault;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
+@Data
+@Accessors(chain = true)
 public class BaseCase extends ApiTest{
-    public String string2int;
-    public String int2string;
+    public String pathParam;
     public IServiceMap serverMap;
-    public BaseAsserts baseAsserts = new DefaultSuccessAssert();
+    public AssertMethod assertMethod = new SuccessAssertDefault();
 }

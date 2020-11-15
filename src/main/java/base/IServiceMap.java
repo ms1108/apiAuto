@@ -11,6 +11,8 @@ public interface IServiceMap {
 
     Class<? extends BaseHeaders>  getHeaders();
 
+    String getJsonSchemaPath();
+
     String getDes();
 
 }

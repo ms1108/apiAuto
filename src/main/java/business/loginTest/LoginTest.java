@@ -10,16 +10,18 @@ import config.asserts.SuccessAssertDefault;
 import org.testng.annotations.Test;
 
 public class LoginTest extends LoginBase {
+    @Test
+    public void annotationTest(){
+        //也可以传入包名
+        annotationTest(LoginCase.class);
+    }
     //更多断言方法http://testingpai.com/article/1599472747188
     @Test
     public void test1() {
-        //annotationTest(LoginCase.class);
         apiTest(new RequestData(new LoginCase().rightLoginCase())
                 .setStepDes("这是我的测试步骤")
                 .setAssertMethod(new SuccessAssertDefault()
-                        .setAssert(new BodyAssert("res","test success"))
-                        .setAssert(new BodyAssert("res","1")))
-        );
+                        .setAssert(new BodyAssert("res","test success"))));
                 //.then().body("res", equalTo("test success"));
 
         ////从响应中取值,常用于case类中

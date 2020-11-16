@@ -6,7 +6,7 @@ import config.header.BaseHeaders;
 import config.header.DefaultHeaders;
 
 public enum LoginService implements IServiceMap {
-    Login("/test", "business/login/login.json", "business/login"),
+    Login("/test", "jsonschema/login/login.json", "business/login"),
     Config("/depend", "", "depend"),
     Upload("/upload", ApiMethod.UPLOAD, "", "upload"),
     List("/list", ApiMethod.GET, "", "list")

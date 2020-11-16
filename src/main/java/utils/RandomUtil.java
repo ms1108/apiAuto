@@ -4,12 +4,12 @@ import java.util.Random;
 
 public class RandomUtil {
 
-    public static String getStringRandom() {
-        return getStringRandom(10);
+    public static String getString() {
+        return getString(10);
     }
 
     //随机相关
-    public static String getStringRandom(Integer length) {
+    public static String getString(Integer length) {
         String str = "zxcvbnmlkjhgfdsaqwertyuiopQWERTYUIOPASDFGHJKLZXCVBNMx1234567890";
         Random random = new Random();
         StringBuffer sb = new StringBuffer();
@@ -20,7 +20,7 @@ public class RandomUtil {
         return sb.toString();
     }
 
-    public static String getIntRandom() {
+    public static String getInt() {
         Random random = new Random();
         return String.valueOf(random.nextInt(2000000000) - 1000000000);
     }
@@ -28,25 +28,25 @@ public class RandomUtil {
     /**
      * 获取x到y内的随机一位数（包含x,y）
      */
-    public static int getIntRandom(int x, int y) {
+    public static int getInt(int x, int y) {
         if (x <= 0 || y <= 0 || x > y) {
             return 0;
         }
         return (int) (Math.random() * (y - x + 1)) + x;
     }
 
-    public static String getPhoneRandom() {
+    public static String getPhone() {
         String[] PhoneFirst = {"186", "187", "179", "178", "138", "139", "158", "159"};
         String PhoneEnd = String.valueOf(((int) ((Math.random() * 9) * 10000000)));
         String RandomFirst = PhoneFirst[(int) (Math.random() * 8)];
         return RandomFirst + PhoneEnd;
     }
 
-    public static String getChineseRandom() {
-        return getChineseRandom(5);
+    public static String getChinese() {
+        return getChinese(5);
     }
 
-    public static String getChineseRandom(int len) {
+    public static String getChinese(int len) {
         String chinese = "";
         StringBuilder sb = new StringBuilder(chinese);
         for (int i = 0; i < len; i++) {

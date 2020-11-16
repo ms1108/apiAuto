@@ -6,7 +6,7 @@ import businessWf.loginWF.logincase.LoginCase;
 import io.restassured.response.Response;
 
 public class LoginBase extends AnnotationTest {
-    public Response loginAdmin() {
+    public Response loginWFAdmin() {
         LoginCase loginCase = new LoginCase().loginCase();
         BaseData.currentLoginName = loginCase.username;
         BaseData.currentLoginPwd = loginCase.pwd;

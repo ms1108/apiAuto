@@ -17,10 +17,7 @@ public class BodyAssert extends AssertMethod {
     @Override
     public AssertMethod assets(RequestData requestData, Response response) {
         response.then().body(path, equalTo(expect));
-        AssertMethod assertMethod = getAssertMethod();
-        if (assertMethod != null) {
-            assertMethod.assets(requestData, response);
-        }
+        backCallAssert(requestData, response);
         return this;
     }
 }

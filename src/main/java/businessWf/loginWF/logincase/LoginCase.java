@@ -2,7 +2,7 @@ package businessWf.loginWF.logincase;
 
 import AES.AesCryptUtil;
 import base.BaseCase;
-import businessWf.loginWF.service_constant.LoginWFService;
+import businessWf.loginWF.serviceconstant.LoginWFService;
 
 import static utils.PropertiesUtil.get;
 

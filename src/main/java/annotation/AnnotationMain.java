@@ -8,5 +8,6 @@ public class AnnotationMain {
         AnnotationTest annotationTest = new AnnotationTest();
         //annotationTest.annotationTest(ListCase.class);
         annotationTest.annotationTest(LoginCase.class);
+        //annotationTest.annotationTest("business.loginTest.testcase");
     }
 }

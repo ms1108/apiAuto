@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSONPath;
 import config.asserts.AssertMethod;
 import config.asserts.ListSearchAssert;
 import lombok.SneakyThrows;
+import utils.ClassFinderUtil;
 import utils.RandomUtil;
 import utils.ReportUtil;
 import utils.StringUtil;
@@ -26,6 +27,26 @@ public class AnnotationTest extends ApiTest {
     private String rootPath = "";
     private BaseCase baseCase;
     private BaseCase baseCaseOld;
+
+    public void annotationTest(String scannedPackage) {
+        annotationTest(scannedPackage, null);
+    }
+
+    public void annotationTest(String scannedPackage, Class<? extends BaseCase> except) {
+        if (!BaseData.isOpenAnnotation) {
+            ReportUtil.log("------------------------------------------------注解测试已被关闭------------------------------------------------");
+            return;
+        }
+        ClassFinderUtil classFinderUtil = new ClassFinderUtil();
+        List<Class<? extends BaseCase>> scanned = classFinderUtil.scanned(scannedPackage);
+        if (except != null) {
+            scanned.remove(except);
+        }
+        for (Class<? extends BaseCase> aClass : scanned) {
+            annotationTest(aClass);
+        }
+
+    }
 
     @SneakyThrows
     public void annotationTest(Class<? extends BaseCase> baseCaseClass) {
@@ -56,7 +77,7 @@ public class AnnotationTest extends ApiTest {
 
     private void baseCaseField(Method method) {
         getRequestData(method);
-        Field[] fields = baseCase.getClass().getDeclaredFields();
+        Field[] fields = baseCase.getClass().getFields();
         fieldAnnotation(fields, method);
     }
 
@@ -70,7 +91,7 @@ public class AnnotationTest extends ApiTest {
         }
         for (Field field : fields) {
             if (field.isAnnotationPresent(NotNull.class)) {
-                NotNull annotation = field.getDeclaredAnnotation(NotNull.class);
+                NotNull annotation = field.getAnnotation(NotNull.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
                     String des = "类名:" + baseCase.getClass().getSimpleName() + ",字段名:" + field.getName() + ",输入null值校验";
                     fieldTest(method, field, annotation.fieldPath(), null, des, annotation.asserts().newInstance(), annotation.resetAssert());
@@ -78,7 +99,7 @@ public class AnnotationTest extends ApiTest {
                 }
             }
             if (field.isAnnotationPresent(NotEmpty.class)) {
-                NotEmpty annotation = field.getDeclaredAnnotation(NotEmpty.class);
+                NotEmpty annotation = field.getAnnotation(NotEmpty.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
                     String des = "类名:" + baseCase.getClass().getSimpleName() + ",字段名:" + field.getName() + ",空字符串校验";
                     fieldTest(method, field, annotation.fieldPath(), "", des, annotation.asserts().newInstance(), annotation.resetAssert());
@@ -86,17 +107,17 @@ public class AnnotationTest extends ApiTest {
                 }
             }
             if (field.isAnnotationPresent(Unique.class)) {
-                Unique annotation = field.getDeclaredAnnotation(Unique.class);
+                Unique annotation = field.getAnnotation(Unique.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
                     String des = "类名:" + baseCase.getClass().getSimpleName() + ",字段名:" + field.getName() + ",唯一性校验";
-                    String uniqueRandom = "Unique" + RandomUtil.getStringRandom(8);
+                    String uniqueRandom = "Unique" + RandomUtil.getString(8);
                     fieldTest(method, field, annotation.fieldPath(), uniqueRandom, des + ",数据准备", annotation.assertSuccess().newInstance(), annotation.resetAssert());
                     fieldTest(method, field, annotation.fieldPath(), uniqueRandom, des + ",已存在创建失败", annotation.assertFail().newInstance(), annotation.resetAssert());
 
                 }
             }
             if (field.isAnnotationPresent(Length.class)) {
-                Length annotation = field.getDeclaredAnnotation(Length.class);
+                Length annotation = field.getAnnotation(Length.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
                     int minLen = annotation.minLen();
                     int maxLen = annotation.maxLen();
@@ -105,14 +126,16 @@ public class AnnotationTest extends ApiTest {
                                     ",字段名:" + field.getName() +
                                     ",期望长度范围:" + minLen + "-" + maxLen +
                                     ",传入值长度:";
-                    fieldTest(method, field, annotation.fieldPath(), RandomUtil.getStringRandom(minLen), des + minLen, annotation.assertSuccess().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, annotation.fieldPath(), RandomUtil.getStringRandom(maxLen), des + maxLen, annotation.assertSuccess().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, annotation.fieldPath(), RandomUtil.getStringRandom(minLen - 1), des + (minLen - 1), annotation.assertFail().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, annotation.fieldPath(), RandomUtil.getStringRandom(maxLen + 1), des + (maxLen + 1), annotation.assertFail().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, annotation.fieldPath(), RandomUtil.getString(minLen), des + minLen, annotation.assertSuccess().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, annotation.fieldPath(), RandomUtil.getString(maxLen), des + maxLen, annotation.assertSuccess().newInstance(), annotation.resetAssert());
+                    if (minLen != 1) {
+                        fieldTest(method, field, annotation.fieldPath(), RandomUtil.getString(minLen - 1), des + (minLen - 1), annotation.assertFail().newInstance(), annotation.resetAssert());
+                    }
+                    fieldTest(method, field, annotation.fieldPath(), RandomUtil.getString(maxLen + 1), des + (maxLen + 1), annotation.assertFail().newInstance(), annotation.resetAssert());
                 }
             }
             if (field.isAnnotationPresent(Size.class)) {
-                Size annotation = field.getDeclaredAnnotation(Size.class);
+                Size annotation = field.getAnnotation(Size.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
                     int minNum = annotation.minNum();
                     int maxNum = annotation.maxNum();
@@ -129,7 +152,7 @@ public class AnnotationTest extends ApiTest {
                 }
             }
             if (field.isAnnotationPresent(StringToInt.class)) {
-                StringToInt annotation = field.getDeclaredAnnotation(StringToInt.class);
+                StringToInt annotation = field.getAnnotation(StringToInt.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
                     String des =
                             "类名:" + baseCase.getClass().getSimpleName() +
@@ -141,7 +164,7 @@ public class AnnotationTest extends ApiTest {
                 }
             }
             if (field.isAnnotationPresent(IntToString.class)) {
-                IntToString annotation = field.getDeclaredAnnotation(IntToString.class);
+                IntToString annotation = field.getAnnotation(IntToString.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
                     String des =
                             "类名:" + baseCase.getClass().getSimpleName() +
@@ -152,7 +175,7 @@ public class AnnotationTest extends ApiTest {
                 }
             }
             if (field.isAnnotationPresent(Search.class)) {
-                Search annotation = field.getDeclaredAnnotation(Search.class);
+                Search annotation = field.getAnnotation(Search.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
                     String des =
                             "类名:" + baseCase.getClass().getSimpleName() +
@@ -171,13 +194,13 @@ public class AnnotationTest extends ApiTest {
                 }
             }
             if (field.isAnnotationPresent(Chinese.class)) {
-                Chinese annotation = field.getDeclaredAnnotation(Chinese.class);
+                Chinese annotation = field.getAnnotation(Chinese.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
                     String des =
                             "类名:" + baseCase.getClass().getSimpleName() +
                                     ",字段名:" + field.getName() +
                                     ",中文字符测试,传入中文值:";
-                    String value = RandomUtil.getChineseRandom(annotation.chineseLen());
+                    String value = RandomUtil.getChinese(annotation.chineseLen());
                     fieldTest(method, field, annotation.fieldPath(), value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
                 }
             }

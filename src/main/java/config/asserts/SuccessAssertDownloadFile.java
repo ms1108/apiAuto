@@ -15,6 +15,7 @@ public class SuccessAssertDownloadFile extends AssertMethod {
         if (file.length() == 0) {
             Assert.fail("下载的文件大小为0");
         }
+        backCallAssert(requestData, response);
         return this;
     }
 }

@@ -6,7 +6,7 @@ import businessWf.loginWF.logincase.LoginCase;
 import org.testng.annotations.Test;
 
 public class LoginWF extends ApiTest {
-    @Test(priority = 1)
+    @Test
     public void login() {
         //apiTest(new RequestData(LoginWFService.Config,new BaseCase()));
         //apiTest(LoginWFService.Config,new BaseCase());

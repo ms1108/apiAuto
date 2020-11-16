@@ -35,10 +35,7 @@ public class BaseCaseAssert extends AssertMethod {
         data.setAssertMethod(assertMethod);
         apiTest(data);
 
-        AssertMethod assertMethod = getAssertMethod();
-        if (assertMethod != null) {
-            assertMethod.assets(requestData, response);
-        }
+        backCallAssert(requestData, response);
         return this;
     }
 }

@@ -4,8 +4,7 @@ import api.RequestData;
 import base.BaseCase;
 import base.BaseListCase;
 import business.user.service_constant.UserConstant;
-import business.user.service_constant.UserService;
-import com.alibaba.fastjson.annotation.JSONField;
+import business.user.service_constant.UserServiceTestCode;
 import io.restassured.response.Response;
 import utils.RandomUtil;
 
@@ -16,7 +15,7 @@ public class UserCase extends BaseCase {
     public Integer role;
 
     public UserCase() {
-        serverMap = UserService.ADD_USER;
+        serverMap = UserServiceTestCode.ADD_USER;
     }
 
     //连续发送的接口可以封装起来
@@ -28,12 +27,12 @@ public class UserCase extends BaseCase {
     public Response user(BaseCase baseCase) {
         //--此处还可以调用其他接口--
         apiTest(new RequestData(baseCase));
-        return apiTest(new RequestData(UserService.USER_LIST, new BaseListCase()));
+        return apiTest(new RequestData(UserServiceTestCode.USER_LIST, new BaseListCase()));
     }
 
     public UserCase addUser() {
-        name = RandomUtil.getStringRandom();
-        sex = RandomUtil.getStringRandom();
+        name = RandomUtil.getString();
+        sex = RandomUtil.getString();
         return this;
     }
 

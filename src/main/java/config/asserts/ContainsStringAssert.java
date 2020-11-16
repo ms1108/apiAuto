@@ -15,6 +15,7 @@ public class ContainsStringAssert extends AssertMethod{
     @Override
     public AssertMethod assets(RequestData requestData, Response response) {
         response.then().body(containsString(expect));
+        backCallAssert(requestData, response);
         return this;
     }
 }

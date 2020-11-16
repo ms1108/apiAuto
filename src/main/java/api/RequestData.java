@@ -80,7 +80,7 @@ public class RequestData {
     }
 
     public RequestData setAssertMethod(AssertMethod assertMethod) {
-        this.assertMethod = getAssertMethod().setAssert(assertMethod);
+        this.assertMethod = assertMethod;
         return this;
     }
 }

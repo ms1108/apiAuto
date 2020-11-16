@@ -28,11 +28,8 @@ public class SuccessAssertDefault extends AssertMethod {
             validatableResponse.body(matchesJsonSchemaInClasspath(requestData.getJsonSchemaPath()));
         }
 
-        //调用其他断言
-        AssertMethod assertMethod = getAssertMethod();
-        if (assertMethod != null) {
-            assertMethod.assets(requestData, response);
-        }
+        backCallAssert(requestData, response);
+
         return this;
     }
 }

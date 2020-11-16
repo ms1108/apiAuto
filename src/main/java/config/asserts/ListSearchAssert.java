@@ -35,10 +35,8 @@ public class ListSearchAssert extends AssertMethod {
 
         }
 
-        AssertMethod assertMethod = getAssertMethod();
-        if (assertMethod != null) {
-            assertMethod.assets(requestData, response);
-        }
+        backCallAssert(requestData, response);
+
         return this;
     }
 }

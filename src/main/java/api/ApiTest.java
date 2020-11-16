@@ -3,7 +3,7 @@ package api;
 import base.BaseCase;
 import base.BaseData;
 import base.IServiceMap;
-import businessWf.loginWF.service_constant.LoginWFService;
+import businessWf.loginWF.serviceconstant.LoginWFService;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -78,7 +78,7 @@ public class ApiTest {
             if (headerDisposition != null) {
                 fileType = headerDisposition.substring(headerDisposition.lastIndexOf("."), headerDisposition.length() - 1);
             }
-            String contentPath = "src/main/resources/download/" + RandomUtil.getStringRandom() + fileType;
+            String contentPath = "src/main/resources/download/" + RandomUtil.getString() + fileType;
             Assert.assertTrue(writeFile(response.getBody().asInputStream(), contentPath), "下载文件失败");
             res = "{\"filePath\":\"" + contentPath + "\"}";
         }

@@ -17,4 +17,12 @@ public abstract class AssertMethod extends ApiTest {
     }
 
     public abstract AssertMethod assets(RequestData requestData, Response response);
+
+    //调用其他断言对象
+    public void backCallAssert(RequestData requestData, Response response) {
+        if (assertMethod != null) {
+            assertMethod.assets(requestData, response);
+        }
+    }
+
 }

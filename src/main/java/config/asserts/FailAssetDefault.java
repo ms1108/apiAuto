@@ -24,6 +24,7 @@ public class FailAssetDefault extends AssertMethod {
         if (response.statusCode() == 200) {
             response.then().body(assertPath, not(equalTo(assertValue)));
         }
+        backCallAssert(requestData, response);
         return this;
     }
 }

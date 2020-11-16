@@ -1,6 +1,6 @@
 package businessWf.loginWF.logincase;
 
-import AES.AesCryptUtil;
+//import AES.AesCryptUtil;
 import base.BaseCase;
 import businessWf.loginWF.serviceconstant.LoginWFService;
 
@@ -17,7 +17,7 @@ public class LoginCase extends BaseCase {
 
     public LoginCase loginCase(){
         username = "admin";
-        pwd = AesCryptUtil.encryptTmp(get("g_loginPwd"));
+        //pwd = AesCryptUtil.encryptTmp(get("g_loginPwd"));
         isAdminPage =1;
         return this;
     }

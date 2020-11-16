@@ -1,0 +1,111 @@
+[{
+	"description": "0.测试",
+	"request": {
+		"uri": "/test",
+		"method": "post"
+	},
+	"response": {
+		"status": 200,
+		"headers": {
+			"Content-Type": "application/json;charset=utf-8"
+		},
+		"json": {
+			"code": 0,
+			"res": "test success",
+			"jsonSchema": ""
+		}
+	}
+}, {
+	"description": "1.depend",
+	"request": {
+		"uri": "/depend",
+		"method": "post",
+		"json": {
+			"c": {},
+			"b": {
+				"depend": "123"
+			}
+		}
+	},
+	"response": {
+		"status": 200,
+		"headers": {
+			"Content-Type": "application/json;charset=utf-8"
+		},
+		"json": {
+			"code": 0,
+			"res": {
+				"depend": "123"
+			}
+		}
+	}
+}, {
+	"description": "2.登陆",
+	"request": {
+		"uri": "/login",
+		"method": "post",
+		"json": {
+			"c": {
+
+			},
+			"b": {
+				"depend": "123",
+				"pwd": "Admin_12345",
+				"type": {
+					"role": {
+						"TypeIn": 1
+					}
+				}
+			}
+		}
+	},
+	"response": {
+		"status": 200,
+		"headers": {
+			"Content-Type": "application/json;charset=utf-8"
+		},
+		"json": {
+			"code": 0,
+			"res": "test success",
+			"data": {
+				"token": "myToken"
+			}
+		}
+	}
+}, {
+	"description": "3.上传",
+	"request": {
+		"uri": "/upload",
+		"method": "post"
+	},
+	"response": {
+		"status": 200,
+		"headers": {
+			"Content-Type": "application/json;charset=utf-8"
+		},
+		"json": {
+			"code": 0,
+			"res": "test success"
+		}
+	}
+}, {
+	"description": "4.列表",
+	"request": {
+		"uri": "/list",
+		"method": "get"
+	},
+	"response": {
+		"status": 200,
+		"headers": {
+			"Content-Type": "application/json;charset=utf-8"
+		},
+		"json": {
+			"code": 0,
+			"res": "test success",
+			"search":"admin",
+			"data": {
+				"rows": [1]
+			}
+		}
+	}
+}]

@@ -79,8 +79,4 @@ public class RequestData {
         return this;
     }
 
-    public RequestData setAssertMethod(AssertMethod assertMethod) {
-        this.assertMethod = assertMethod;
-        return this;
-    }
 }

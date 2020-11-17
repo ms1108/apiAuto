@@ -18,6 +18,4 @@ public @interface Chinese {
 
     String[] group() default "0";//当输入0时则不进行分组考虑
 
-    String fieldPath() default "";
-
 }

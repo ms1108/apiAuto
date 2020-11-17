@@ -94,7 +94,7 @@ public class AnnotationTest extends ApiTest {
                 NotNull annotation = field.getAnnotation(NotNull.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
                     String des = "类名:" + baseCase.getClass().getSimpleName() + ",字段名:" + field.getName() + ",输入null值校验";
-                    fieldTest(method, field, annotation.fieldPath(), null, des, annotation.asserts().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, null, des, annotation.asserts().newInstance(), annotation.resetAssert());
 
                 }
             }
@@ -102,8 +102,7 @@ public class AnnotationTest extends ApiTest {
                 NotEmpty annotation = field.getAnnotation(NotEmpty.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
                     String des = "类名:" + baseCase.getClass().getSimpleName() + ",字段名:" + field.getName() + ",空字符串校验";
-                    fieldTest(method, field, annotation.fieldPath(), "", des, annotation.asserts().newInstance(), annotation.resetAssert());
-
+                    fieldTest(method, field, "", des, annotation.asserts().newInstance(), annotation.resetAssert());
                 }
             }
             if (field.isAnnotationPresent(Unique.class)) {
@@ -111,8 +110,8 @@ public class AnnotationTest extends ApiTest {
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
                     String des = "类名:" + baseCase.getClass().getSimpleName() + ",字段名:" + field.getName() + ",唯一性校验";
                     String uniqueRandom = "Unique" + RandomUtil.getString(8);
-                    fieldTest(method, field, annotation.fieldPath(), uniqueRandom, des + ",数据准备", annotation.assertSuccess().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, annotation.fieldPath(), uniqueRandom, des + ",已存在创建失败", annotation.assertFail().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, uniqueRandom, des + ",数据准备", annotation.assertSuccess().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, uniqueRandom, des + ",已存在创建失败", annotation.assertFail().newInstance(), annotation.resetAssert());
 
                 }
             }
@@ -126,12 +125,12 @@ public class AnnotationTest extends ApiTest {
                                     ",字段名:" + field.getName() +
                                     ",期望长度范围:" + minLen + "-" + maxLen +
                                     ",传入值长度:";
-                    fieldTest(method, field, annotation.fieldPath(), RandomUtil.getString(minLen), des + minLen, annotation.assertSuccess().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, annotation.fieldPath(), RandomUtil.getString(maxLen), des + maxLen, annotation.assertSuccess().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, RandomUtil.getString(minLen), des + minLen, annotation.assertSuccess().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, RandomUtil.getString(maxLen), des + maxLen, annotation.assertSuccess().newInstance(), annotation.resetAssert());
                     if (minLen != 1) {
-                        fieldTest(method, field, annotation.fieldPath(), RandomUtil.getString(minLen - 1), des + (minLen - 1), annotation.assertFail().newInstance(), annotation.resetAssert());
+                        fieldTest(method, field, RandomUtil.getString(minLen - 1), des + (minLen - 1), annotation.assertFail().newInstance(), annotation.resetAssert());
                     }
-                    fieldTest(method, field, annotation.fieldPath(), RandomUtil.getString(maxLen + 1), des + (maxLen + 1), annotation.assertFail().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, RandomUtil.getString(maxLen + 1), des + (maxLen + 1), annotation.assertFail().newInstance(), annotation.resetAssert());
                 }
             }
             if (field.isAnnotationPresent(Size.class)) {
@@ -144,10 +143,10 @@ public class AnnotationTest extends ApiTest {
                                     ",字段名:" + field.getName() +
                                     ",期望大小范围:" + minNum + "-" + maxNum +
                                     ",传入值:";
-                    fieldTest(method, field, annotation.fieldPath(), minNum, des + minNum, annotation.assertSuccess().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, annotation.fieldPath(), maxNum, des + maxNum, annotation.assertSuccess().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, annotation.fieldPath(), minNum - 1, des + (minNum - 1), annotation.assertFail().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, annotation.fieldPath(), maxNum + 1, des + (maxNum + 1), annotation.assertFail().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, minNum, des + minNum, annotation.assertSuccess().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, maxNum, des + maxNum, annotation.assertSuccess().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, minNum - 1, des + (minNum - 1), annotation.assertFail().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, maxNum + 1, des + (maxNum + 1), annotation.assertFail().newInstance(), annotation.resetAssert());
 
                 }
             }
@@ -159,7 +158,7 @@ public class AnnotationTest extends ApiTest {
                                     ",字段名:" + field.getName() +
                                     ",类型测试,传入整形:";
                     Integer value = isInteger(field.get(baseCaseOld) + "") ? Integer.parseInt((String) field.get(baseCaseOld)) : 1;
-                    fieldTest(method, field, annotation.fieldPath(), value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
 
                 }
             }
@@ -171,7 +170,7 @@ public class AnnotationTest extends ApiTest {
                                     ",字段名:" + field.getName() +
                                     ",类型测试,传入字符:";
                     String value = field.get(baseCaseOld) + "";
-                    fieldTest(method, field, annotation.fieldPath(), value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
                 }
             }
             if (field.isAnnotationPresent(Search.class)) {
@@ -183,13 +182,13 @@ public class AnnotationTest extends ApiTest {
                                     ",列表搜索测试,";
                     Object value = getRequest(annotation.addDataBaseCase().newInstance().serverMap, annotation.searchValuePath());
                     String dimSearch = value.toString().substring(0, value.toString().length() - 1);
-                    fieldTest(method, field, annotation.fieldPath(), value,
+                    fieldTest(method, field, value,
                             des + value, new ListSearchAssert(annotation.listRootPath(), value.toString(), annotation.expectListLen()), annotation.resetAssert());
-                    fieldTest(method, field, annotation.fieldPath(), dimSearch,
+                    fieldTest(method, field, dimSearch,
                             des + "模糊搜索:" + dimSearch, new ListSearchAssert(annotation.listRootPath(), value.toString(), annotation.expectListLen()), annotation.resetAssert());
-                    fieldTest(method, field, annotation.fieldPath(), "",
+                    fieldTest(method, field, "",
                             des + "空值搜索", new ListSearchAssert(annotation.listRootPath(), annotation.expectListLen()), annotation.resetAssert());
-                    fieldTest(method, field, annotation.fieldPath(), null,
+                    fieldTest(method, field, null,
                             des + "搜索字段不传", new ListSearchAssert(annotation.listRootPath(), annotation.expectListLen()), annotation.resetAssert());
                 }
             }
@@ -201,7 +200,7 @@ public class AnnotationTest extends ApiTest {
                                     ",字段名:" + field.getName() +
                                     ",中文字符测试,传入中文值:";
                     String value = RandomUtil.getChinese(annotation.chineseLen());
-                    fieldTest(method, field, annotation.fieldPath(), value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
                 }
             }
 
@@ -214,12 +213,9 @@ public class AnnotationTest extends ApiTest {
     }
 
     @SneakyThrows
-    private void fieldTest(Method method, Field field, String path, Object value, String des, AssertMethod assertMethod, String retAssert) {
+    private void fieldTest(Method method, Field field, Object value, String des, AssertMethod assertMethod, String retAssert) {
         RequestData requestData = getRequestData(method);
         String targetPath = rootPath + field.getName();
-        if (StringUtil.isNotEmpty(path)) {
-            targetPath = path;
-        }
         requestData.setParam(replaceValue(requestData.getParam(), targetPath, value));
         requestData.setStepDes(des);
         if (StringUtil.isNotEmpty(retAssert)) {

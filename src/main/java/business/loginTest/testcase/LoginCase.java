@@ -18,7 +18,7 @@ import static utils.PropertiesUtil.get;
 @Data
 @Accessors(fluent = true)
 public class LoginCase extends BaseCase {
-    @Unique(assertFail = SuccessAssertDefault.class)
+    @Unique
     @NotNull
     @NotEmpty
     @Chinese

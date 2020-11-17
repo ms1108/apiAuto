@@ -3,7 +3,6 @@ package businessWf.user;
 import api.RequestData;
 import base.BaseCase;
 import base.LoginBase;
-import businessWf.user.testcase.AddUserCase;
 import businessWf.user.testcase.DownloadUserCase;
 import businessWf.user.service.UserService;
 import businessWf.user.testcase.UploadUserCase;
@@ -20,8 +19,8 @@ public class UserTest extends LoginBase {
     }
 
     @Test
-    public void DownloadUserCaseAnnotationTest() {
-        annotationTest(DownloadUserCase.class);
+    public void annotationTest() {
+        annotationTest("base.BaseCase");
     }
 
     @Test
@@ -37,14 +36,4 @@ public class UserTest extends LoginBase {
         apiTest(new UploadUserCase().setFilePath("src/main/resources/download/FIebXbhmOE.csv"));
     }
 
-    @Test
-    public void addUserCaseTest() {
-        //apiTest(new AddUserCase().addUserCase());
-        annotationTest(AddUserCase.class);
-    }
-
-    @Test
-    public void annotationByPackage(){
-        annotationTest("businessWf/user/testcase");
-    }
 }

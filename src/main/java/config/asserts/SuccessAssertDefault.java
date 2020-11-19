@@ -25,6 +25,8 @@ public class SuccessAssertDefault extends AssertMethod {
     public AssertMethod assets(RequestData requestData, Response response) {
         ValidatableResponse validatableResponse = response.then().statusCode(200).body(assertPath, equalTo(assertValue));
         if (StringUtil.isNotEmpty(requestData.getJsonSchemaPath())){
+            //jsonschema的模板生成：https://pypi.org/project/genson/
+            // 使用：https://blog.csdn.net/swinfans/article/details/89231247
             validatableResponse.body(matchesJsonSchemaInClasspath(requestData.getJsonSchemaPath()));
         }
 

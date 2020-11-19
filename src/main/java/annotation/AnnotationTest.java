@@ -86,10 +86,12 @@ public class AnnotationTest extends ApiTest {
         BeforeMethod beforeMethod;
         String group = "0";
         if (method != null) {
-            beforeMethod = method.getAnnotation(BeforeMethod.class);
+            //只获取当前类中的方法
+            beforeMethod = method.getDeclaredAnnotation(BeforeMethod.class);
             group = beforeMethod.group();
         }
         for (Field field : fields) {
+            field.setAccessible(true);
             if (field.isAnnotationPresent(NotNull.class)) {
                 NotNull annotation = field.getAnnotation(NotNull.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
@@ -203,7 +205,17 @@ public class AnnotationTest extends ApiTest {
                     fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
                 }
             }
-
+            if (field.isAnnotationPresent(Blank.class)) {
+                Blank annotation = field.getAnnotation(Blank.class);
+                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
+                    String des =
+                            "类名:" + baseCase.getClass().getSimpleName() +
+                                    ",字段名:" + field.getName() +
+                                    ",末尾加空格测试,传入中文值:";
+                    String value = RandomUtil.getString() + " ";
+                    fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
+                }
+            }
             if (field.getType().toString().contains("$")) {
                 rootPath = rootPath + field.getName() + ".";
                 inertClass(method, baseCase, field.getType().getSimpleName());
@@ -219,7 +231,7 @@ public class AnnotationTest extends ApiTest {
         requestData.setParam(replaceValue(requestData.getParam(), targetPath, value));
         requestData.setStepDes(des);
         if (StringUtil.isNotEmpty(retAssert)) {
-            AssertMethod retAssertMethod = (AssertMethod) baseCase.getClass().getDeclaredMethod(retAssert).invoke(baseCase);
+            AssertMethod retAssertMethod = (AssertMethod) baseCase.getClass().getMethod(retAssert).invoke(baseCase);
             requestData.setAssertMethod(retAssertMethod);
         } else {
             requestData.setAssertMethod(assertMethod);

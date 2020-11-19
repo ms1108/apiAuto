@@ -22,7 +22,9 @@ public class LoginCase extends BaseCase {
     @NotNull
     @NotEmpty
     @Chinese
+    @Blank
     public String loginName;
+    @Chinese
     @Length(minLen = 1, maxLen = 8, assertFail = SuccessAssertDefault.class)
     public String pwd;
     @NotNull

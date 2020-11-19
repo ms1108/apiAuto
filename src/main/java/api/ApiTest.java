@@ -33,13 +33,14 @@ public class ApiTest {
         //换行
         ReportUtil.log("");
         if (requestData.getStepDes() == null) {
-            ReportUtil.log("Des     : " + requestData.getDes());
+            ReportUtil.log("Des       :" + requestData.getDes());
         } else {
-            ReportUtil.log("StepDes : " + requestData.getStepDes());
+            ReportUtil.log("StepDes   :" + requestData.getStepDes());
         }
-        ReportUtil.log("Host    : " + requestData.getHost());
-        ReportUtil.log("Uri     : " + requestData.getUri());
-        ReportUtil.log("Method  : " + requestData.getMethodAndRequestType().getApiMethod());
+        ReportUtil.log("Host      :" + requestData.getHost());
+        ReportUtil.log("Uri       :" + requestData.getUri());
+        ReportUtil.log("Method    :" + requestData.getMethodAndRequestType().getApiMethod());
+        ReportUtil.log("ParamType :" + requestData.getMethodAndRequestType().getRequestType().getClass().getSimpleName());
 
         RestAssured.baseURI = requestData.getHost();
         RestAssured.useRelaxedHTTPSValidation();
@@ -47,14 +48,15 @@ public class ApiTest {
 
         Map<String, Object> headers = requestData.getHeaders();
         specification.headers(headers);
-        ReportUtil.log("Header  : " + headers);
+        ReportUtil.log("Header    :" + headers);
 
         specification = requestData.getMethodAndRequestType().getRequestType().requestBuild(specification, requestData);
-        ReportUtil.log("Param   : " + requestData.getParam());
+        ReportUtil.log("Param     :" + requestData.getParam());
 
         if (requestData.getSleep() != null && requestData.getSleep() != 0) {
             try {
-                ReportUtil.log("Sleep   : " + requestData.getSleep());
+                ReportUtil.log("Sleep     :" + requestData.getSleep());
+
                 TimeUnit.SECONDS.sleep(requestData.getSleep());
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -62,7 +64,6 @@ public class ApiTest {
         }
         //发送请求
         Response response = specification.request(requestData.getMethodAndRequestType().getApiMethod(), requestData.getUri());
-
         //存储请求
         BaseData.req.put(requestData.getUri(), from(requestData.getParam()));
         //存储响应
@@ -82,7 +83,7 @@ public class ApiTest {
             Assert.assertTrue(writeFile(response.getBody().asInputStream(), contentPath), "下载文件失败");
             res = "{\"filePath\":\"" + contentPath + "\"}";
         }
-        ReportUtil.log("res     : " + res);
+        ReportUtil.log("res       :" + res);
 
         //断言
         if (requestData.isOpenDefaultAssert() && requestData.getAssertMethod() != null) {

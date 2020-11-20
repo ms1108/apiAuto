@@ -10,7 +10,7 @@ import static utils.PropertiesUtil.get;
 
 public class DefaultHeaders implements BaseHeaders {
     @Override
-    public Map<String, Object> getBaseHeaders() {
+    public Map<String, Object> getHeaders() {
         Map<String, Object> map = new HashMap<>();
         map.put("content-type", "application/json");
         map.put("referer", get("g_host"));

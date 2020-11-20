@@ -9,8 +9,6 @@ public interface IServiceMap {
 
     ApiMethod getMethodAndRequestType();
 
-    Class<? extends BaseHeaders>  getHeaders();
-
     String getJsonSchemaPath();
 
     String getDes();

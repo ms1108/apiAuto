@@ -8,7 +8,6 @@ import config.asserts.AssertMethod;
 import config.asserts.FailAssetDefault;
 import config.header.BaseHeaders;
 import lombok.Data;
-import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import org.testng.Assert;
 
@@ -29,7 +28,7 @@ public class RequestData {
     private String stepDes;
 
     private Map<String, String> cookies;
-    private Class<? extends BaseHeaders> headers;
+    private BaseHeaders headers;
     private String param;
 
     private boolean isOpenDefaultAssert = true;
@@ -53,20 +52,16 @@ public class RequestData {
         this.methodAndRequestType = param.serverMap.getMethodAndRequestType();
         this.jsonSchemaPath = param.serverMap.getJsonSchemaPath();
         this.des = param.serverMap.getDes();
-        this.headers = param.serverMap.getHeaders();
         this.assertMethod = param.assertMethod;
+        this.headers = param.headers;
         param.serverMap = null;
         param.assertMethod = null;
+        param.headers = null;
         String jsonParam = JSON.toJSONString(param);
         if (jsonParam.contains("{\"$ref\":\"@\"}")) {
             Assert.fail("参数类中不能出现以get开头的方法，或者在该方法加上注解：@JSONField(serialize = false)");
         }
         this.param = jsonParam;
-    }
-
-    @SneakyThrows
-    public Map<String, Object> getHeaders() {
-        return headers.newInstance().getBaseHeaders();
     }
 
     public RequestData fail() {

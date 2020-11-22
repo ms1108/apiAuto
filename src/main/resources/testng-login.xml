@@ -5,12 +5,4 @@
             <class name="business.loginTest.LoginTest"/>
         </classes>
     </test>
-    <test name = "allTestsInAClass1" >
-        <classes>
-            <class name="business.loginTest.LoginTest"/>
-        </classes>
-    </test>
-<!--    <listeners>-->
-<!--        <listener class-name="utils.ExtentTestNGIReporterListener" />-->
-<!--    </listeners>-->
 </suite>

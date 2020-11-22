@@ -6,14 +6,15 @@ pipeline {
         }
     }
     stages {
+        stage('apiAction') {
+                 steps {
+                     sh 'java -jar ./moco/moco-runner-1.0.0-standalone.jar http -p 8899 -c ./moco/test.json'
+                 }
+             }
         stage('Build') {
             steps {
-                sh 'java -jar ./moco/moco-runner-1.0.0-standalone.jar http -p 8899 -c ./moco/test.json'
-
-            }
-             steps {
                 sh 'mvn clean test'
-             }
+            }
         }
     }
 }

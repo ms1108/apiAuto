@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('apiAction') {
             steps {
-             sh 'mvn clean test'
+             sh 'mvn clean test -D email_recipients=${email_recipients}'
             }
         }
     }

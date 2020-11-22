@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'java -jia ./moco/moco-runner-1.0.0-standalone.jar http -p 8899 -c ./moco/test.json'
+                sh 'java -jar ./moco/moco-runner-1.0.0-standalone.jar http -p 8899 -c ./moco/test.json'
                 sh 'mvn clean test'
             }
         }

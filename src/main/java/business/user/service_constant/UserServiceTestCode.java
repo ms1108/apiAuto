@@ -13,27 +13,18 @@ public enum UserServiceTestCode implements IServiceMap {
         this(uri, ApiMethod.POST, jsonSchemaPath, des);
     }
 
-    UserServiceTestCode(String uri, String jsonSchemaPath, String des, Class<? extends BaseHeaders> headers) {
-        this(uri, ApiMethod.POST, jsonSchemaPath, des, headers);
-    }
 
     UserServiceTestCode(String uri, ApiMethod methodAndRequestType, String jsonSchemaPath, String des) {
-        this(uri, methodAndRequestType, jsonSchemaPath, des, DefaultHeaders.class);
-    }
-
-    UserServiceTestCode(String uri, ApiMethod methodAndRequestType, String jsonSchemaPath, String des, Class<? extends BaseHeaders> headers) {
         this.uri = uri;
         this.methodAndRequestType = methodAndRequestType;
         this.jsonSchemaPath = jsonSchemaPath;
         this.des = des;
-        this.headers = headers;
     }
 
     private String uri;
     private ApiMethod methodAndRequestType;
     private String jsonSchemaPath;
     private String des;
-    private Class<? extends BaseHeaders> headers;
 
 
     @Override
@@ -47,11 +38,6 @@ public enum UserServiceTestCode implements IServiceMap {
     }
 
     @Override
-    public Class<? extends BaseHeaders> getHeaders() {
-        return headers;
-    }
-
-    @Override
     public String getJsonSchemaPath() {
         return jsonSchemaPath;
     }
@@ -60,5 +46,6 @@ public enum UserServiceTestCode implements IServiceMap {
     public String getDes() {
         return des;
     }
+
 
 }

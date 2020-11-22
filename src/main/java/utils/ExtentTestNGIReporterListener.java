@@ -14,16 +14,22 @@ import org.testng.xml.XmlSuite;
 import java.io.File;
 import java.util.*;
 
+import static base.MvnArgs.email_recipients;
+
 public class ExtentTestNGIReporterListener implements IReporter {
     //生成的路径以及文件名
     private static final String OUTPUT_FOLDER = "test-output/";
     private static final String FILE_NAME = "index.html";
 
     private ExtentReports extent;
+    private int allSuitePassSize = 0;
+    private int allSuiteFailSize = 0;
+    private int allSuiteSkipSize = 0;
 
     @Override
     public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
         init();
+
         boolean createSuiteNode = false;
         if (suites.size() > 1) {
             createSuiteNode = true;
@@ -60,6 +66,13 @@ public class ExtentTestNGIReporterListener implements IReporter {
                 } else {
                     resultNode = suiteTest;
                 }
+                //统计SuiteResult下的数据
+                int passSize = r.getTestContext().getPassedTests().size();
+                int failSize = r.getTestContext().getFailedTests().size();
+                int skipSize = r.getTestContext().getSkippedTests().size();
+                suitePassSize += passSize;
+                suiteFailSize += failSize;
+                suiteSkipSize += skipSize;
                 if (resultNode != null) {
                     resultNode.getModel().setName(suite.getName() + " : " + r.getTestContext().getName());
                     if (resultNode.getModel().hasCategory()) {
@@ -69,13 +82,6 @@ public class ExtentTestNGIReporterListener implements IReporter {
                     }
                     resultNode.getModel().setStartTime(r.getTestContext().getStartDate());
                     resultNode.getModel().setEndTime(r.getTestContext().getEndDate());
-                    //统计SuiteResult下的数据
-                    int passSize = r.getTestContext().getPassedTests().size();
-                    int failSize = r.getTestContext().getFailedTests().size();
-                    int skipSize = r.getTestContext().getSkippedTests().size();
-                    suitePassSize += passSize;
-                    suiteFailSize += failSize;
-                    suiteSkipSize += skipSize;
                     if (failSize > 0) {
                         resultNode.getModel().setStatus(Status.FAIL);
                     }
@@ -91,13 +97,20 @@ public class ExtentTestNGIReporterListener implements IReporter {
                     suiteTest.getModel().setStatus(Status.FAIL);
                 }
             }
-
+            allSuitePassSize += suitePassSize;
+            allSuiteFailSize += suiteFailSize;
+            allSuiteSkipSize += suiteSkipSize;
         }
-//        for (String s : Reporter.getOutput()) {
-//            extent.setTestRunnerOutput(s);
-//        }
 
         extent.flush();
+        if (StringUtil.isNotEmpty(PropertiesUtil.get(email_recipients))) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("<br/><br/>总测试用例数：" + (allSuitePassSize + allSuiteFailSize + allSuiteSkipSize));
+            sb.append("<br/>通过用例数：" + allSuitePassSize);
+            sb.append("<br/>失败用例数：" + allSuiteFailSize);
+            sb.append("<br/>跳过用例数：" + allSuiteSkipSize);
+            SendEmail.sendEmail(PropertiesUtil.get(email_recipients), "接口自动化测试报告", sb.toString(), OUTPUT_FOLDER + FILE_NAME);
+        }
     }
 
     private void init() {

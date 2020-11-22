@@ -11,18 +11,35 @@ import org.testng.annotations.Test;
 
 public class LoginTest extends LoginBase {
     @Test
-    public void annotationTest(){
+    public void annotationTest() {
         //也可以传入包名
         annotationTest(LoginCase.class);
     }
+
     //更多断言方法http://testingpai.com/article/1599472747188
     @Test
     public void test1() {
         apiTest(new RequestData(new LoginCase().rightLoginCase())
                 .setStepDes("这是我的测试步骤")
                 .setAssertMethod(new SuccessAssertDefault()
-                        .setAssert(new BodyAssert("res","test success"))));
-                //.then().body("res", equalTo("test success"));
+                        .setAssert(new BodyAssert("res", "test success"))));
+        //.then().body("res", equalTo("test success"));
+
+        ////从响应中取值,常用于case类中
+        //System.out.println("resValue " + BaseData.res.get(LoginService.Login.getUri()).path("code"));
+        //Integer s = getResponse(LoginService.Login, "code");
+        //System.out.println(s);
+        ////从请求中取值,常用于case类中
+        //System.out.println("reqValue " + BaseData.req.get(LoginService.Login.getUri()).get("loginName"));
+        //String s1 = getRequest(LoginService.Login,"loginName");
+        //System.out.println(s1);
+    }
+
+    @Test
+    public void test11() {
+        apiTest(new RequestData(new ConfigCase().dependCase()));
+        apiTest(new LoginCase().rightLoginCase());
+        //.then().body("res", equalTo("test success"));
 
         ////从响应中取值,常用于case类中
         //System.out.println("resValue " + BaseData.res.get(LoginService.Login.getUri()).path("code"));

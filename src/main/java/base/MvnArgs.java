@@ -8,12 +8,14 @@ public class MvnArgs {
     public static String g_loginName = "g_loginName";
     public static String g_loginPwd = "g_loginPwd";
     public static String is_open_annotation = "is_open_annotation";
+    public static String email_recipients = "email_recipients";
 
     public void mvnArgs() {
         String host = System.getProperty(g_host);
         String loginName = System.getProperty(g_loginName);
         String loginPwd = System.getProperty(g_loginPwd);
         String isOpenAnnotation = System.getProperty(is_open_annotation);
+        String emailRecipients = System.getProperty(email_recipients);
 
         if (!StringUtil.isEmpty(host)) {
             PropertiesUtil.set(g_host, host);
@@ -26,6 +28,9 @@ public class MvnArgs {
         }
         if (!StringUtil.isEmpty(isOpenAnnotation)) {
             BaseData.isOpenAnnotation = "true".equals(isOpenAnnotation);
+        }
+        if (!StringUtil.isEmpty(emailRecipients)) {
+            PropertiesUtil.set(email_recipients, emailRecipients);;
         }
     }
 }

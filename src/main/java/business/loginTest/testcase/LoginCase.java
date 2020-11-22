@@ -4,10 +4,7 @@ import annotation.*;
 import base.BaseCase;
 import business.loginTest.service_constant.LoginConstant;
 import business.loginTest.service_constant.LoginService;
-import config.asserts.AssertMethod;
-import config.asserts.BaseCaseAssert;
-import config.asserts.BodyAssert;
-import config.asserts.SuccessAssertDefault;
+import config.asserts.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -41,7 +38,6 @@ public class LoginCase extends BaseCase {
     public static class Type {
         @NotNull()
         public TypeIn role;
-        //public Integer role;
     }
 
     @Data
@@ -60,9 +56,9 @@ public class LoginCase extends BaseCase {
     public LoginCase rightLoginCase() {
         loginName = get("g_loginName");
         pwd = get("g_loginPwd");
-        //type = new Type().role(LoginConstant.IS_MENAGE);
         type = new Type().role(new TypeIn().TypeIn(LoginConstant.IS_MENAGE));
         depend = "123";
+        assertMethod = new SuccessAssert(new BodyAssert("res", "test success"));
         return this;
     }
 
@@ -77,7 +73,7 @@ public class LoginCase extends BaseCase {
         loginCase.depend = null;
         //从其他的请求参数中获取值
         //loginCase.depend = BaseData.req.get(LoginService.Config.getUri()).get("depend");
-        loginCase.depend = getRequest(LoginService.Config, "depend");
+        loginCase.depend = getRequest(LoginService.Config, "b.depend");
         return this;
     }
 

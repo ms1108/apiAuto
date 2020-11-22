@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <project.restassured.version>3.2.0</project.restassured.version>
+        <project.restassured.version>4.3.2</project.restassured.version>
         <g_run_suit_list>src/main/resources/testng-login.xml</g_run_suit_list>
     </properties>
 
@@ -61,6 +61,12 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.68</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
         </dependency>
     </dependencies>
 

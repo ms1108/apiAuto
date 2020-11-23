@@ -3,7 +3,7 @@ package api;
 import base.BaseCase;
 import base.BaseData;
 import base.IServiceMap;
-import businessWf.loginWF.serviceconstant.LoginWFService;
+import business.loginTest.service_constant.LoginService;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -91,10 +91,10 @@ public class ApiTest {
         }
 
         //保存token
-        if (requestData.getUri().equals(LoginWFService.LoginWF.getUri())
+        if (requestData.getUri().equals(LoginService.Login.getUri())
                 && response.statusCode() == 200
                 && response.path(defaultAssertPath) == defaultAssertValue) {
-            BaseData.token = response.path("data.token");
+            //BaseData.token = response.path("data.token");
         }
         return response;
     }

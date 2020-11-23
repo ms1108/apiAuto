@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class BaseCase extends ApiTest{
+public class BaseCase extends LoginBase {
     public String pathParam;
     public IServiceMap serverMap;
     public AssertMethod assertMethod = new SuccessAssertDefault();

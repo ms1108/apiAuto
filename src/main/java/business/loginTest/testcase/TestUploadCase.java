@@ -9,7 +9,7 @@ public class TestUploadCase extends UploadCase {
     }
 
     public TestUploadCase uploadCase() {
-        filePath = "src/main/resources/test1.json";
+        filePath = "moco/test.json";
         return this;
     }
 }

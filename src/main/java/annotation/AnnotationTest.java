@@ -4,6 +4,7 @@ import api.ApiTest;
 import api.RequestData;
 import base.BaseCase;
 import base.BaseData;
+import base.LoginBase;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
@@ -22,7 +23,7 @@ import java.util.regex.Pattern;
 
 import static base.BaseData.getRequest;
 
-public class AnnotationTest extends ApiTest {
+public class AnnotationTest extends LoginBase {
 
     private String rootPath = "";
     private BaseCase baseCase;

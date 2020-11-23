@@ -1,15 +1,7 @@
 package base;
 
-import annotation.AnnotationTest;
-import api.RequestData;
-import businessWf.loginWF.logincase.LoginCase;
-import io.restassured.response.Response;
+import api.ApiTest;
 
-public class LoginBase extends AnnotationTest {
-    public Response loginWFAdmin() {
-        LoginCase loginCase = new LoginCase().loginCase();
-        BaseData.currentLoginName = loginCase.username;
-        BaseData.currentLoginPwd = loginCase.pwd;
-        return apiTest(new RequestData(loginCase).offDefaultAssert());
-    }
+public class LoginBase extends ApiTest {
+
 }

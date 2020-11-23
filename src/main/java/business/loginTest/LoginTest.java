@@ -1,5 +1,6 @@
 package business.loginTest;
 
+import annotation.AnnotationTest;
 import api.RequestData;
 import base.LoginBase;
 import business.loginTest.testcase.ConfigCase;
@@ -9,7 +10,7 @@ import config.asserts.BodyAssert;
 import config.asserts.SuccessAssertDefault;
 import org.testng.annotations.Test;
 
-public class LoginTest extends LoginBase {
+public class LoginTest extends AnnotationTest {
     @Test
     public void annotationTest() {
         //也可以传入包名

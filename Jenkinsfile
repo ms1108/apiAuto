@@ -9,7 +9,7 @@ pipeline {
         stage('apiAction') {
             steps {
              sh 'mvn clean test -D g_host=${g_host} -D email_recipients=${email_recipients}'
-             echo '${ip addr show | grep inet | grep eth1 | awk -F'/' '{print $1}' | awk '{print $2}'}/test-output/index.html'
+             echo '/test-output/index.html'
             }
         }
     }

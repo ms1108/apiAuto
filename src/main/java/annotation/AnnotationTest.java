@@ -109,17 +109,7 @@ public class AnnotationTest extends CommandLogic {
                     fieldTest(method, field, "", des, annotation.asserts().newInstance(), annotation.resetAssert());
                 }
             }
-            if (field.isAnnotationPresent(Blank.class)) {
-                Blank annotation = field.getAnnotation(Blank.class);
-                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
-                    String des =
-                            "类名:" + baseCase.getClass().getSimpleName() +
-                                    ",字段名:" + field.getName() +
-                                    ",空格测试,传入空格";
-                    String value = " ";
-                    fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
-                }
-            }
+
             if (field.isAnnotationPresent(Unique.class)) {
                 Unique annotation = field.getAnnotation(Unique.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
@@ -218,7 +208,28 @@ public class AnnotationTest extends CommandLogic {
                     fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
                 }
             }
-
+            if (field.isAnnotationPresent(Blank.class)) {
+                Blank annotation = field.getAnnotation(Blank.class);
+                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
+                    String des =
+                            "类名:" + baseCase.getClass().getSimpleName() +
+                                    ",字段名:" + field.getName() +
+                                    ",空格测试,传入空格";
+                    String value = " ";
+                    fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
+                }
+            }
+            if (field.isAnnotationPresent(BlankEnd.class)) {
+                BlankEnd annotation = field.getAnnotation(BlankEnd.class);
+                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
+                    String des =
+                            "类名:" + baseCase.getClass().getSimpleName() +
+                                    ",字段名:" + field.getName() +
+                                    ",末尾空格测试,传入值:";
+                    String value = field.get(baseCaseOld) + " ";
+                    fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
+                }
+            }
             if (field.getType().toString().contains("$")) {
                 rootPath = rootPath + field.getName() + ".";
                 inertClass(method, baseCase, field.getType().getSimpleName());

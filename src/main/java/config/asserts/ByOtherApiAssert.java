@@ -8,17 +8,17 @@ import io.restassured.response.Response;
 /**
  * 调用其他接口进行断言
  */
-public class BaseCaseAssert extends AssertMethod {
+public class ByOtherApiAssert extends AssertMethod {
     private IServiceMap iServiceMap;
     private BaseCase baseCase;
     private AssertMethod assertMethod;
 
-    public BaseCaseAssert(BaseCase baseCase, AssertMethod assertMethod) {
+    public ByOtherApiAssert(BaseCase baseCase, AssertMethod assertMethod) {
         this.baseCase = baseCase;
         this.assertMethod = assertMethod;
     }
 
-    public BaseCaseAssert(IServiceMap iServiceMap, BaseCase baseCase, AssertMethod assertMethod) {
+    public ByOtherApiAssert(IServiceMap iServiceMap, BaseCase baseCase, AssertMethod assertMethod) {
         this.iServiceMap = iServiceMap;
         this.baseCase = baseCase;
         this.assertMethod = assertMethod;
@@ -32,10 +32,11 @@ public class BaseCaseAssert extends AssertMethod {
         } else {
             data = new RequestData(iServiceMap, baseCase);
         }
+        //调用其他接口进行断言
         data.setAssertMethod(assertMethod);
-        apiTest(data);
+        Response otherResponse = apiTest(data);
 
-        backCallAssert(requestData, response);
+        backCallAssert(data, otherResponse);
         return this;
     }
 }

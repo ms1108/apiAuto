@@ -5,7 +5,7 @@ import api.RequestData;
 import business.loginTest.testcase.ConfigCase;
 import business.loginTest.testcase.LoginCase;
 import business.loginTest.testcase.TestUploadCase;
-import config.asserts.BodyAssert;
+import config.asserts.EqualAssert;
 import config.asserts.SuccessAssertDefault;
 import org.testng.annotations.Test;
 
@@ -22,7 +22,7 @@ public class LoginTest extends AnnotationTest {
         apiTest(new RequestData(new LoginCase().rightLoginCase())
                 .setStepDes("这是我的测试步骤")
                 .setAssertMethod(new SuccessAssertDefault()
-                        .setAssert(new BodyAssert("res", "test success"))));
+                        .setAssert(new EqualAssert("res", "test success"))));
         //.then().body("res", equalTo("test success"));
 
         ////从响应中取值,常用于case类中

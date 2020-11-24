@@ -1,16 +1,16 @@
 package annotation;
 
 import config.asserts.AssertMethod;
-import config.asserts.FailAssetDefault;
+import config.asserts.SuccessAssert;
 
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.FIELD})
 @Inherited
-//末尾加上空格测试
-public @interface BlankEnd {
-    Class<? extends AssertMethod> asserts() default FailAssetDefault.class;
+//首末尾加上空格测试
+public @interface BlankWith {
+    Class<? extends AssertMethod> asserts() default SuccessAssert.class;
 
     String resetAssert() default "";
 

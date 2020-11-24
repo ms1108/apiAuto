@@ -31,6 +31,7 @@ public class LoginCase extends BaseCase {
     @Length(minLen = 1, maxLen = 8, assertFail = SuccessAssertDefault.class)
     @StringToInt
     @IntToString(resetAssert = "assertRightLogin")
+    @BlankWith
     public String depend;//依赖config接口返回的结果
 
     @Data
@@ -58,7 +59,7 @@ public class LoginCase extends BaseCase {
         pwd = get("g_loginPwd");
         type = new Type().role(new TypeIn().TypeIn(LoginConstant.IS_MENAGE));
         depend = "123";
-        assertMethod = new SuccessAssert(new BodyAssert("res", "test success"));
+        assertMethod = new SuccessAssert(new EqualAssert("res", "test success"));
         return this;
     }
 
@@ -86,7 +87,7 @@ public class LoginCase extends BaseCase {
 
     public AssertMethod assertRightLogin() {
         return new SuccessAssertDefault()
-                .setAssert(new BodyAssert("res", "test success"))
-                .setAssert(new BaseCaseAssert(new ConfigCase().dependCase(), new BodyAssert("res.depend", "123")));
+                .setAssert(new EqualAssert("res", "test success"))
+                .setAssert(new ByOtherApiAssert(new ConfigCase().dependCase(), new EqualAssert("res.depend", "123")));
     }
 }

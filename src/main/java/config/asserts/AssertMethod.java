@@ -20,6 +20,7 @@ public abstract class AssertMethod extends ApiTest {
 
     //调用其他断言对象
     public void backCallAssert(RequestData requestData, Response response) {
+        //判断是否还有后续断言
         if (assertMethod != null) {
             assertMethod.assets(requestData, response);
         }

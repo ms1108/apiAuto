@@ -24,7 +24,7 @@ public class ListSearchAssert extends AssertMethod {
 
     public AssertMethod assets(RequestData requestData, Response response) {
         ValidatableResponse validatableResponse = response.then();
-        //调用父类断言
+
         if (expectValue != null) {
             validatableResponse.body(containsString(expectValue))
                     .body(listRootPath + ".size()",

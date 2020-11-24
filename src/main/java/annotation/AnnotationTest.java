@@ -219,14 +219,14 @@ public class AnnotationTest extends CommandLogic {
                     fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
                 }
             }
-            if (field.isAnnotationPresent(BlankEnd.class)) {
-                BlankEnd annotation = field.getAnnotation(BlankEnd.class);
+            if (field.isAnnotationPresent(BlankWith.class)) {
+                BlankWith annotation = field.getAnnotation(BlankWith.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
                     String des =
                             "类名:" + baseCase.getClass().getSimpleName() +
                                     ",字段名:" + field.getName() +
                                     ",末尾空格测试,传入值:";
-                    String value = field.get(baseCaseOld) + " ";
+                    String value = " " + field.get(baseCaseOld) + " ";
                     fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
                 }
             }

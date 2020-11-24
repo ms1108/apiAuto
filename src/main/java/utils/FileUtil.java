@@ -2,6 +2,8 @@ package utils;
 
 import java.io.*;
 
+import static base.BaseData.tmpDir;
+
 public class FileUtil {
 
     public static boolean writeFile(InputStream is, String contentPath) {
@@ -54,7 +56,7 @@ public class FileUtil {
     }
 
     public static String getNewestFileContentPath() {
-        return getNewestFileContentPath("src/main/resources/download");
+        return getNewestFileContentPath(tmpDir);
     }
 
     public static String getNewestFileContentPath(String contentPath) {

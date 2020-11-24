@@ -1,6 +1,5 @@
 package annotation;
 
-import business.loginTest.testcase.ListCase;
 import business.loginTest.testcase.LoginCase;
 
 public class AnnotationMain {

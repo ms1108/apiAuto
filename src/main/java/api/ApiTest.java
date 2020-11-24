@@ -14,8 +14,7 @@ import utils.ReportUtil;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static base.BaseData.defaultAssertPath;
-import static base.BaseData.defaultAssertValue;
+import static base.BaseData.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.path.json.JsonPath.from;
 import static utils.FileUtil.writeFile;
@@ -79,7 +78,7 @@ public class ApiTest {
             if (headerDisposition != null) {
                 fileType = headerDisposition.substring(headerDisposition.lastIndexOf("."), headerDisposition.length() - 1);
             }
-            String contentPath = "src/main/resources/download/" + RandomUtil.getString() + fileType;
+            String contentPath = tmpDir + RandomUtil.getString() + fileType;
             Assert.assertTrue(writeFile(response.getBody().asInputStream(), contentPath), "下载文件失败");
             res = "{\"filePath\":\"" + contentPath + "\"}";
         }

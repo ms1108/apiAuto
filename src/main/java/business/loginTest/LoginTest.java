@@ -2,7 +2,6 @@ package business.loginTest;
 
 import annotation.AnnotationTest;
 import api.RequestData;
-import base.LoginBase;
 import business.loginTest.testcase.ConfigCase;
 import business.loginTest.testcase.LoginCase;
 import business.loginTest.testcase.TestUploadCase;

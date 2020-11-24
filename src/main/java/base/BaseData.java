@@ -4,9 +4,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class BaseData {
@@ -18,6 +16,7 @@ public class BaseData {
     public static String defaultAssertPath = "code";
     public static Object defaultAssertValue = 0;
     public static boolean isOpenAnnotation = true;
+    public static String tmpDir = "src/main/resources/download";
 
     static {
         MvnArgs mvnArgs = new MvnArgs();
@@ -30,7 +29,7 @@ public class BaseData {
             Assert.fail(iServiceMap.getUri() + ",接口无响应数据");
         }
 
-        T t = (T)response.path(path);
+        T t = (T) response.path(path);
         if (t == null) {
             Assert.fail("未获取到请求数据，接口：" + iServiceMap.getUri() + ",路径:" + path);
         }

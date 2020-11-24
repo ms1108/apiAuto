@@ -2,7 +2,6 @@ package utils;
 
 import base.BaseCase;
 import lombok.SneakyThrows;
-import org.testng.Assert;
 
 import java.io.File;
 import java.net.URL;

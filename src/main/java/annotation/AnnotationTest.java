@@ -3,7 +3,7 @@ package annotation;
 import api.RequestData;
 import base.BaseCase;
 import base.BaseData;
-import base.LoginBase;
+import base.CommandLogic;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 import static base.BaseData.getRequest;
 
-public class AnnotationTest extends LoginBase {
+public class AnnotationTest extends CommandLogic {
 
     private String rootPath = "";
     private BaseCase baseCase;
@@ -107,6 +107,17 @@ public class AnnotationTest extends LoginBase {
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
                     String des = "类名:" + baseCase.getClass().getSimpleName() + ",字段名:" + field.getName() + ",空字符串校验";
                     fieldTest(method, field, "", des, annotation.asserts().newInstance(), annotation.resetAssert());
+                }
+            }
+            if (field.isAnnotationPresent(Blank.class)) {
+                Blank annotation = field.getAnnotation(Blank.class);
+                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
+                    String des =
+                            "类名:" + baseCase.getClass().getSimpleName() +
+                                    ",字段名:" + field.getName() +
+                                    ",空格测试,传入空格";
+                    String value = " ";
+                    fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
                 }
             }
             if (field.isAnnotationPresent(Unique.class)) {
@@ -207,17 +218,7 @@ public class AnnotationTest extends LoginBase {
                     fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
                 }
             }
-            if (field.isAnnotationPresent(Blank.class)) {
-                Blank annotation = field.getAnnotation(Blank.class);
-                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
-                    String des =
-                            "类名:" + baseCase.getClass().getSimpleName() +
-                                    ",字段名:" + field.getName() +
-                                    ",末尾加空格测试,传入中文值:";
-                    String value = RandomUtil.getString() + " ";
-                    fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
-                }
-            }
+
             if (field.getType().toString().contains("$")) {
                 rootPath = rootPath + field.getName() + ".";
                 inertClass(method, baseCase, field.getType().getSimpleName());

@@ -72,8 +72,7 @@ public class LoginCase extends BaseCase {
         LoginCase loginCase = rightLoginCase();
         loginCase.depend = null;
         //从其他的请求参数中获取值
-        //loginCase.depend = BaseData.req.get(LoginService.Config.getUri()).get("depend");
-        loginCase.depend = getRequest(LoginService.Config, "b.depend");
+        loginCase.depend = getRequest(LoginService.Config, "depend");
         return this;
     }
 
@@ -81,7 +80,6 @@ public class LoginCase extends BaseCase {
         LoginCase loginCase = rightLoginCase();
         loginCase.depend = null;
         //从其他响应中获取值，需要事先调用相应接口
-        //loginCase.depend = BaseData.res.get(LoginService.Config.getUri()).path("res.depend");
         loginCase.depend = getResponse(LoginService.Config, "res.depend");
         return this;
     }

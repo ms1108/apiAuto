@@ -6,7 +6,7 @@ import base.BaseCase;
 import business.loginTest.service_constant.LoginService;
 
 public class ListCase extends BaseCase {
-    @Search(addDataBaseCase = LoginCase.class, searchValuePath = "b.loginName")
+    @Search(addDataBaseCase = LoginCase.class, searchValuePath = "loginName")
     public String search;
     public Integer page = 1;
     public Integer pageSize = 100;

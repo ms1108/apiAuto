@@ -46,7 +46,7 @@ public class ApiTest {
         RestAssured.useRelaxedHTTPSValidation();
         RequestSpecification specification = given();
 
-        Map<String, Object> headers = requestData.getHeaders().getHeaders();
+        Map<String, Object> headers = requestData.getHeaders().getHeaders(requestData);
         specification.headers(headers);
         ReportUtil.log("Header    :" + headers);
 

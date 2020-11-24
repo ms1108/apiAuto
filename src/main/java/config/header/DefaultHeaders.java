@@ -1,5 +1,6 @@
 package config.header;
 
+import api.RequestData;
 import base.BaseData;
 
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import static utils.PropertiesUtil.get;
 
 public class DefaultHeaders implements BaseHeaders {
     @Override
-    public Map<String, Object> getHeaders() {
+    public Map<String, Object> getHeaders(RequestData requestData) {
         Map<String, Object> map = new HashMap<>();
         map.put("content-type", "application/json");
         map.put("referer", get("g_host"));

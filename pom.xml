@@ -15,13 +15,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.ms</groupId>
-            <artifactId>AES</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/AES.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>${project.restassured.version}</version>

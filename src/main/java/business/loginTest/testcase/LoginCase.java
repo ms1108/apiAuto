@@ -5,6 +5,7 @@ import base.BaseCase;
 import business.loginTest.service_constant.LoginConstant;
 import business.loginTest.service_constant.LoginService;
 import config.asserts.*;
+import config.header.DefaultHeaders;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -31,7 +32,7 @@ public class LoginCase extends BaseCase {
     @Length(minLen = 1, maxLen = 8, assertFail = SuccessAssertDefault.class)
     @StringToInt
     @IntToString(resetAssert = "assertRightLogin")
-    @BlankWith
+    @BlankWith(group = "1")
     public String depend;//依赖config接口返回的结果
 
     @Data
@@ -62,13 +63,14 @@ public class LoginCase extends BaseCase {
         assertMethod = new SuccessAssertGather(new EqualAssert("res", "test success"));
         return this;
     }
-    @BeforeMethod
+    @BeforeMethod(group = "1")
     public LoginCase rightLoginCase1() {
         loginName = get("g_loginName");
         pwd = get("g_loginPwd");
         type = new Type().role(new TypeIn().TypeIn(LoginConstant.No_MENAGE));
         depend = "123456";
         assertMethod = new SuccessAssertGather(new EqualAssert("res", "test success"));
+        headers = new DefaultHeaders();
         return this;
     }
     public LoginCase errorLoginCase() {

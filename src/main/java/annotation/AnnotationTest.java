@@ -225,7 +225,7 @@ public class AnnotationTest extends CommandLogic {
                     String des =
                             "类名:" + baseCase.getClass().getSimpleName() +
                                     ",字段名:" + field.getName() +
-                                    ",末尾空格测试,传入值:";
+                                    ",首末尾空格测试,传入值:";
                     String value = " " + field.get(baseCaseOld) + " ";
                     fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
                 }

@@ -9,8 +9,7 @@ import config.header.DefaultHeaders;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import static base.BaseData.getRequest;
-import static base.BaseData.getResponse;
+import static base.BaseData.*;
 import static utils.PropertiesUtil.get;
 
 @Data
@@ -96,8 +95,10 @@ public class LoginCase extends BaseCase {
     }
 
     public AssertMethod assertRightLogin() {
-        return new SuccessAssertDefault()
-                .setAssert(new EqualAssert("res", "test success"))
-                .setAssert(new ByOtherApiAssert(new ConfigCase().dependCase(), new EqualAssert("res.depend", "123")));
+        return new SuccessAssertGather(new EqualAssert("res","test success"),
+                new ByOtherApiAssert(new ConfigCase().dependCase(), new EqualAssert("res.depend", "123")));
+        //return new SuccessAssertDefault()
+        //        .setAssert(new EqualAssert("res", "test success"))
+        //        .setAssert(new ByOtherApiAssert(new ConfigCase().dependCase(), new EqualAssert("res.depend", "123")));
     }
 }

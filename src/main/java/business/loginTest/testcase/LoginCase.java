@@ -59,10 +59,18 @@ public class LoginCase extends BaseCase {
         pwd = get("g_loginPwd");
         type = new Type().role(new TypeIn().TypeIn(LoginConstant.IS_MENAGE));
         depend = "123";
-        assertMethod = new SuccessAssert(new EqualAssert("res", "test success"));
+        assertMethod = new SuccessAssertGather(new EqualAssert("res", "test success"));
         return this;
     }
-
+    @BeforeMethod
+    public LoginCase rightLoginCase1() {
+        loginName = get("g_loginName");
+        pwd = get("g_loginPwd");
+        type = new Type().role(new TypeIn().TypeIn(LoginConstant.No_MENAGE));
+        depend = "123456";
+        assertMethod = new SuccessAssertGather(new EqualAssert("res", "test success"));
+        return this;
+    }
     public LoginCase errorLoginCase() {
         LoginCase loginCase = rightLoginCase();
         loginCase.pwd = "";

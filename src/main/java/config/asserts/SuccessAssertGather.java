@@ -3,15 +3,15 @@ package config.asserts;
 import api.RequestData;
 import io.restassured.response.Response;
 
-public class SuccessAssert extends AssertMethod {
+public class SuccessAssertGather extends AssertMethod {
 
     private AssertMethod assertMethod;
 
-    public SuccessAssert(AssertMethod... assertMethods) {
+    public SuccessAssertGather(AssertMethod... assertMethods) {
         assertGather(new SuccessAssertDefault(), assertMethods);
     }
 
-    public SuccessAssert(SuccessAssertDefault successAssertDefault, AssertMethod... assertMethods) {
+    public SuccessAssertGather(SuccessAssertDefault successAssertDefault, AssertMethod... assertMethods) {
         assertGather(successAssertDefault, assertMethods);
     }
 

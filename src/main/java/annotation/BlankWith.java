@@ -1,7 +1,7 @@
 package annotation;
 
 import config.asserts.AssertMethod;
-import config.asserts.SuccessAssert;
+import config.asserts.SuccessAssertDefault;
 
 import java.lang.annotation.*;
 
@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Inherited
 //首末尾加上空格测试
 public @interface BlankWith {
-    Class<? extends AssertMethod> asserts() default SuccessAssert.class;
+    Class<? extends AssertMethod> asserts() default SuccessAssertDefault.class;
 
     String resetAssert() default "";
 

@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('apiAction') {
             steps {
-             sh 'mvn clean test -D g_host=${g_host} -D email_recipients=${email_recipients}'
+             sh 'mvn clean test -D g_host=${g_host} -D email_recipients=${email_recipients} -D g_run_suit_list=src/main/resources/testng-login.xml'
             }
         }
     }

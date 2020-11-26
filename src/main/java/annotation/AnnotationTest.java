@@ -57,7 +57,6 @@ public class AnnotationTest extends CommandLogic {
             return;
         }
         baseCase = baseCaseClass.newInstance();
-        baseCase.assertMethod = null;
         Method[] methods = baseCaseClass.getDeclaredMethods();
         List<Method> beforeMethod = new ArrayList<>();
         for (Method method : methods) {
@@ -116,7 +115,7 @@ public class AnnotationTest extends CommandLogic {
                     String des = "类名:" + baseCase.getClass().getSimpleName() + ",字段名:" + field.getName() + ",唯一性校验";
                     String uniqueRandom = "Unique" + RandomUtil.getString(8);
                     fieldTest(method, field, uniqueRandom, des + ",数据准备", annotation.assertSuccess().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, uniqueRandom, des + ",已存在创建失败", annotation.assertFail().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, uniqueRandom, des + ",数据已存在创建失败", annotation.assertFail().newInstance(), annotation.resetAssert());
 
                 }
             }

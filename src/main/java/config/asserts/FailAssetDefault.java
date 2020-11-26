@@ -9,12 +9,12 @@ import static org.hamcrest.CoreMatchers.not;
 
 public class FailAssetDefault extends AssertMethod {
     private String assertPath = BaseData.defaultAssertPath;
-    private String assertValue = BaseData.defaultAssertPath;
+    private Object assertValue = BaseData.defaultAssertValue;
 
     public FailAssetDefault() {
     }
 
-    public FailAssetDefault(String assertPath, String assertValue) {
+    public FailAssetDefault(String assertPath, Object assertValue) {
         this.assertPath = assertPath;
         this.assertValue = assertValue;
     }

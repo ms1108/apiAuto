@@ -1,7 +1,7 @@
 package business.loginTest.testcase;
 
-import annotation.BeforeClass;
-import annotation.Search;
+import annotation.annotation.BeforeClassRun;
+import annotation.annotation.Search;
 import base.BaseCase;
 import business.loginTest.service_constant.LoginService;
 
@@ -15,7 +15,7 @@ public class ListCase extends BaseCase {
         serverMap = LoginService.List;
     }
 
-    @BeforeClass
+    @BeforeClassRun
     public void beforeClass() {
         apiTest(new LoginCase().rightLoginCase());
         apiTest(new LoginCase().rightLoginCase());

@@ -10,6 +10,7 @@ import io.restassured.specification.RequestSpecification;
 import org.testng.Assert;
 import utils.RandomUtil;
 import utils.ReportUtil;
+import utils.StringUtil;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +32,7 @@ public class ApiTest {
     public Response apiTest(RequestData requestData) {
         //换行
         ReportUtil.log("");
-        if (requestData.getStepDes() == null) {
+        if (StringUtil.isEmpty(requestData.getStepDes())) {
             ReportUtil.log("Des       :" + requestData.getDes());
         } else {
             ReportUtil.log("StepDes   :" + requestData.getStepDes());
@@ -85,7 +86,7 @@ public class ApiTest {
         ReportUtil.log("res       :" + res);
 
         //断言
-        if (requestData.isOpenDefaultAssert() && requestData.getAssertMethod() != null) {
+        if (requestData.isOpenAssert() && requestData.getAssertMethod() != null) {
             requestData.getAssertMethod().assets(requestData, response);
         }
 

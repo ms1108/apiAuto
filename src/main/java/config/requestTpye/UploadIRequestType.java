@@ -8,7 +8,7 @@ import lombok.SneakyThrows;
 import java.io.File;
 import java.util.Map;
 
-public class UploadRequestType implements RequestType {
+public class UploadIRequestType implements IRequestType {
     @SneakyThrows
     @Override
     public RequestSpecification requestBuild(RequestSpecification specification, RequestData requestData) {

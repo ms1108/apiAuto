@@ -1,7 +1,6 @@
-package annotation;
+package annotation.annotation;
 
 import config.asserts.AssertMethod;
-import config.asserts.FailAssetDefault;
 import config.asserts.SuccessAssertDefault;
 
 import java.lang.annotation.*;
@@ -9,14 +8,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.FIELD})
 @Inherited
-public @interface Size {
-    int maxNum() default 1;
+public @interface Chinese {
 
-    int minNum() default 1;
+    int chineseLen() default 5;
 
-    Class<? extends AssertMethod> assertSuccess() default SuccessAssertDefault.class;
-
-    Class<? extends AssertMethod> assertFail() default FailAssetDefault.class;
+    Class<? extends AssertMethod> asserts() default SuccessAssertDefault.class;
 
     String resetAssert() default "";
 

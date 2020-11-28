@@ -2,8 +2,6 @@ package business.user.service_constant;
 
 import base.ApiMethod;
 import base.IServiceMap;
-import config.header.BaseHeaders;
-import config.header.DefaultHeaders;
 
 public enum UserServiceTestCode implements IServiceMap {
     ADD_USER("/user/add", "", "user"),

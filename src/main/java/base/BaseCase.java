@@ -2,7 +2,7 @@ package base;
 
 import config.asserts.AssertMethod;
 import config.asserts.SuccessAssertDefault;
-import config.header.BaseHeaders;
+import config.header.IHeaders;
 import config.header.DefaultHeaders;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -13,5 +13,5 @@ public class BaseCase extends CommandLogic {
     public String pathParam;
     public IServiceMap serverMap;
     public AssertMethod assertMethod = new SuccessAssertDefault();
-    public BaseHeaders headers = new DefaultHeaders();
+    public IHeaders headers = new DefaultHeaders();
 }

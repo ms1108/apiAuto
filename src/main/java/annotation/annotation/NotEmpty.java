@@ -1,4 +1,4 @@
-package annotation;
+package annotation.annotation;
 
 import config.asserts.AssertMethod;
 import config.asserts.FailAssetDefault;

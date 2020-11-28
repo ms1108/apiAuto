@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import static utils.PropertiesUtil.get;
 
-public class DefaultHeaders implements BaseHeaders {
+public class DefaultHeaders implements IHeaders {
     @Override
     public Map<String, Object> getHeaders(RequestData requestData) {
         Map<String, Object> map = new HashMap<>();

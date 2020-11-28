@@ -1,4 +1,4 @@
-package annotation;
+package annotation.annotation;
 
 import config.asserts.AssertMethod;
 import config.asserts.FailAssetDefault;
@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.FIELD})
 @Inherited
-public @interface NotNull {
+public @interface StringToInt {
 
     Class<? extends AssertMethod> asserts() default FailAssetDefault.class;
 

@@ -1,4 +1,4 @@
-package annotation;
+package annotation.annotation;
 
 import config.asserts.AssertMethod;
 import config.asserts.FailAssetDefault;
@@ -9,7 +9,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.FIELD})
 @Inherited
-public @interface Unique {
+public @interface Length {
+    int maxLen() default 1;
+
+    int minLen() default 1;
 
     Class<? extends AssertMethod> assertSuccess() default SuccessAssertDefault.class;
 

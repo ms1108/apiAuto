@@ -1,4 +1,4 @@
-package annotation;
+package annotation.annotation;
 
 
 import java.lang.annotation.*;
@@ -6,6 +6,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.METHOD})
 @Inherited
-public @interface BeforeMethod {
+public @interface BeforeMethodRun {
     String group() default "0";
 }

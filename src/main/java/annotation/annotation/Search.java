@@ -1,9 +1,6 @@
-package annotation;
+package annotation.annotation;
 
 import base.BaseCase;
-import base.IServiceMap;
-import config.asserts.AssertMethod;
-import config.asserts.SuccessAssertDefault;
 
 import java.lang.annotation.*;
 

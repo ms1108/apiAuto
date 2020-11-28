@@ -4,16 +4,16 @@ import config.requestTpye.*;
 import lombok.SneakyThrows;
 
 public enum ApiMethod {
-    POST("post", BodyRequestType.class),
-    POST_FORM("post", FormRequestType.class),
-    GET("get", QueryRequestType.class),
-    GET_PATH("get", PathRequestType.class),
-    UPLOAD("post", UploadRequestType.class);
+    POST("post", BodyIRequestType.class),
+    POST_FORM("post", FormIRequestType.class),
+    GET("get", QueryIRequestType.class),
+    GET_PATH("get", PathIRequestType.class),
+    UPLOAD("post", UploadIRequestType.class);
 
     private String apiMethod;
-    private Class<? extends RequestType> requestType;
+    private Class<? extends IRequestType> requestType;
 
-    ApiMethod(String method, Class<? extends RequestType> requestType) {
+    ApiMethod(String method, Class<? extends IRequestType> requestType) {
         this.apiMethod = method;
         this.requestType = requestType;
     }
@@ -23,7 +23,7 @@ public enum ApiMethod {
     }
 
     @SneakyThrows
-    public RequestType getRequestType() {
+    public IRequestType getRequestType() {
         return requestType.newInstance();
     }
 }

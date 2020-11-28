@@ -1,6 +1,7 @@
 package business.loginTest.testcase;
 
-import annotation.*;
+import annotation.annotation.*;
+import api.RequestData;
 import base.BaseCase;
 import business.loginTest.service_constant.LoginConstant;
 import business.loginTest.service_constant.LoginService;
@@ -28,7 +29,6 @@ public class LoginCase extends BaseCase {
     public String pwd;
 
     @NotNull(asserts = SuccessAssertDefault.class)
-    @Size(minNum = 0, maxNum = 10, assertFail = SuccessAssertDefault.class)
     public Type type;
 
     @NotNull(asserts = SuccessAssertDefault.class)
@@ -44,6 +44,7 @@ public class LoginCase extends BaseCase {
     @Accessors(fluent = true)
     public static class Type {
         @NotNull(asserts = SuccessAssertDefault.class)
+        @Range(maxNum = "10", minInfinite = true, assertFail = SuccessAssertDefault.class)
         public TypeIn role;
     }
 
@@ -51,7 +52,7 @@ public class LoginCase extends BaseCase {
     @Accessors(fluent = true)
     public static class TypeIn {
         @NotNull(asserts = SuccessAssertDefault.class)
-        @Size(minNum = 0, maxNum = 10, assertFail = SuccessAssertDefault.class)
+        @Range(minNum = "0.1", maxNum = "1", floatValue = "0.1", assertFail = SuccessAssertDefault.class)//测试范围(0,1]
         public Integer TypeIn;
     }
 
@@ -59,7 +60,12 @@ public class LoginCase extends BaseCase {
         serverMap = LoginService.Login;
     }
 
-    @BeforeMethod
+    @BeforeClassRun
+    public void dependBeforeClass() {
+        apiTest(new RequestData(new ConfigCase().dependCase()));
+    }
+
+    @BeforeMethodRun
     public LoginCase rightLoginCase() {
         loginName = get("g_loginName");
         pwd = get("g_loginPwd");
@@ -69,7 +75,7 @@ public class LoginCase extends BaseCase {
         return this;
     }
 
-    @BeforeMethod(group = "1")
+    @BeforeMethodRun(group = "1")
     public LoginCase rightLoginCase1() {
         loginName = get("g_loginName");
         pwd = get("g_loginPwd");
@@ -87,9 +93,9 @@ public class LoginCase extends BaseCase {
         return this;
     }
 
+    @AutoTest(des = "依赖测试")
     public LoginCase dependCase() {
         LoginCase loginCase = rightLoginCase();
-        loginCase.depend = null;
         //从其他的请求参数中获取值
         loginCase.depend = getRequest(LoginService.Config, "depend");
         return this;

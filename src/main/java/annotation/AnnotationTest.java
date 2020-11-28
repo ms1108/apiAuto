@@ -1,5 +1,6 @@
 package annotation;
 
+import annotation.annotation.*;
 import api.RequestData;
 import base.BaseCase;
 import base.BaseData;
@@ -17,6 +18,7 @@ import utils.StringUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,9 +28,9 @@ import static base.BaseData.getRequest;
 
 public class AnnotationTest extends CommandLogic {
 
-    private String rootPath = "";
-    private BaseCase baseCase;
-    private BaseCase baseCaseOld;
+    public String rootPath = "";
+    public BaseCase baseCase;
+    public BaseCase baseCaseOld;
 
     public void annotationTest(String scannedPackage) {
         annotationTest(scannedPackage, null);
@@ -59,13 +61,17 @@ public class AnnotationTest extends CommandLogic {
         baseCase = baseCaseClass.newInstance();
         Method[] methods = baseCaseClass.getDeclaredMethods();
         List<Method> beforeMethod = new ArrayList<>();
+        List<Method> autoTestMethod = new ArrayList<>();
         for (Method method : methods) {
             //BeforeClass调用前置接口
-            if (method.isAnnotationPresent(BeforeClass.class)) {
+            if (method.isAnnotationPresent(BeforeClassRun.class)) {
                 method.invoke(baseCase);
             }
-            if (method.isAnnotationPresent(BeforeMethod.class)) {
+            if (method.isAnnotationPresent(BeforeMethodRun.class)) {
                 beforeMethod.add(method);
+            }
+            if (method.isAnnotationPresent(AutoTest.class)) {
+                autoTestMethod.add(method);
             }
         }
         for (Method method : beforeMethod) {
@@ -73,6 +79,19 @@ public class AnnotationTest extends CommandLogic {
         }
         if (beforeMethod.size() == 0) {
             baseCaseField(null);
+        }
+        for (Method method : autoTestMethod) {
+            AutoTest annotation = method.getAnnotation(AutoTest.class);
+            BaseCase baseCaseAutoTest = (BaseCase) method.invoke(baseCase);
+            String des = annotation.des();
+            if (StringUtil.isNotEmpty(annotation.des())) {
+                String currantCase = "执行@AutoTest,类名:" + baseCase.getClass().getSimpleName() + ",方法名:" + method.getName() + "，%s";
+                des = String.format(currantCase, des);
+            }
+            apiTest(new RequestData(baseCaseAutoTest)
+                    .setStepDes(des)
+                    .setOpenAssert(annotation.isOpenAssert())
+                    .setSleep(annotation.sleep()));
         }
     }
 
@@ -84,12 +103,12 @@ public class AnnotationTest extends CommandLogic {
 
     @SneakyThrows
     private void fieldAnnotation(Field[] fields, Method method) {
-        BeforeMethod beforeMethod;
+        BeforeMethodRun beforeMethodRun;
         String group = "0";
         if (method != null) {
             //只获取当前类中的方法
-            beforeMethod = method.getDeclaredAnnotation(BeforeMethod.class);
-            group = beforeMethod.group();
+            beforeMethodRun = method.getDeclaredAnnotation(BeforeMethodRun.class);
+            group = beforeMethodRun.group();
         }
         for (Field field : fields) {
             field.setAccessible(true);
@@ -115,7 +134,8 @@ public class AnnotationTest extends CommandLogic {
                     String des = "类名:" + baseCase.getClass().getSimpleName() + ",字段名:" + field.getName() + ",唯一性校验";
                     String uniqueRandom = "Unique" + RandomUtil.getString(8);
                     fieldTest(method, field, uniqueRandom, des + ",数据准备", annotation.assertSuccess().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, uniqueRandom, des + ",数据已存在创建失败", annotation.assertFail().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, uniqueRandom, des + ",数据已存在,期望创建失败", annotation.assertFail().newInstance(), annotation.resetAssert());
+                    fieldTest(method, field, " " + uniqueRandom + " ", des + ",首末尾加上空格,校验后端去除了空格,期望创建失败", annotation.assertFail().newInstance(), annotation.resetAssert());
 
                 }
             }
@@ -137,20 +157,38 @@ public class AnnotationTest extends CommandLogic {
                     fieldTest(method, field, RandomUtil.getString(maxLen + 1), des + (maxLen + 1), annotation.assertFail().newInstance(), annotation.resetAssert());
                 }
             }
-            if (field.isAnnotationPresent(Size.class)) {
-                Size annotation = field.getAnnotation(Size.class);
+            if (field.isAnnotationPresent(Range.class)) {
+                Range annotation = field.getAnnotation(Range.class);
                 if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
-                    int minNum = annotation.minNum();
-                    int maxNum = annotation.maxNum();
+                    BigDecimal minNum = new BigDecimal(annotation.minNum());
+                    BigDecimal maxNum = new BigDecimal(annotation.maxNum());
+                    BigDecimal floatValue = new BigDecimal(annotation.floatValue());
                     String des =
                             "类名:" + baseCase.getClass().getSimpleName() +
                                     ",字段名:" + field.getName() +
                                     ",期望大小范围:" + minNum + "-" + maxNum +
                                     ",传入值:";
+                    if (annotation.minInfinite()) {
+                        minNum = new BigDecimal(RandomUtil.getInt(Integer.MIN_VALUE, maxNum.intValue()) + "");
+                    } else {
+                        BigDecimal subtract = minNum.subtract(floatValue);
+                        fieldTest(method, field, subtract, des + subtract, annotation.assertFail().newInstance(), annotation.resetAssert());
+                        if ("0.0".equals(subtract.toString())) {
+                            fieldTest(method, field, 0, des + 0, annotation.assertFail().newInstance(), annotation.resetAssert());
+                        }
+                    }
                     fieldTest(method, field, minNum, des + minNum, annotation.assertSuccess().newInstance(), annotation.resetAssert());
+
+                    if (annotation.maxInfinite()) {
+                        maxNum = new BigDecimal(RandomUtil.getInt(minNum.intValue(), Integer.MAX_VALUE) + "");
+                    } else {
+                        fieldTest(method, field, maxNum.add(floatValue), des + maxNum.add(floatValue), annotation.assertFail().newInstance(), annotation.resetAssert());
+                    }
                     fieldTest(method, field, maxNum, des + maxNum, annotation.assertSuccess().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, minNum - 1, des + (minNum - 1), annotation.assertFail().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, maxNum + 1, des + (maxNum + 1), annotation.assertFail().newInstance(), annotation.resetAssert());
+
+                    //自定义注解中的测试流程，示例
+                    //IAnnotationTestMethod instance = annotation.testMethod().newInstance();
+                    //instance.testMethod(method, field, annotation, this);
 
                 }
             }
@@ -238,7 +276,7 @@ public class AnnotationTest extends CommandLogic {
     }
 
     @SneakyThrows
-    private void fieldTest(Method method, Field field, Object value, String des, AssertMethod assertMethod, String retAssert) {
+    public void fieldTest(Method method, Field field, Object value, String des, AssertMethod assertMethod, String retAssert) {
         RequestData requestData = getRequestData(method);
         String targetPath = rootPath + field.getName();
         requestData.setParam(replaceValue(requestData.getParam(), targetPath, value));

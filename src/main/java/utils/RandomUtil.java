@@ -20,19 +20,20 @@ public class RandomUtil {
         return sb.toString();
     }
 
-    public static String getInt() {
-        Random random = new Random();
-        return String.valueOf(random.nextInt(2000000000) - 1000000000);
+    public static int getInt() {
+        return getInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    public static int getInt(int max) {
+        return getInt(0, max);
     }
 
     /**
-     * 获取x到y内的随机一位数（包含x,y）
+     * 获取min到max内的随机一位数，[min,max]
      */
-    public static int getInt(int x, int y) {
-        if (x <= 0 || y <= 0 || x > y) {
-            return 0;
-        }
-        return (int) (Math.random() * (y - x + 1)) + x;
+    public static int getInt(int min, int max) {
+        Random random = new Random();
+        return random.nextInt(max) % (max - min + 1) + min;
     }
 
     public static String getPhone() {

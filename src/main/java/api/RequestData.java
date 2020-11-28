@@ -6,7 +6,7 @@ import base.IServiceMap;
 import com.alibaba.fastjson.JSON;
 import config.asserts.AssertMethod;
 import config.asserts.FailAssetDefault;
-import config.header.BaseHeaders;
+import config.header.IHeaders;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.testng.Assert;
@@ -28,10 +28,10 @@ public class RequestData {
     private String stepDes;
 
     private Map<String, String> cookies;
-    private BaseHeaders headers;
+    private IHeaders headers;
     private String param;
 
-    private boolean isOpenDefaultAssert = true;
+    private boolean isOpenAssert = true;
     private Integer sleep;
     private AssertMethod assertMethod;
 
@@ -70,7 +70,7 @@ public class RequestData {
     }
 
     public RequestData offDefaultAssert() {
-        isOpenDefaultAssert = false;
+        isOpenAssert = false;
         return this;
     }
 

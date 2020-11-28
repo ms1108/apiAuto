@@ -9,6 +9,9 @@ import config.asserts.EqualAssert;
 import config.asserts.SuccessAssertDefault;
 import org.testng.annotations.Test;
 
+/**
+ * Test类，建议用于多流程，多场景测试
+ */
 public class LoginTest extends AnnotationTest {
     @Test
     public void annotationTest() {
@@ -53,7 +56,7 @@ public class LoginTest extends AnnotationTest {
 
     @Test
     public void test2() {
-        apiTest(new RequestData(new LoginCase().errorLoginCase()).fail());
+        apiTest(new RequestData(new LoginCase().errorLoginCase()));
     }
 
     @Test

@@ -1,18 +1,16 @@
-package annotation;
+package annotation.annotation;
 
 import config.asserts.AssertMethod;
-import config.asserts.SuccessAssertDefault;
+import config.asserts.FailAssetDefault;
 
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.FIELD})
 @Inherited
-public @interface Chinese {
+public @interface IntToString {
 
-    int chineseLen() default 5;
-
-    Class<? extends AssertMethod> asserts() default SuccessAssertDefault.class;
+    Class<? extends AssertMethod> asserts() default FailAssetDefault.class;
 
     String resetAssert() default "";
 

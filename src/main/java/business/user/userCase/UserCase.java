@@ -27,7 +27,7 @@ public class UserCase extends BaseCase {
     public Response user(BaseCase baseCase) {
         //--此处还可以调用其他接口--
         apiTest(new RequestData(baseCase));
-        return apiTest(new RequestData(UserServiceTestCode.USER_LIST, new BaseListCase()));
+        return apiTest(new RequestData(new BaseListCase()));
     }
 
     public UserCase addUser() {

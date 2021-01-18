@@ -1,6 +1,6 @@
 package business.loginTest.testcase;
 
-import annotation.annotation.*;
+import annotation.annotations.*;
 import api.RequestData;
 import base.BaseCase;
 import business.loginTest.service_constant.LoginConstant;
@@ -21,7 +21,7 @@ public class LoginCase extends BaseCase {
     @NotNull(asserts = SuccessAssertDefault.class)
     @NotEmpty(asserts = SuccessAssertDefault.class)
     @Chinese
-    @Blank(asserts = SuccessAssertDefault.class)
+    @Blank(assertFail = SuccessAssertDefault.class)
     public String loginName;
 
     @Chinese
@@ -37,7 +37,6 @@ public class LoginCase extends BaseCase {
     @IntToString(resetAssert = "assertRightLogin")
     public String depend;//依赖config接口返回的结果
 
-    @BlankWith(group = "1")
     public String userName;
 
     @Data
@@ -97,7 +96,7 @@ public class LoginCase extends BaseCase {
     public LoginCase dependCase() {
         LoginCase loginCase = rightLoginCase();
         //从其他的请求参数中获取值
-        loginCase.depend = getRequest(LoginService.Config, "depend");
+        loginCase.depend = getRequestValue(LoginService.Config, "depend");
         return this;
     }
 
@@ -105,15 +104,13 @@ public class LoginCase extends BaseCase {
         LoginCase loginCase = rightLoginCase();
         loginCase.depend = null;
         //从其他响应中获取值，需要事先调用相应接口
-        loginCase.depend = getResponse(LoginService.Config, "res.depend");
+        loginCase.depend = getResponseValue(LoginService.Config, "res.depend");
+        loginCase.depend = invokeApiGetValue(new ConfigCase().dependCase(), "res.depend");
         return this;
     }
 
     public AssertMethod assertRightLogin() {
         return new SuccessAssertGather(new EqualAssert("res", "test success"),
-                new ByOtherApiAssert(new ConfigCase().dependCase(), new EqualAssert("res.depend", "123")));
-        //return new SuccessAssertDefault()
-        //        .setAssert(new EqualAssert("res", "test success"))
-        //        .setAssert(new ByOtherApiAssert(new ConfigCase().dependCase(), new EqualAssert("res.depend", "123")));
+                new ByOtherApiAssert(new ConfigCase().dependCase()),new EqualAssert("res.depend", "123"));
     }
 }

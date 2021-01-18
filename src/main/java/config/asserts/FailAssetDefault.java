@@ -10,8 +10,13 @@ import static org.hamcrest.CoreMatchers.not;
 public class FailAssetDefault extends AssertMethod {
     private String assertPath = BaseData.defaultAssertPath;
     private Object assertValue = BaseData.defaultAssertValue;
+    private int statusCode = 200;
 
     public FailAssetDefault() {
+    }
+
+    public FailAssetDefault(int statusCode) {
+        this.statusCode = statusCode;
     }
 
     public FailAssetDefault(String assertPath, Object assertValue) {
@@ -21,8 +26,10 @@ public class FailAssetDefault extends AssertMethod {
 
     @Override
     public AssertMethod assets(RequestData requestData, Response response) {
-        if (response.statusCode() == 200) {
+        if (statusCode == 200) {
             response.then().body(assertPath, not(equalTo(assertValue)));
+        }else {
+            response.then().statusCode(statusCode);
         }
         backCallAssert(requestData, response);
         return this;

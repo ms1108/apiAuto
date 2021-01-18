@@ -2,7 +2,6 @@ package api;
 
 import base.BaseCase;
 import base.BaseData;
-import base.IServiceMap;
 import business.loginTest.service_constant.LoginService;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -23,10 +22,6 @@ import static utils.FileUtil.writeFile;
 public class ApiTest {
     public Response apiTest(BaseCase baseCase) {
         return apiTest(new RequestData(baseCase));
-    }
-
-    public Response apiTest(IServiceMap iServiceMap, BaseCase baseCase) {
-        return apiTest(new RequestData(iServiceMap, baseCase));
     }
 
     public Response apiTest(RequestData requestData) {

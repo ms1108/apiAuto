@@ -42,18 +42,13 @@ public class RequestData {
         requestData(param);
     }
 
-    public RequestData(IServiceMap iServiceMap, BaseCase param) {
-        param.serverMap = iServiceMap;
-        requestData(param);
-    }
-
     public void requestData(BaseCase param) {
         this.uri = param.serverMap.getUri();
         this.methodAndRequestType = param.serverMap.getMethodAndRequestType();
         this.jsonSchemaPath = param.serverMap.getJsonSchemaPath();
         this.des = param.serverMap.getDes();
         this.assertMethod = param.assertMethod;
-        this.headers = param.headers;
+        this.headers = param.headers;//header最好由BaseCase对象传入，因为如果通过RequestData类set进来，其他方法调用该接口时又要set一遍，而且编写代码的人离职后，其他人通过BaseCase更直观的看出
         param.serverMap = null;
         param.assertMethod = null;
         param.headers = null;

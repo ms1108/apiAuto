@@ -1,5 +1,7 @@
-package annotation.annotation;
+package annotation.annotations;
 
+import annotation.IAnnotationTestMethod;
+import annotation.impl.LengthDefaultImpl;
 import config.asserts.AssertMethod;
 import config.asserts.FailAssetDefault;
 import config.asserts.SuccessAssertDefault;
@@ -21,5 +23,7 @@ public @interface Length {
     String resetAssert() default "";
 
     String[] group() default "0";//当输入0时则不进行分组考虑
+
+    Class<? extends IAnnotationTestMethod> testMethod() default LengthDefaultImpl.class;
 
 }

@@ -1,7 +1,7 @@
 package business.loginTest.testcase;
 
-import annotation.annotation.BeforeClassRun;
-import annotation.annotation.Search;
+import annotation.annotations.BeforeClassRun;
+import annotation.annotations.Search;
 import base.BaseCase;
 import business.loginTest.service_constant.LoginService;
 

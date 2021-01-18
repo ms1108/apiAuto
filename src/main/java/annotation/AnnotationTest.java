@@ -1,6 +1,6 @@
 package annotation;
 
-import annotation.annotation.*;
+import annotation.annotations.*;
 import api.RequestData;
 import base.BaseCase;
 import base.BaseData;
@@ -9,22 +9,17 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import config.asserts.AssertMethod;
-import config.asserts.ListSearchAssert;
 import lombok.SneakyThrows;
 import utils.ClassFinderUtil;
-import utils.RandomUtil;
 import utils.ReportUtil;
 import utils.StringUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import static base.BaseData.getRequest;
 
 public class AnnotationTest extends CommandLogic {
 
@@ -106,167 +101,102 @@ public class AnnotationTest extends CommandLogic {
         BeforeMethodRun beforeMethodRun;
         String group = "0";
         if (method != null) {
-            //只获取当前类中的方法
             beforeMethodRun = method.getDeclaredAnnotation(BeforeMethodRun.class);
             group = beforeMethodRun.group();
         }
+
         for (Field field : fields) {
             field.setAccessible(true);
             if (field.isAnnotationPresent(NotNull.class)) {
                 NotNull annotation = field.getAnnotation(NotNull.class);
-                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
-                    String des = "类名:" + baseCase.getClass().getSimpleName() + ",字段名:" + field.getName() + ",输入null值校验";
-                    fieldTest(method, field, null, des, annotation.asserts().newInstance(), annotation.resetAssert());
-
+                List<String> groupList = Arrays.asList(annotation.group());
+                if (groupList.contains("0") || groupList.contains(group)) {
+                    IAnnotationTestMethod instance = annotation.testMethod().newInstance();
+                    instance.testMethod(method, field, annotation, this);
                 }
             }
             if (field.isAnnotationPresent(NotEmpty.class)) {
                 NotEmpty annotation = field.getAnnotation(NotEmpty.class);
-                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
-                    String des = "类名:" + baseCase.getClass().getSimpleName() + ",字段名:" + field.getName() + ",空字符串校验";
-                    fieldTest(method, field, "", des, annotation.asserts().newInstance(), annotation.resetAssert());
+                List<String> groupList = Arrays.asList(annotation.group());
+                if (groupList.contains("0") || groupList.contains(group)) {
+                    IAnnotationTestMethod instance = annotation.testMethod().newInstance();
+                    instance.testMethod(method, field, annotation, this);
                 }
             }
 
             if (field.isAnnotationPresent(Unique.class)) {
                 Unique annotation = field.getAnnotation(Unique.class);
-                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
-                    String des = "类名:" + baseCase.getClass().getSimpleName() + ",字段名:" + field.getName() + ",唯一性校验";
-                    String uniqueRandom = "Unique" + RandomUtil.getString(8);
-                    fieldTest(method, field, uniqueRandom, des + ",数据准备", annotation.assertSuccess().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, uniqueRandom, des + ",数据已存在,期望创建失败", annotation.assertFail().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, " " + uniqueRandom + " ", des + ",首末尾加上空格,校验后端去除了空格,期望创建失败", annotation.assertFail().newInstance(), annotation.resetAssert());
-
+                List<String> groupList = Arrays.asList(annotation.group());
+                if (groupList.contains("0") || groupList.contains(group)) {
+                    IAnnotationTestMethod instance = annotation.testMethod().newInstance();
+                    instance.testMethod(method, field, annotation, this);
                 }
             }
             if (field.isAnnotationPresent(Length.class)) {
                 Length annotation = field.getAnnotation(Length.class);
-                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
-                    int minLen = annotation.minLen();
-                    int maxLen = annotation.maxLen();
-                    String des =
-                            "类名:" + baseCase.getClass().getSimpleName() +
-                                    ",字段名:" + field.getName() +
-                                    ",期望长度范围:" + minLen + "-" + maxLen +
-                                    ",传入值长度:";
-                    fieldTest(method, field, RandomUtil.getString(minLen), des + minLen, annotation.assertSuccess().newInstance(), annotation.resetAssert());
-                    fieldTest(method, field, RandomUtil.getString(maxLen), des + maxLen, annotation.assertSuccess().newInstance(), annotation.resetAssert());
-                    if (minLen != 1) {
-                        fieldTest(method, field, RandomUtil.getString(minLen - 1), des + (minLen - 1), annotation.assertFail().newInstance(), annotation.resetAssert());
-                    }
-                    fieldTest(method, field, RandomUtil.getString(maxLen + 1), des + (maxLen + 1), annotation.assertFail().newInstance(), annotation.resetAssert());
+                List<String> groupList = Arrays.asList(annotation.group());
+                if (groupList.contains("0") || groupList.contains(group)) {
+                    IAnnotationTestMethod instance = annotation.testMethod().newInstance();
+                    instance.testMethod(method, field, annotation, this);
+
                 }
             }
             if (field.isAnnotationPresent(Range.class)) {
                 Range annotation = field.getAnnotation(Range.class);
-                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
-                    BigDecimal minNum = new BigDecimal(annotation.minNum());
-                    BigDecimal maxNum = new BigDecimal(annotation.maxNum());
-                    BigDecimal floatValue = new BigDecimal(annotation.floatValue());
-                    String des =
-                            "类名:" + baseCase.getClass().getSimpleName() +
-                                    ",字段名:" + field.getName() +
-                                    ",期望大小范围:" + minNum + "-" + maxNum +
-                                    ",传入值:";
-                    if (annotation.minInfinite()) {
-                        minNum = new BigDecimal(RandomUtil.getInt(Integer.MIN_VALUE, maxNum.intValue()) + "");
-                    } else {
-                        BigDecimal subtract = minNum.subtract(floatValue);
-                        fieldTest(method, field, subtract, des + subtract, annotation.assertFail().newInstance(), annotation.resetAssert());
-                        if ("0.0".equals(subtract.toString())) {
-                            fieldTest(method, field, 0, des + 0, annotation.assertFail().newInstance(), annotation.resetAssert());
-                        }
-                    }
-                    fieldTest(method, field, minNum, des + minNum, annotation.assertSuccess().newInstance(), annotation.resetAssert());
-
-                    if (annotation.maxInfinite()) {
-                        maxNum = new BigDecimal(RandomUtil.getInt(minNum.intValue(), Integer.MAX_VALUE) + "");
-                    } else {
-                        fieldTest(method, field, maxNum.add(floatValue), des + maxNum.add(floatValue), annotation.assertFail().newInstance(), annotation.resetAssert());
-                    }
-                    fieldTest(method, field, maxNum, des + maxNum, annotation.assertSuccess().newInstance(), annotation.resetAssert());
-
+                List<String> groupList = Arrays.asList(annotation.group());
+                if (groupList.contains("0") || groupList.contains(group)) {
                     //自定义注解中的测试流程，示例
-                    //IAnnotationTestMethod instance = annotation.testMethod().newInstance();
-                    //instance.testMethod(method, field, annotation, this);
+                    IAnnotationTestMethod instance = annotation.testMethod().newInstance();
+                    instance.testMethod(method, field, annotation, this);
 
                 }
             }
             if (field.isAnnotationPresent(StringToInt.class)) {
                 StringToInt annotation = field.getAnnotation(StringToInt.class);
-                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
-                    String des =
-                            "类名:" + baseCase.getClass().getSimpleName() +
-                                    ",字段名:" + field.getName() +
-                                    ",类型测试,传入整形:";
-                    Integer value = isInteger(field.get(baseCaseOld) + "") ? Integer.parseInt((String) field.get(baseCaseOld)) : 1;
-                    fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
+                List<String> groupList = Arrays.asList(annotation.group());
+                if (groupList.contains("0") || groupList.contains(group)) {
+                    IAnnotationTestMethod instance = annotation.testMethod().newInstance();
+                    instance.testMethod(method, field, annotation, this);
 
                 }
             }
             if (field.isAnnotationPresent(IntToString.class)) {
                 IntToString annotation = field.getAnnotation(IntToString.class);
-                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
-                    String des =
-                            "类名:" + baseCase.getClass().getSimpleName() +
-                                    ",字段名:" + field.getName() +
-                                    ",类型测试,传入字符:";
-                    String value = field.get(baseCaseOld) + "";
-                    fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
+                List<String> groupList = Arrays.asList(annotation.group());
+                if (groupList.contains("0") || groupList.contains(group)) {
+                    IAnnotationTestMethod instance = annotation.testMethod().newInstance();
+                    instance.testMethod(method, field, annotation, this);
+
                 }
             }
             if (field.isAnnotationPresent(Search.class)) {
                 Search annotation = field.getAnnotation(Search.class);
-                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
-                    String des =
-                            "类名:" + baseCase.getClass().getSimpleName() +
-                                    ",字段名:" + field.getName() +
-                                    ",列表搜索测试,";
-                    Object value = getRequest(annotation.addDataBaseCase().newInstance().serverMap, annotation.searchValuePath());
-                    String dimSearch = value.toString().substring(0, value.toString().length() - 1);
-                    fieldTest(method, field, value,
-                            des + value, new ListSearchAssert(annotation.listRootPath(), value.toString(), annotation.expectListLen()), annotation.resetAssert());
-                    fieldTest(method, field, dimSearch,
-                            des + "模糊搜索:" + dimSearch, new ListSearchAssert(annotation.listRootPath(), value.toString(), annotation.expectListLen()), annotation.resetAssert());
-                    fieldTest(method, field, "",
-                            des + "空值搜索", new ListSearchAssert(annotation.listRootPath(), annotation.expectListLen()), annotation.resetAssert());
-                    fieldTest(method, field, null,
-                            des + "搜索字段不传", new ListSearchAssert(annotation.listRootPath(), annotation.expectListLen()), annotation.resetAssert());
+                List<String> groupList = Arrays.asList(annotation.group());
+                if (groupList.contains("0") || groupList.contains(group)) {
+                    IAnnotationTestMethod instance = annotation.testMethod().newInstance();
+                    instance.testMethod(method, field, annotation, this);
+
                 }
             }
             if (field.isAnnotationPresent(Chinese.class)) {
                 Chinese annotation = field.getAnnotation(Chinese.class);
-                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
-                    String des =
-                            "类名:" + baseCase.getClass().getSimpleName() +
-                                    ",字段名:" + field.getName() +
-                                    ",中文字符测试,传入中文值:";
-                    String value = RandomUtil.getChinese(annotation.chineseLen());
-                    fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
+                List<String> groupList = Arrays.asList(annotation.group());
+                if (groupList.contains("0") || groupList.contains(group)) {
+                    IAnnotationTestMethod instance = annotation.testMethod().newInstance();
+                    instance.testMethod(method, field, annotation, this);
+
                 }
             }
             if (field.isAnnotationPresent(Blank.class)) {
                 Blank annotation = field.getAnnotation(Blank.class);
-                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
-                    String des =
-                            "类名:" + baseCase.getClass().getSimpleName() +
-                                    ",字段名:" + field.getName() +
-                                    ",空格测试,传入空格";
-                    String value = " ";
-                    fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
+                List<String> groupList = Arrays.asList(annotation.group());
+                if (groupList.contains("0") || groupList.contains(group)) {
+                    IAnnotationTestMethod instance = annotation.testMethod().newInstance();
+                    instance.testMethod(method, field, annotation, this);
+
                 }
             }
-            if (field.isAnnotationPresent(BlankWith.class)) {
-                BlankWith annotation = field.getAnnotation(BlankWith.class);
-                if (Arrays.asList(annotation.group()).contains("0") || Arrays.asList(annotation.group()).contains(group)) {
-                    String des =
-                            "类名:" + baseCase.getClass().getSimpleName() +
-                                    ",字段名:" + field.getName() +
-                                    ",首末尾空格测试,传入值:";
-                    String value = " " + field.get(baseCaseOld) + " ";
-                    fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
-                }
-            }
+
             if (field.getType().toString().contains("$")) {
                 rootPath = rootPath + field.getName() + ".";
                 inertClass(method, baseCase, field.getType().getSimpleName());
@@ -282,13 +212,15 @@ public class AnnotationTest extends CommandLogic {
         requestData.setParam(replaceValue(requestData.getParam(), targetPath, value));
         requestData.setStepDes(des);
         if (StringUtil.isNotEmpty(retAssert)) {
-            AssertMethod retAssertMethod = (AssertMethod) baseCase.getClass().getMethod(retAssert).invoke(baseCase);
+            AssertMethod retAssertMethod = (AssertMethod) baseCaseOld.getClass().getMethod(retAssert).invoke(baseCaseOld);
             requestData.setAssertMethod(retAssertMethod);
         } else {
             requestData.setAssertMethod(assertMethod);
         }
 
         apiTest(requestData);
+
+
     }
 
     private void inertClass(Method method, BaseCase baseCase, String className) {
@@ -307,12 +239,25 @@ public class AnnotationTest extends CommandLogic {
         if (method != null) {
             requestData = new RequestData((BaseCase) method.invoke(baseCase));
         } else {
-            //当baseCase类中没有@BeforeMethod时new一个构造函数
+
             requestData = new RequestData(baseCase.getClass().getConstructor().newInstance());
         }
-        baseCaseOld = baseCase;
-        baseCase = baseCase.getClass().newInstance();
+        baseCaseOld = baseCase;//在下边new完之后有些随机数据会被修改，所有保存有一份经过了RequestData的对象数据
+        baseCase = baseCase.getClass().newInstance();//因为走了RequestData，serverMap会被置空，所以再new一遍
         return requestData;
+    }
+
+    @SneakyThrows
+    private BaseCase resetBaseCaseMethod(Method method) {
+        BaseCase baseCaseMethod;
+        if (method != null) {
+            baseCaseMethod = (BaseCase) method.invoke(baseCase);
+        } else {
+            //当baseCase类中没有@BeforeMethod时new一个构造函数
+            baseCaseMethod = this.baseCase.getClass().getConstructor().newInstance();
+        }
+        baseCase = baseCase.getClass().newInstance();//因为走了RequestData，serverMap会被置空，所以再new一遍
+        return baseCaseMethod;
     }
 
     private String replaceValue(String param, String targetPath, Object value) {

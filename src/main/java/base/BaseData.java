@@ -1,5 +1,7 @@
 package base;
 
+import api.ApiTest;
+import api.RequestData;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -23,7 +25,7 @@ public class BaseData {
         mvnArgs.mvnArgs();
     }
 
-    public static <T> T getResponse(IServiceMap iServiceMap, String path) {
+    public static <T> T getResponseValue(IServiceMap iServiceMap, String path) {
         Response response = res.get(iServiceMap.getUri());
         if (response == null) {
             Assert.fail(iServiceMap.getUri() + ",接口无响应数据");
@@ -36,7 +38,17 @@ public class BaseData {
         return t;
     }
 
-    public static <T> T getRequest(IServiceMap iServiceMap, String path) {
+    public static <T> T invokeApiGetValue(BaseCase baseCase, String path) {
+        Response response = new ApiTest().apiTest(baseCase);
+
+        T t = (T) response.path(path);
+        if (t == null) {
+            Assert.fail("未获取到请求数据，接口：" + baseCase.serverMap.getUri() + ",路径:" + path);
+        }
+        return t;
+    }
+
+    public static <T> T getRequestValue(IServiceMap iServiceMap, String path) {
         JsonPath jsonPath = req.get(iServiceMap.getUri());
         if (jsonPath == null) {
             Assert.fail(iServiceMap.getUri() + ",接口无请求数据");

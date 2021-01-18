@@ -92,7 +92,7 @@ public class AnnotationTest extends CommandLogic {
 
     private void baseCaseField(Method method) {
         //准备一份基础数据baseCaseBackup
-        getRequestData(method);
+        getBaseCaseMethod(method);
         Field[] fields = baseCase.getClass().getFields();
         fieldAnnotation(fields, method);
     }
@@ -208,7 +208,8 @@ public class AnnotationTest extends CommandLogic {
 
     @SneakyThrows
     public void fieldTest(Method method, Field field, Object value, String des, AssertMethod assertMethod, String retAssert) {
-        RequestData requestData = getRequestData(method);
+        RequestData requestData = new RequestData(getBaseCaseMethod(method));
+        baseCase = baseCase.getClass().newInstance();//因为走了RequestData，serverMap会被置空，所以再new一遍
         String targetPath = rootPath + field.getName();
         requestData.setParam(replaceValue(requestData.getParam(), targetPath, value));
         requestData.setStepDes(des);
@@ -220,7 +221,6 @@ public class AnnotationTest extends CommandLogic {
         }
 
         apiTest(requestData);
-
 
     }
 
@@ -235,16 +235,15 @@ public class AnnotationTest extends CommandLogic {
     }
 
     @SneakyThrows
-    private RequestData getRequestData(Method method) {
-        RequestData requestData;
+    private BaseCase getBaseCaseMethod(Method method) {
+        BaseCase baseCaseMethod;
         if (method != null) {
-            requestData = new RequestData((BaseCase) method.invoke(baseCase));
+            baseCaseMethod = (BaseCase) method.invoke(baseCase);
         } else {
-            requestData = new RequestData(baseCase.getClass().getConstructor().newInstance());
+            baseCaseMethod = baseCase.getClass().getConstructor().newInstance();
         }
         baseCaseBackup = baseCase;//baseCaseBackup，数据传入fieldTest发送前，需要一份Case的完整可用数据，某些字段替换进baseCase中发送出去
-        baseCase = baseCase.getClass().newInstance();//因为走了RequestData，serverMap会被置空，所以再new一遍
-        return requestData;
+        return baseCaseMethod;
     }
 
     private String replaceValue(String param, String targetPath, Object value) {

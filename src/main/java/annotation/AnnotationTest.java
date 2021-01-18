@@ -208,13 +208,14 @@ public class AnnotationTest extends CommandLogic {
 
     @SneakyThrows
     public void fieldTest(Method method, Field field, Object value, String des, AssertMethod assertMethod, String retAssert) {
-        RequestData requestData = new RequestData(getBaseCaseMethod(method));
+        BaseCase baseCaseMethod = getBaseCaseMethod(method);
+        RequestData requestData = new RequestData(baseCaseMethod);
         baseCase = baseCase.getClass().newInstance();//因为走了RequestData，serverMap会被置空，所以再new一遍
         String targetPath = rootPath + field.getName();
         requestData.setParam(replaceValue(requestData.getParam(), targetPath, value));
         requestData.setStepDes(des);
         if (StringUtil.isNotEmpty(retAssert)) {
-            AssertMethod retAssertMethod = (AssertMethod) baseCaseBackup.getClass().getMethod(retAssert).invoke(baseCaseBackup);
+            AssertMethod retAssertMethod = (AssertMethod) baseCaseMethod.getClass().getMethod(retAssert).invoke(baseCaseMethod);
             requestData.setAssertMethod(retAssertMethod);
         } else {
             requestData.setAssertMethod(assertMethod);

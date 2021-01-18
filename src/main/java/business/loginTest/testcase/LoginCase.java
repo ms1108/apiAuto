@@ -17,24 +17,22 @@ import static utils.PropertiesUtil.get;
 @Data
 @Accessors(fluent = true)
 public class LoginCase extends BaseCase {
-    @Unique(assertFail = SuccessAssertDefault.class)
-    @NotNull(asserts = SuccessAssertDefault.class)
-    @NotEmpty(asserts = SuccessAssertDefault.class)
-    @Chinese
-    @Blank(assertFail = SuccessAssertDefault.class)
+    //@Unique(assertFail = SuccessAssertDefault.class)
+    @NotNull(resetAssert = "assertRightLogin")
+    //@NotNull(asserts = SuccessAssertDefault.class)
+    //@NotEmpty(asserts = SuccessAssertDefault.class)
+    //@Chinese
+    //@Blank(assertFail = SuccessAssertDefault.class)
     public String loginName;
 
-    @Chinese
-    @Length(minLen = 1, maxLen = 8, assertFail = SuccessAssertDefault.class)
+
+    //@Length(minLen = 1, maxLen = 8, assertFail = SuccessAssertDefault.class)
     public String pwd;
 
-    @NotNull(asserts = SuccessAssertDefault.class)
     public Type type;
 
-    @NotNull(asserts = SuccessAssertDefault.class)
-    @Length(minLen = 1, maxLen = 8, assertFail = SuccessAssertDefault.class)
-    @StringToInt(asserts = SuccessAssertDefault.class)
-    @IntToString(resetAssert = "assertRightLogin")
+    //@StringToInt(asserts = SuccessAssertDefault.class)
+    //@IntToString(resetAssert = "assertRightLogin")
     public String depend;//依赖config接口返回的结果
 
     public String userName;
@@ -42,16 +40,14 @@ public class LoginCase extends BaseCase {
     @Data
     @Accessors(fluent = true)
     public static class Type {
-        @NotNull(asserts = SuccessAssertDefault.class)
-        @Range(maxNum = "10", minInfinite = true, assertFail = SuccessAssertDefault.class)
+        //@Range(maxNum = "10", minInfinite = true, assertFail = SuccessAssertDefault.class)
         public TypeIn role;
     }
 
     @Data
     @Accessors(fluent = true)
     public static class TypeIn {
-        @NotNull(asserts = SuccessAssertDefault.class)
-        @Range(minNum = "0.1", maxNum = "1", floatValue = "0.1", assertFail = SuccessAssertDefault.class)//测试范围(0,1]
+        //@Range(minNum = "0.1", maxNum = "1", floatValue = "0.1", assertFail = SuccessAssertDefault.class)//测试范围(0,1]
         public Integer TypeIn;
     }
 
@@ -70,6 +66,7 @@ public class LoginCase extends BaseCase {
         pwd = get("g_loginPwd");
         type = new Type().role(new TypeIn().TypeIn(LoginConstant.IS_MENAGE));
         depend = "123";
+        userName = RandomUtil.getString();
         assertMethod = new SuccessAssertGather(new EqualAssert("res", "test success"));
         return this;
     }

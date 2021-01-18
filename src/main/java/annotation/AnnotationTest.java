@@ -247,19 +247,6 @@ public class AnnotationTest extends CommandLogic {
         return requestData;
     }
 
-    @SneakyThrows
-    private BaseCase resetBaseCaseMethod(Method method) {
-        BaseCase baseCaseMethod;
-        if (method != null) {
-            baseCaseMethod = (BaseCase) method.invoke(baseCase);
-        } else {
-            //当baseCase类中没有@BeforeMethod时new一个构造函数
-            baseCaseMethod = this.baseCase.getClass().getConstructor().newInstance();
-        }
-        baseCase = baseCase.getClass().newInstance();//因为走了RequestData，serverMap会被置空，所以再new一遍
-        return baseCaseMethod;
-    }
-
     private String replaceValue(String param, String targetPath, Object value) {
         JSONObject jsonObj = JSON.parseObject(param);
         JSONPath.set(jsonObj, targetPath, value);

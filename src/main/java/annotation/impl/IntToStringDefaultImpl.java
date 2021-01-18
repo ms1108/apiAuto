@@ -17,8 +17,8 @@ public class IntToStringDefaultImpl implements IAnnotationTestMethod {
         String des =
                 "类名:" + at.baseCase.getClass().getSimpleName() +
                         ",字段名:" + field.getName() +
-                        ",类型测试,传入字符:";
-        String value = field.get(at.baseCase) + "";
+                        ",IntToString类型测试,传入字符:";
+        String value = field.get(at.baseCaseBackup) + "";
         at.fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
 
     }

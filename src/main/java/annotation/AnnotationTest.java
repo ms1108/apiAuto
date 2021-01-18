@@ -25,7 +25,7 @@ public class AnnotationTest extends CommandLogic {
 
     public String rootPath = "";
     public BaseCase baseCase;
-    public BaseCase baseCaseOld;
+    public BaseCase baseCaseBackup;
 
     public void annotationTest(String scannedPackage) {
         annotationTest(scannedPackage, null);
@@ -91,6 +91,7 @@ public class AnnotationTest extends CommandLogic {
     }
 
     private void baseCaseField(Method method) {
+        //准备一份基础数据baseCaseBackup
         getRequestData(method);
         Field[] fields = baseCase.getClass().getFields();
         fieldAnnotation(fields, method);
@@ -212,7 +213,7 @@ public class AnnotationTest extends CommandLogic {
         requestData.setParam(replaceValue(requestData.getParam(), targetPath, value));
         requestData.setStepDes(des);
         if (StringUtil.isNotEmpty(retAssert)) {
-            AssertMethod retAssertMethod = (AssertMethod) baseCaseOld.getClass().getMethod(retAssert).invoke(baseCaseOld);
+            AssertMethod retAssertMethod = (AssertMethod) baseCaseBackup.getClass().getMethod(retAssert).invoke(baseCaseBackup);
             requestData.setAssertMethod(retAssertMethod);
         } else {
             requestData.setAssertMethod(assertMethod);
@@ -239,10 +240,9 @@ public class AnnotationTest extends CommandLogic {
         if (method != null) {
             requestData = new RequestData((BaseCase) method.invoke(baseCase));
         } else {
-
             requestData = new RequestData(baseCase.getClass().getConstructor().newInstance());
         }
-        baseCaseOld = baseCase;//在下边new完之后有些随机数据会被修改，所有保存有一份经过了RequestData的对象数据
+        baseCaseBackup = baseCase;//baseCaseBackup，数据传入fieldTest发送前，需要一份Case的完整可用数据，某些字段替换进baseCase中发送出去
         baseCase = baseCase.getClass().newInstance();//因为走了RequestData，serverMap会被置空，所以再new一遍
         return requestData;
     }

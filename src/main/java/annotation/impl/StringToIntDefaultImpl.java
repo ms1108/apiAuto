@@ -17,8 +17,8 @@ public class StringToIntDefaultImpl implements IAnnotationTestMethod {
         String des =
                 "类名:" + at.baseCase.getClass().getSimpleName() +
                         ",字段名:" + field.getName() +
-                        ",类型测试,传入整形:";
-        Integer value = at.isInteger(field.get(at.baseCase) + "") ? Integer.parseInt((String) field.get(at.baseCase)) : 1;
+                        ",StringToInt类型测试,传入整形:";
+        Integer value = at.isInteger(field.get(at.baseCaseBackup) + "") ? Integer.parseInt((String) field.get(at.baseCaseBackup)) : 1;
         at.fieldTest(method, field, value, des + value, annotation.asserts().newInstance(), annotation.resetAssert());
 
     }

@@ -236,13 +236,13 @@ public class AnnotationTest extends CommandLogic {
 
     @SneakyThrows
     public BaseCase getBaseCaseObject(Method method) {
-        BaseCase baseCaseObjcet;
+        BaseCase baseCaseObject;
         if (method != null) {
-            baseCaseObjcet = (BaseCase) method.invoke(baseCase);
+            baseCaseObject = (BaseCase) method.invoke(baseCase);
         } else {
-            baseCaseObjcet = baseCase.getClass().getConstructor().newInstance();
+            baseCaseObject = baseCase.getClass().getConstructor().newInstance();
         }
-        return baseCaseObjcet;
+        return baseCaseObject;
     }
 
     private String replaceValue(String param, String targetPath, Object value) {

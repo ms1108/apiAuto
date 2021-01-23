@@ -20,6 +20,9 @@ import static io.restassured.path.json.JsonPath.from;
 import static utils.FileUtil.writeFile;
 
 public class ApiTest {
+    //该类中的属性一定要写私有的如下
+    //private Integer test = 1;
+
     public Response apiTest(BaseCase baseCase) {
         return apiTest(new RequestData(baseCase));
     }

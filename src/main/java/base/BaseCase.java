@@ -6,11 +6,11 @@ import config.asserts.SuccessAssertDefault;
 import config.header.IHeaders;
 import config.header.DefaultHeaders;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 @Data
-@Accessors(chain = true)
-public class BaseCase extends ApiTest {
+public class BaseCase extends CommandLogic {
     public String pathParam;
     public IServiceMap serverMap;
     public AssertMethod assertMethod = new SuccessAssertDefault();

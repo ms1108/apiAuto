@@ -25,7 +25,6 @@ public class AnnotationTest extends CommandLogic {
 
     public String rootPath = "";
     public BaseCase baseCase;
-    public BaseCase baseCaseBackup;
 
     public void annotationTest(String scannedPackage) {
         annotationTest(scannedPackage, null);
@@ -92,7 +91,7 @@ public class AnnotationTest extends CommandLogic {
 
     private void baseCaseField(Method method) {
         //准备一份基础数据baseCaseBackup
-        getBaseCaseMethod(method);
+        getBaseCaseObject(method);
         Field[] fields = baseCase.getClass().getFields();
         fieldAnnotation(fields, method);
     }
@@ -208,7 +207,7 @@ public class AnnotationTest extends CommandLogic {
 
     @SneakyThrows
     public void fieldTest(Method method, Field field, Object value, String des, AssertMethod assertMethod, String retAssert) {
-        BaseCase baseCaseMethod = getBaseCaseMethod(method);
+        BaseCase baseCaseMethod = getBaseCaseObject(method);
         RequestData requestData = new RequestData(baseCaseMethod);
         baseCase = baseCase.getClass().newInstance();//因为走了RequestData，serverMap会被置空，所以再new一遍
         String targetPath = rootPath + field.getName();
@@ -236,15 +235,14 @@ public class AnnotationTest extends CommandLogic {
     }
 
     @SneakyThrows
-    private BaseCase getBaseCaseMethod(Method method) {
-        BaseCase baseCaseMethod;
+    public BaseCase getBaseCaseObject(Method method) {
+        BaseCase baseCaseObjcet;
         if (method != null) {
-            baseCaseMethod = (BaseCase) method.invoke(baseCase);
+            baseCaseObjcet = (BaseCase) method.invoke(baseCase);
         } else {
-            baseCaseMethod = baseCase.getClass().getConstructor().newInstance();
+            baseCaseObjcet = baseCase.getClass().getConstructor().newInstance();
         }
-        baseCaseBackup = baseCase;//baseCaseBackup，数据传入fieldTest发送前，需要一份Case的完整可用数据，某些字段替换进baseCase中发送出去
-        return baseCaseMethod;
+        return baseCaseObjcet;
     }
 
     private String replaceValue(String param, String targetPath, Object value) {

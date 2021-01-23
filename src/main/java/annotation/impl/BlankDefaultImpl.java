@@ -25,7 +25,7 @@ public class BlankDefaultImpl implements IAnnotationTestMethod {
                 "类名:" + method.getClass().getSimpleName() +
                         ",字段名:" + field.getName() +
                         ",首末尾空格测试,传入值:";
-        value = " " + field.get(at.baseCaseBackup) + " ";
+        value = " " + field.get(at.getBaseCaseObject(method)) + " ";
         at.fieldTest(method, field, value, des + value, annotation.assertSuccess().newInstance(), annotation.resetAssert());
 
     }

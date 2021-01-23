@@ -138,7 +138,6 @@ public class AnnotationTest extends CommandLogic {
                 if (groupList.contains("0") || groupList.contains(group)) {
                     IAnnotationTestMethod instance = annotation.testMethod().newInstance();
                     instance.testMethod(method, field, annotation, this);
-
                 }
             }
             if (field.isAnnotationPresent(Range.class)) {
@@ -148,7 +147,6 @@ public class AnnotationTest extends CommandLogic {
                     //自定义注解中的测试流程，示例
                     IAnnotationTestMethod instance = annotation.testMethod().newInstance();
                     instance.testMethod(method, field, annotation, this);
-
                 }
             }
             if (field.isAnnotationPresent(StringToInt.class)) {
@@ -157,7 +155,6 @@ public class AnnotationTest extends CommandLogic {
                 if (groupList.contains("0") || groupList.contains(group)) {
                     IAnnotationTestMethod instance = annotation.testMethod().newInstance();
                     instance.testMethod(method, field, annotation, this);
-
                 }
             }
             if (field.isAnnotationPresent(IntToString.class)) {
@@ -166,7 +163,6 @@ public class AnnotationTest extends CommandLogic {
                 if (groupList.contains("0") || groupList.contains(group)) {
                     IAnnotationTestMethod instance = annotation.testMethod().newInstance();
                     instance.testMethod(method, field, annotation, this);
-
                 }
             }
             if (field.isAnnotationPresent(Search.class)) {
@@ -175,7 +171,6 @@ public class AnnotationTest extends CommandLogic {
                 if (groupList.contains("0") || groupList.contains(group)) {
                     IAnnotationTestMethod instance = annotation.testMethod().newInstance();
                     instance.testMethod(method, field, annotation, this);
-
                 }
             }
             if (field.isAnnotationPresent(Chinese.class)) {
@@ -184,7 +179,6 @@ public class AnnotationTest extends CommandLogic {
                 if (groupList.contains("0") || groupList.contains(group)) {
                     IAnnotationTestMethod instance = annotation.testMethod().newInstance();
                     instance.testMethod(method, field, annotation, this);
-
                 }
             }
             if (field.isAnnotationPresent(Blank.class)) {
@@ -193,7 +187,14 @@ public class AnnotationTest extends CommandLogic {
                 if (groupList.contains("0") || groupList.contains(group)) {
                     IAnnotationTestMethod instance = annotation.testMethod().newInstance();
                     instance.testMethod(method, field, annotation, this);
-
+                }
+            }
+            if (field.isAnnotationPresent(SpecialCharacters.class)) {
+                SpecialCharacters annotation = field.getAnnotation(SpecialCharacters.class);
+                List<String> groupList = Arrays.asList(annotation.group());
+                if (groupList.contains("0") || groupList.contains(group)) {
+                    IAnnotationTestMethod instance = annotation.testMethod().newInstance();
+                    instance.testMethod(method, field, annotation, this);
                 }
             }
 

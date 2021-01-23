@@ -17,8 +17,8 @@ import static utils.PropertiesUtil.get;
 @Data
 @Accessors(fluent = true)
 public class LoginCase extends BaseCase {
+    @SpecialCharacters(allowCharacters = "~!@", denyCharacters = "$%^", assertFail = SuccessAssertDefault.class)
     //@Unique(assertFail = SuccessAssertDefault.class)
-    @NotNull(resetAssert = "assertRightLogin")
     //@NotNull(asserts = SuccessAssertDefault.class)
     //@NotEmpty(asserts = SuccessAssertDefault.class)
     //@Chinese
@@ -71,7 +71,7 @@ public class LoginCase extends BaseCase {
         return this;
     }
 
-    @BeforeMethodRun(group = "1")
+    //@BeforeMethodRun(group = "1")
     public LoginCase rightLoginCase1() {
         loginName = get("g_loginName");
         pwd = get("g_loginPwd");
@@ -108,6 +108,6 @@ public class LoginCase extends BaseCase {
 
     public AssertMethod assertRightLogin() {
         return new SuccessAssertGather(new EqualAssert("res", "test success"),
-                new ByOtherApiAssert(new ConfigCase().dependCase()),new EqualAssert("res.depend", "123"));
+                new ByOtherApiAssert(new ConfigCase().dependCase()), new EqualAssert("res.depend", "123"));
     }
 }

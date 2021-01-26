@@ -30,6 +30,7 @@ public class RequestData {
     private Map<String, String> cookies;
     private IHeaders headers;
     private String param;
+    private BaseCase baseParam;
 
     private boolean isOpenAssert = true;
     private Integer sleep;
@@ -43,6 +44,7 @@ public class RequestData {
     }
 
     public void requestData(BaseCase param) {
+        this.baseParam = param;
         this.uri = param.serverMap.getUri();
         this.methodAndRequestType = param.serverMap.getMethodAndRequestType();
         this.jsonSchemaPath = param.serverMap.getJsonSchemaPath();
@@ -52,6 +54,7 @@ public class RequestData {
         param.serverMap = null;
         param.assertMethod = null;
         param.headers = null;
+        param.pathParam = null;
         String jsonParam = JSON.toJSONString(param);
         if (jsonParam.contains("{\"$ref\":\"@\"}")) {
             Assert.fail("参数类中不能出现以get开头的方法，或者在该方法加上注解：@JSONField(serialize = false)");

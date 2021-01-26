@@ -18,7 +18,7 @@ public class BaseData {
     public static String defaultAssertPath = "code";
     public static Object defaultAssertValue = 0;
     public static boolean isOpenAnnotation = true;
-    public static String tmpDir = "src/main/resources/download";
+    public static String DownloadDir = "src/main/resources/download";
 
     static {
         MvnArgs mvnArgs = new MvnArgs();

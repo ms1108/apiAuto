@@ -8,6 +8,7 @@ public enum ApiMethod {
     POST_FORM("post", FormIRequestType.class),
     GET("get", QueryIRequestType.class),
     GET_PATH("get", PathIRequestType.class),
+    POST_PATH_BODY("post", PathAndBodyRequestType.class),
     UPLOAD("post", UploadIRequestType.class);
 
     private String apiMethod;

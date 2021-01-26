@@ -77,7 +77,7 @@ public class ApiTest {
             if (headerDisposition != null) {
                 fileType = headerDisposition.substring(headerDisposition.lastIndexOf("."), headerDisposition.length() - 1);
             }
-            String contentPath = tmpDir + RandomUtil.getString() + fileType;
+            String contentPath = DownloadDir + RandomUtil.getString() + fileType;
             Assert.assertTrue(writeFile(response.getBody().asInputStream(), contentPath), "下载文件失败");
             res = "{\"filePath\":\"" + contentPath + "\"}";
         }

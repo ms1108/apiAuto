@@ -1,79 +1,46 @@
 package utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class DateUtil {
-
-
-    public static String getNowData() {
-        return getNowDataTime(true);
-    }
-
-    public static String getNowDataTime() {
-        return getNowDataTime(false);
-    }
-
     /**
-     * 获取今天
+     * @param offset:1表示明天，-1表示昨天
      * @return
      */
-    private static String getNowDataTime(boolean justDate) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(justDate ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        Calendar calendar = Calendar.getInstance();
-        date = calendar.getTime();
-
-        return simpleDateFormat.format(date);
+    public LocalDateTime modifyDayDate(int offset) {
+        return currentDate().plusDays(offset);
     }
 
-    public static String getFutureData(int dayCount) {
-        return getFutureDataTime(dayCount, true);
+    //调整时间
+    public LocalDateTime modifyMonthDate(int offset) {
+        return currentDate().plus(offset, ChronoUnit.MONTHS);
     }
 
-    public static String getFutureDataTime(int dayCount) {
-        return getFutureDataTime(dayCount, false);
+    public LocalDateTime currentDate() {
+        return LocalDateTime.now();
     }
 
-    /**
-     * 获取今天后多少天的时间
-     * @param dayCount
-     * @return
-     */
-    private static String getFutureDataTime(int dayCount, boolean justDate) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(justDate ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(calendar.DATE, dayCount);
-        date = calendar.getTime();
-
-        return simpleDateFormat.format(date);
+    public String formatDate(LocalDateTime date) {
+        return formatDate(date,"yyyy-MM-dd HH:mm:ss");
+    }
+    public String formatDate(LocalDateTime date, String pattern) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern);
+        return dtf.format(date);
     }
 
-
-    public static String getPreviousData(int dayCount) {
-        return getPreviousDataTime(dayCount, true);
+    //当前时间戳
+    public String nowTimeLong() {
+        return Long.toString(System.currentTimeMillis());
     }
 
-    public static String getPreviousDataTime(int dayCount) {
-        return getPreviousDataTime(dayCount, false);
-    }
-
-    /**
-     * 获取今天前多少天的时间
-     * @param dayCount
-     * @return
-     */
-    private static String getPreviousDataTime(int dayCount, boolean justDate) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(justDate ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(calendar.DATE, -dayCount);
-        date = calendar.getTime();
-
-        return simpleDateFormat.format(date);
+    //指定时间戳
+    public String timeLongByDate(String dateTime) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(dateTime, fmt);
+        long time = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        return Long.toString(time);
     }
 
 }

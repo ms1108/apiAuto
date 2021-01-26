@@ -4,7 +4,7 @@ import api.RequestData;
 import base.BaseCase;
 import base.BaseListCase;
 import business.user.service_constant.UserConstant;
-import business.user.service_constant.UserServiceTestCode;
+import business.user.service_constant.UserService;
 import io.restassured.response.Response;
 import utils.RandomUtil;
 
@@ -15,7 +15,7 @@ public class UserCase extends BaseCase {
     public Integer role;
 
     public UserCase() {
-        serverMap = UserServiceTestCode.ADD_USER;
+        serverMap = UserService.ADD_USER;
     }
 
     //连续发送的接口可以封装起来

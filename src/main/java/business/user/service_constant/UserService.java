@@ -3,16 +3,16 @@ package business.user.service_constant;
 import base.ApiMethod;
 import base.IServiceMap;
 
-public enum UserServiceTestCode implements IServiceMap {
+public enum UserService implements IServiceMap {
     ADD_USER("/user/add", "", "user"),
     USER_LIST("/user/list", "", "list");
 
-    UserServiceTestCode(String uri, String jsonSchemaPath, String des) {
+    UserService(String uri, String jsonSchemaPath, String des) {
         this(uri, ApiMethod.POST, jsonSchemaPath, des);
     }
 
 
-    UserServiceTestCode(String uri, ApiMethod methodAndRequestType, String jsonSchemaPath, String des) {
+    UserService(String uri, ApiMethod methodAndRequestType, String jsonSchemaPath, String des) {
         this.uri = uri;
         this.methodAndRequestType = methodAndRequestType;
         this.jsonSchemaPath = jsonSchemaPath;

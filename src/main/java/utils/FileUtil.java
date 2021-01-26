@@ -2,7 +2,7 @@ package utils;
 
 import java.io.*;
 
-import static base.BaseData.tmpDir;
+import static base.BaseData.DownloadDir;
 
 public class FileUtil {
 
@@ -56,7 +56,7 @@ public class FileUtil {
     }
 
     public static String getNewestFileContentPath() {
-        return getNewestFileContentPath(tmpDir);
+        return getNewestFileContentPath(DownloadDir);
     }
 
     public static String getNewestFileContentPath(String contentPath) {

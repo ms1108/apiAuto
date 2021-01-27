@@ -1,11 +1,15 @@
 package business.loginTest.testcase;
 
-import annotation.annotations.*;
-import api.RequestData;
+import annotation.annotations.BeforeClassRun;
+import annotation.annotations.BeforeMethodRun;
+import annotation.annotations.MultiRequest;
 import base.BaseCase;
 import business.loginTest.service_constant.LoginConstant;
 import business.loginTest.service_constant.LoginService;
-import config.asserts.*;
+import config.asserts.AssertMethod;
+import config.asserts.ByOtherApiAssert;
+import config.asserts.EqualAssert;
+import config.asserts.SuccessAssertGather;
 import config.header.DefaultHeaders;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -17,7 +21,7 @@ import static utils.PropertiesUtil.get;
 @Data
 @Accessors(fluent = true)
 public class LoginCase extends BaseCase {
-    @SpecialCharacters(allowCharacters = "~!@", denyCharacters = "$%^", assertFail = SuccessAssertDefault.class)
+    //@SpecialCharacters(allowCharacters = "~!@", denyCharacters = "$%^", assertFail = SuccessAssertDefault.class)
     //@Unique(assertFail = SuccessAssertDefault.class)
     //@NotNull(asserts = SuccessAssertDefault.class)
     //@NotEmpty(asserts = SuccessAssertDefault.class)
@@ -57,10 +61,11 @@ public class LoginCase extends BaseCase {
 
     @BeforeClassRun
     public void dependBeforeClass() {
-        apiTest(new RequestData(new ConfigCase().dependCase()));
+        //apiTest(new RequestData(new ConfigCase().dependCase()));
     }
 
     @BeforeMethodRun
+    @MultiRequest
     public LoginCase rightLoginCase() {
         loginName = get("g_loginName");
         pwd = get("g_loginPwd");
@@ -89,7 +94,7 @@ public class LoginCase extends BaseCase {
         return this;
     }
 
-    @AutoTest(des = "依赖测试")
+    //@AutoTest(des = "依赖测试")
     public LoginCase dependCase() {
         LoginCase loginCase = rightLoginCase();
         //从其他的请求参数中获取值

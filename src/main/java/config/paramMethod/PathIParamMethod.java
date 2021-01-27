@@ -1,15 +1,12 @@
-package config.requestTpye;
+package config.paramMethod;
 
 import api.RequestData;
-import com.alibaba.fastjson.JSONObject;
 import io.restassured.specification.RequestSpecification;
 
-import java.util.Map;
-
-public class PathIRequestType implements IRequestType {
+public class PathIParamMethod implements IParamMethod {
 
     @Override
-    public RequestSpecification requestBuild(RequestSpecification specification, RequestData requestData) {
+    public RequestSpecification paramMethodBuild(RequestSpecification specification, RequestData requestData) {
         String uri = requestData.getUri();
         String pathParam = requestData.getBaseParam().pathParam;
         if (uri.endsWith("/")) {

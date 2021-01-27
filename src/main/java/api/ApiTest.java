@@ -38,7 +38,7 @@ public class ApiTest {
         ReportUtil.log("Host      :" + requestData.getHost());
         ReportUtil.log("Uri       :" + requestData.getUri());
         ReportUtil.log("Method    :" + requestData.getMethodAndRequestType().getApiMethod());
-        ReportUtil.log("ParamType :" + requestData.getMethodAndRequestType().getRequestType().getClass().getSimpleName());
+        ReportUtil.log("ParamType :" + requestData.getMethodAndRequestType().getParamMethod().getClass().getSimpleName());
 
         RestAssured.baseURI = requestData.getHost();
         RestAssured.useRelaxedHTTPSValidation();
@@ -48,20 +48,20 @@ public class ApiTest {
         specification.headers(headers);
         ReportUtil.log("Header    :" + headers);
 
-        specification = requestData.getMethodAndRequestType().getRequestType().requestBuild(specification, requestData);
+        specification = requestData.getMethodAndRequestType().getParamMethod().paramMethodBuild(specification, requestData);
+
         ReportUtil.log("Param     :" + requestData.getParam());
 
         if (requestData.getSleep() != null && requestData.getSleep() != 0) {
             try {
                 ReportUtil.log("Sleep     :" + requestData.getSleep());
-
                 TimeUnit.SECONDS.sleep(requestData.getSleep());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
         //发送请求
-        Response response = specification.request(requestData.getMethodAndRequestType().getApiMethod(), requestData.getUri());
+        Response response = requestData.getIRequest().requestMethod(specification, requestData);
         //存储请求
         BaseData.req.put(requestData.getUri(), from(requestData.getParam()));
         //存储响应
@@ -96,5 +96,4 @@ public class ApiTest {
         }
         return response;
     }
-
 }

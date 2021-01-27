@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 public class AnnotationTest extends CommandLogic {
 
-    public String rootPath = "";
+    private String rootPath = "";
     public BaseCase baseCase;
 
     public void annotationTest(String scannedPackage) {
@@ -56,6 +56,7 @@ public class AnnotationTest extends CommandLogic {
         Method[] methods = baseCaseClass.getDeclaredMethods();
         List<Method> beforeMethod = new ArrayList<>();
         List<Method> autoTestMethod = new ArrayList<>();
+        List<Method> multiRequestMethod = new ArrayList<>();
         for (Method method : methods) {
             //BeforeClass调用前置接口
             if (method.isAnnotationPresent(BeforeClassRun.class)) {
@@ -67,6 +68,9 @@ public class AnnotationTest extends CommandLogic {
             if (method.isAnnotationPresent(AutoTest.class)) {
                 autoTestMethod.add(method);
             }
+            if (method.isAnnotationPresent(MultiRequest.class)) {
+                multiRequestMethod.add(method);
+            }
         }
         for (Method method : beforeMethod) {
             baseCaseField(method);
@@ -76,16 +80,27 @@ public class AnnotationTest extends CommandLogic {
         }
         for (Method method : autoTestMethod) {
             AutoTest annotation = method.getAnnotation(AutoTest.class);
-            BaseCase baseCaseAutoTest = (BaseCase) method.invoke(baseCase);
+            BaseCase baseCaseTest = (BaseCase) method.invoke(baseCase);
             String des = annotation.des();
             if (StringUtil.isNotEmpty(annotation.des())) {
-                String currantCase = "执行@AutoTest,类名:" + baseCase.getClass().getSimpleName() + ",方法名:" + method.getName() + "，%s";
-                des = String.format(currantCase, des);
+                des = "执行@AutoTest,类名:" + baseCase.getClass().getSimpleName() + ",方法名:" + method.getName() + "，" + des;
             }
-            apiTest(new RequestData(baseCaseAutoTest)
+            apiTest(new RequestData(baseCaseTest)
                     .setStepDes(des)
                     .setOpenAssert(annotation.isOpenAssert())
                     .setSleep(annotation.sleep()));
+        }
+        for (Method method : multiRequestMethod) {
+            MultiRequest annotation = method.getAnnotation(MultiRequest.class);
+            BaseCase baseCaseTest = (BaseCase) method.invoke(baseCase);
+            String des = annotation.des();
+            apiTest(new RequestData(baseCaseTest)
+                    .setMultiThreadNum(annotation.multiThreadNum())
+                    .setIRequest(annotation.iRequest().newInstance())
+                    .setStepDes(des)
+                    .setOpenAssert(annotation.isOpenAssert())
+                    .setSleep(annotation.sleep()));
+
         }
     }
 

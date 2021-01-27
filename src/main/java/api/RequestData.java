@@ -2,11 +2,12 @@ package api;
 
 import base.ApiMethod;
 import base.BaseCase;
-import base.IServiceMap;
 import com.alibaba.fastjson.JSON;
 import config.asserts.AssertMethod;
 import config.asserts.FailAssetDefault;
 import config.header.IHeaders;
+import config.request.DefaultRequest;
+import config.request.IRequest;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.testng.Assert;
@@ -35,6 +36,9 @@ public class RequestData {
     private boolean isOpenAssert = true;
     private Integer sleep;
     private AssertMethod assertMethod;
+
+    private int multiThreadNum;
+    private IRequest iRequest = new DefaultRequest();
 
     public RequestData() {
     }

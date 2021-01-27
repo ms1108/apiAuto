@@ -1,4 +1,4 @@
-package config.requestTpye;
+package config.paramMethod;
 
 import api.RequestData;
 import com.alibaba.fastjson.JSONObject;
@@ -8,10 +8,10 @@ import lombok.SneakyThrows;
 import java.io.File;
 import java.util.Map;
 
-public class UploadIRequestType implements IRequestType {
+public class UploadIParamMethod implements IParamMethod {
     @SneakyThrows
     @Override
-    public RequestSpecification requestBuild(RequestSpecification specification, RequestData requestData) {
+    public RequestSpecification paramMethodBuild(RequestSpecification specification, RequestData requestData) {
         Map<String, Object> jsonObject = JSONObject.parseObject(requestData.getParam());
         String filePath = (String) jsonObject.get("filePath");
         specification.contentType("multipart/form-data")

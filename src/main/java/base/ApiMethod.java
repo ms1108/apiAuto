@@ -1,22 +1,22 @@
 package base;
 
-import config.requestTpye.*;
+import config.paramMethod.*;
 import lombok.SneakyThrows;
 
 public enum ApiMethod {
-    POST("post", BodyIRequestType.class),
-    POST_FORM("post", FormIRequestType.class),
-    GET("get", QueryIRequestType.class),
-    GET_PATH("get", PathIRequestType.class),
-    POST_PATH_BODY("post", PathAndBodyRequestType.class),
-    UPLOAD("post", UploadIRequestType.class);
+    POST("post", BodyIParamMethod.class),
+    POST_FORM("post", FormIParamMethod.class),
+    GET("get", QueryIParamMethod.class),
+    GET_PATH("get", PathIParamMethod.class),
+    POST_PATH_BODY("post", PathAndBodyParamMethod.class),
+    UPLOAD("post", UploadIParamMethod.class);
 
     private String apiMethod;
-    private Class<? extends IRequestType> requestType;
+    private Class<? extends IParamMethod> paramMethod;
 
-    ApiMethod(String method, Class<? extends IRequestType> requestType) {
+    ApiMethod(String method, Class<? extends IParamMethod> paramMethod) {
         this.apiMethod = method;
-        this.requestType = requestType;
+        this.paramMethod = paramMethod;
     }
 
     public String getApiMethod() {
@@ -24,7 +24,7 @@ public enum ApiMethod {
     }
 
     @SneakyThrows
-    public IRequestType getRequestType() {
-        return requestType.newInstance();
+    public IParamMethod getParamMethod() {
+        return paramMethod.newInstance();
     }
 }

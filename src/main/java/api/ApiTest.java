@@ -61,7 +61,7 @@ public class ApiTest {
             }
         }
         //发送请求
-        Response response = requestData.getIRequest().requestMethod(specification, requestData);
+        Response response = requestData.getIRequestMethod().requestMethod(specification, requestData);
         //存储请求
         BaseData.req.put(requestData.getUri(), from(requestData.getParam()));
         //存储响应

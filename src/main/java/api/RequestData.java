@@ -6,8 +6,8 @@ import com.alibaba.fastjson.JSON;
 import config.asserts.AssertMethod;
 import config.asserts.FailAssetDefault;
 import config.header.IHeaders;
-import config.request.DefaultRequest;
-import config.request.IRequest;
+import config.requestMethod.DefaultRequestMethod;
+import config.requestMethod.IRequestMethod;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.testng.Assert;
@@ -38,7 +38,7 @@ public class RequestData {
     private AssertMethod assertMethod;
 
     private int multiThreadNum;
-    private IRequest iRequest = new DefaultRequest();
+    private IRequestMethod iRequestMethod = new DefaultRequestMethod();
 
     public RequestData() {
     }

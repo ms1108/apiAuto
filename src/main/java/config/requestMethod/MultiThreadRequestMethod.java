@@ -1,4 +1,4 @@
-package config.request;
+package config.requestMethod;
 
 import api.RequestData;
 import config.asserts.SuccessAssertDefault;
@@ -15,15 +15,15 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static io.restassured.RestAssured.given;
 
-public class MultiThreadRequest implements Runnable, IRequest {
+public class MultiThreadRequestMethod implements Runnable, IRequestMethod {
     private RequestData requestData;
     private List<Response> responses = new ArrayList<>();
     private Lock lock = new ReentrantLock();//锁要在属性中new，不能再run方法中new，不然锁无效，因为多个线程就new出了多个锁不合理
 
-    public MultiThreadRequest() {
+    public MultiThreadRequestMethod() {
     }
 
-    public MultiThreadRequest(RequestData requestData) {
+    public MultiThreadRequestMethod(RequestData requestData) {
         this.requestData = requestData;
     }
 
@@ -51,7 +51,7 @@ public class MultiThreadRequest implements Runnable, IRequest {
     @Override
     public Response requestMethod(RequestSpecification specification, RequestData requestData) {
         int multiThreadNum = requestData.getMultiThreadNum();
-        MultiThreadRequest multiThreadRequest = new MultiThreadRequest(requestData);
+        MultiThreadRequestMethod multiThreadRequest = new MultiThreadRequestMethod(requestData);
         List<Thread> threads = new ArrayList<>();
         //通过起多线程同时快速的向后端发起多个相同参数的请求
         for (int i = 0; i < multiThreadNum; i++) {

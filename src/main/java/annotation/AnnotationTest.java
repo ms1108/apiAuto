@@ -96,7 +96,7 @@ public class AnnotationTest extends CommandLogic {
             String des = annotation.des();
             apiTest(new RequestData(baseCaseTest)
                     .setMultiThreadNum(annotation.multiThreadNum())
-                    .setIRequest(annotation.iRequest().newInstance())
+                    .setIRequestMethod(annotation.iRequest().newInstance())
                     .setStepDes(des)
                     .setOpenAssert(annotation.isOpenAssert())
                     .setSleep(annotation.sleep()));

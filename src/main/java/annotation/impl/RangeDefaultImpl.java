@@ -25,6 +25,7 @@ public class RangeDefaultImpl implements IAnnotationTestMethod {
         BigDecimal floatValue = new BigDecimal(annotation.floatValue());
         String des =
                 "类名:" + at.baseCase.getClass().getSimpleName() +
+                        ",方法名:" + method.getName() +
                         ",字段名:" + field.getName() +
                         ",期望大小范围:" + minNum + "-" + maxNum +
                         ",传入值:";

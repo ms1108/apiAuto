@@ -72,7 +72,7 @@ public class LoginCase extends BaseCase {
         return this;
     }
 
-    //@BeforeMethodRun(group = "1")
+    @BeforeMethodRun(group = "1")
     public LoginCase rightLoginCase1() {
         loginName = get("g_loginName");
         pwd = get("g_loginPwd");

@@ -19,6 +19,7 @@ public class LengthDefaultImpl implements IAnnotationTestMethod {
         int maxLen = annotation.maxLen();
         String des =
                 "类名:" + at.baseCase.getClass().getSimpleName() +
+                        ",方法名:" + method.getName() +
                         ",字段名:" + field.getName() +
                         ",期望长度范围:" + minLen + "-" + maxLen +
                         ",传入值长度:";

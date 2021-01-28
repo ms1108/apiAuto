@@ -61,10 +61,8 @@ public class AnnotationServer extends CommandLogic {
         for (Method method : autoTestMethod) {
             AutoTest annotation = method.getAnnotation(AutoTest.class);
             BaseCase baseCaseTest = (BaseCase) method.invoke(baseCase);
-            String des = annotation.des();
-            if (StringUtil.isNotEmpty(annotation.des())) {
-                des = "执行@AutoTest,类名:" + baseCase.getClass().getSimpleName() + ",方法名:" + method.getName() + "，" + des;
-            }
+            String des = "执行@AutoTest,类名:" + baseCase.getClass().getSimpleName() +
+                    ",方法名:" + method.getName() + "，" + annotation.des();
             apiTest(new RequestData(baseCaseTest)
                     .setStepDes(des)
                     .setOpenAssert(annotation.isOpenAssert())
@@ -73,7 +71,8 @@ public class AnnotationServer extends CommandLogic {
         for (Method method : multiRequestMethod) {
             MultiRequest annotation = method.getAnnotation(MultiRequest.class);
             BaseCase baseCaseTest = (BaseCase) method.invoke(baseCase);
-            String des = annotation.des();
+            String des = "执行@MultiRequest,类名:" + baseCase.getClass().getSimpleName() +
+                    ",方法名:" + method.getName() + "，" + annotation.des();
             apiTest(new RequestData(baseCaseTest)
                     .setMultiThreadNum(annotation.multiThreadNum())
                     .setIRequestMethod(annotation.iRequest().newInstance())
@@ -195,7 +194,7 @@ public class AnnotationServer extends CommandLogic {
 
             if (field.getType().toString().contains("$")) {
                 rootPath = rootPath + field.getName() + ".";
-                inertClass(method, baseCase, field.getType().getSimpleName(),executeAnnotationAble);
+                inertClass(method, baseCase, field.getType().getSimpleName(), executeAnnotationAble);
             }
             rootPath = "";
         }

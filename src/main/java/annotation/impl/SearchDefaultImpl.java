@@ -19,6 +19,7 @@ public class SearchDefaultImpl implements IAnnotationTestMethod {
         Search annotation = (Search) a;
         String des =
                 "类名:" + at.baseCase.getClass().getSimpleName() +
+                        ",方法名:" + method.getName() +
                         ",字段名:" + field.getName() +
                         ",列表搜索测试,";
         Object value = getRequestValue(annotation.addDataBaseCase().newInstance().serverMap, annotation.searchValuePath());

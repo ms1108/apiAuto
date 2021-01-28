@@ -16,6 +16,7 @@ public class BlankDefaultImpl implements IAnnotationTestMethod {
         Blank annotation = (Blank) a;
         String des =
                 "类名:" + method.getClass().getSimpleName() +
+                        ",方法名:" + method.getName() +
                         ",字段名:" + field.getName() +
                         ",空格测试,传入空格";
         String value = " ";
@@ -23,6 +24,7 @@ public class BlankDefaultImpl implements IAnnotationTestMethod {
 
         des =
                 "类名:" + method.getClass().getSimpleName() +
+                        ",方法名:" + method.getName() +
                         ",字段名:" + field.getName() +
                         ",首末尾空格测试,传入值:";
         value = " " + field.get(at.getBaseCaseObject(method)) + " ";

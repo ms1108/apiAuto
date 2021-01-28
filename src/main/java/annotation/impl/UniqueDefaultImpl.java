@@ -15,7 +15,11 @@ public class UniqueDefaultImpl implements IAnnotationTestMethod {
     @Override
     public void testMethod(Method method, Field field, Annotation a, AnnotationServer at) {
         Unique annotation = (Unique) a;
-        String des = "类名:" + at.baseCase.getClass().getSimpleName() + ",字段名:" + field.getName() + ",唯一性校验";
+        String des =
+                "类名:" + at.baseCase.getClass().getSimpleName() +
+                        ",方法名:" + method.getName() +
+                        ",字段名:" + field.getName() +
+                        ",唯一性校验";
         String uniqueRandom = "Unique" + RandomUtil.getString(8);
         at.fieldTest(method, field, uniqueRandom, des + ",数据准备", annotation.assertSuccess().newInstance(), annotation.resetAssert());
         at.fieldTest(method, field, uniqueRandom, des + ",数据已存在,期望创建失败", annotation.assertFail().newInstance(), annotation.resetAssert());

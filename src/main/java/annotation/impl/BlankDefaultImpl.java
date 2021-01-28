@@ -1,6 +1,6 @@
 package annotation.impl;
 
-import annotation.AnnotationTest;
+import annotation.AnnotationServer;
 import annotation.IAnnotationTestMethod;
 import annotation.annotations.Blank;
 import lombok.SneakyThrows;
@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 public class BlankDefaultImpl implements IAnnotationTestMethod {
     @SneakyThrows
     @Override
-    public void testMethod(Method method, Field field, Annotation a, AnnotationTest at) {
+    public void testMethod(Method method, Field field, Annotation a, AnnotationServer at) {
         Blank annotation = (Blank) a;
         String des =
                 "类名:" + method.getClass().getSimpleName() +

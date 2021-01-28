@@ -1,6 +1,6 @@
 package annotation.impl;
 
-import annotation.AnnotationTest;
+import annotation.AnnotationServer;
 import annotation.IAnnotationTestMethod;
 import annotation.annotations.Search;
 import config.asserts.ListSearchAssert;
@@ -15,7 +15,7 @@ import static base.BaseData.getRequestValue;
 public class SearchDefaultImpl implements IAnnotationTestMethod {
     @SneakyThrows
     @Override
-    public void testMethod(Method method, Field field, Annotation a, AnnotationTest at) {
+    public void testMethod(Method method, Field field, Annotation a, AnnotationServer at) {
         Search annotation = (Search) a;
         String des =
                 "类名:" + at.baseCase.getClass().getSimpleName() +

@@ -14,40 +14,20 @@ import utils.ClassFinderUtil;
 import utils.ReportUtil;
 import utils.StringUtil;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
-public class AnnotationTest extends CommandLogic {
+public class AnnotationServer extends CommandLogic {
 
     private String rootPath = "";
     public BaseCase baseCase;
 
-    public void annotationTest(String scannedPackage) {
-        annotationTest(scannedPackage, null);
-    }
-
-    public void annotationTest(String scannedPackage, Class<? extends BaseCase> except) {
-        if (!BaseData.isOpenAnnotation) {
-            ReportUtil.log("------------------------------------------------注解测试已被关闭------------------------------------------------");
-            return;
-        }
-        ClassFinderUtil classFinderUtil = new ClassFinderUtil();
-        List<Class<? extends BaseCase>> scanned = classFinderUtil.scanned(scannedPackage);
-        if (except != null) {
-            scanned.remove(except);
-        }
-        for (Class<? extends BaseCase> aClass : scanned) {
-            annotationTest(aClass);
-        }
-
-    }
 
     @SneakyThrows
-    public void annotationTest(Class<? extends BaseCase> baseCaseClass) {
+    public void annotationServer(Class<? extends BaseCase> baseCaseClass, String executeAnnotationAble) {
         if (!BaseData.isOpenAnnotation) {
             ReportUtil.log("------------------------------------------------注解测试已被关闭------------------------------------------------");
             return;
@@ -59,24 +39,24 @@ public class AnnotationTest extends CommandLogic {
         List<Method> multiRequestMethod = new ArrayList<>();
         for (Method method : methods) {
             //BeforeClass调用前置接口
-            if (method.isAnnotationPresent(BeforeClassRun.class)) {
+            if (executeAnnotationAble.contains(BeforeClassRun.class.getSimpleName()) && method.isAnnotationPresent(BeforeClassRun.class)) {
                 method.invoke(baseCase);
             }
-            if (method.isAnnotationPresent(BeforeMethodRun.class)) {
+            if (executeAnnotationAble.contains(BeforeMethodRun.class.getSimpleName()) && method.isAnnotationPresent(BeforeMethodRun.class)) {
                 beforeMethod.add(method);
             }
-            if (method.isAnnotationPresent(AutoTest.class)) {
+            if (executeAnnotationAble.contains(AutoTest.class.getSimpleName()) && method.isAnnotationPresent(AutoTest.class)) {
                 autoTestMethod.add(method);
             }
-            if (method.isAnnotationPresent(MultiRequest.class)) {
+            if (executeAnnotationAble.contains(MultiRequest.class.getSimpleName()) && method.isAnnotationPresent(MultiRequest.class)) {
                 multiRequestMethod.add(method);
             }
         }
         for (Method method : beforeMethod) {
-            baseCaseField(method);
+            baseCaseField(method, executeAnnotationAble);
         }
-        if (beforeMethod.size() == 0) {
-            baseCaseField(null);
+        if (executeAnnotationAble.contains(BeforeMethodRun.class.getSimpleName()) && beforeMethod.size() == 0) {
+            baseCaseField(null, executeAnnotationAble);
         }
         for (Method method : autoTestMethod) {
             AutoTest annotation = method.getAnnotation(AutoTest.class);
@@ -104,15 +84,15 @@ public class AnnotationTest extends CommandLogic {
         }
     }
 
-    private void baseCaseField(Method method) {
+    private void baseCaseField(Method method, String executeAnnotationAble) {
         //准备一份基础数据baseCaseBackup
         getBaseCaseObject(method);
         Field[] fields = baseCase.getClass().getFields();
-        fieldAnnotation(fields, method);
+        fieldAnnotation(fields, method, executeAnnotationAble);
     }
 
     @SneakyThrows
-    private void fieldAnnotation(Field[] fields, Method method) {
+    private void fieldAnnotation(Field[] fields, Method method, String executeAnnotationAble) {
         BeforeMethodRun beforeMethodRun;
         String group = "0";
         if (method != null) {
@@ -122,7 +102,7 @@ public class AnnotationTest extends CommandLogic {
 
         for (Field field : fields) {
             field.setAccessible(true);
-            if (field.isAnnotationPresent(NotNull.class)) {
+            if (executeAnnotationAble.contains(NotNull.class.getSimpleName()) && field.isAnnotationPresent(NotNull.class)) {
                 NotNull annotation = field.getAnnotation(NotNull.class);
                 List<String> groupList = Arrays.asList(annotation.group());
                 if (groupList.contains("0") || groupList.contains(group)) {
@@ -130,7 +110,7 @@ public class AnnotationTest extends CommandLogic {
                     instance.testMethod(method, field, annotation, this);
                 }
             }
-            if (field.isAnnotationPresent(NotEmpty.class)) {
+            if (executeAnnotationAble.contains(NotEmpty.class.getSimpleName()) && field.isAnnotationPresent(NotEmpty.class)) {
                 NotEmpty annotation = field.getAnnotation(NotEmpty.class);
                 List<String> groupList = Arrays.asList(annotation.group());
                 if (groupList.contains("0") || groupList.contains(group)) {
@@ -139,7 +119,7 @@ public class AnnotationTest extends CommandLogic {
                 }
             }
 
-            if (field.isAnnotationPresent(Unique.class)) {
+            if (executeAnnotationAble.contains(Unique.class.getSimpleName()) && field.isAnnotationPresent(Unique.class)) {
                 Unique annotation = field.getAnnotation(Unique.class);
                 List<String> groupList = Arrays.asList(annotation.group());
                 if (groupList.contains("0") || groupList.contains(group)) {
@@ -147,7 +127,7 @@ public class AnnotationTest extends CommandLogic {
                     instance.testMethod(method, field, annotation, this);
                 }
             }
-            if (field.isAnnotationPresent(Length.class)) {
+            if (executeAnnotationAble.contains(Length.class.getSimpleName()) && field.isAnnotationPresent(Length.class)) {
                 Length annotation = field.getAnnotation(Length.class);
                 List<String> groupList = Arrays.asList(annotation.group());
                 if (groupList.contains("0") || groupList.contains(group)) {
@@ -155,7 +135,7 @@ public class AnnotationTest extends CommandLogic {
                     instance.testMethod(method, field, annotation, this);
                 }
             }
-            if (field.isAnnotationPresent(Range.class)) {
+            if (executeAnnotationAble.contains(Range.class.getSimpleName()) && field.isAnnotationPresent(Range.class)) {
                 Range annotation = field.getAnnotation(Range.class);
                 List<String> groupList = Arrays.asList(annotation.group());
                 if (groupList.contains("0") || groupList.contains(group)) {
@@ -164,7 +144,7 @@ public class AnnotationTest extends CommandLogic {
                     instance.testMethod(method, field, annotation, this);
                 }
             }
-            if (field.isAnnotationPresent(StringToInt.class)) {
+            if (executeAnnotationAble.contains(StringToInt.class.getSimpleName()) && field.isAnnotationPresent(StringToInt.class)) {
                 StringToInt annotation = field.getAnnotation(StringToInt.class);
                 List<String> groupList = Arrays.asList(annotation.group());
                 if (groupList.contains("0") || groupList.contains(group)) {
@@ -172,7 +152,7 @@ public class AnnotationTest extends CommandLogic {
                     instance.testMethod(method, field, annotation, this);
                 }
             }
-            if (field.isAnnotationPresent(IntToString.class)) {
+            if (executeAnnotationAble.contains(IntToString.class.getSimpleName()) && field.isAnnotationPresent(IntToString.class)) {
                 IntToString annotation = field.getAnnotation(IntToString.class);
                 List<String> groupList = Arrays.asList(annotation.group());
                 if (groupList.contains("0") || groupList.contains(group)) {
@@ -180,7 +160,7 @@ public class AnnotationTest extends CommandLogic {
                     instance.testMethod(method, field, annotation, this);
                 }
             }
-            if (field.isAnnotationPresent(Search.class)) {
+            if (executeAnnotationAble.contains(Search.class.getSimpleName()) && field.isAnnotationPresent(Search.class)) {
                 Search annotation = field.getAnnotation(Search.class);
                 List<String> groupList = Arrays.asList(annotation.group());
                 if (groupList.contains("0") || groupList.contains(group)) {
@@ -188,7 +168,7 @@ public class AnnotationTest extends CommandLogic {
                     instance.testMethod(method, field, annotation, this);
                 }
             }
-            if (field.isAnnotationPresent(Chinese.class)) {
+            if (executeAnnotationAble.contains(Chinese.class.getSimpleName()) && field.isAnnotationPresent(Chinese.class)) {
                 Chinese annotation = field.getAnnotation(Chinese.class);
                 List<String> groupList = Arrays.asList(annotation.group());
                 if (groupList.contains("0") || groupList.contains(group)) {
@@ -196,7 +176,7 @@ public class AnnotationTest extends CommandLogic {
                     instance.testMethod(method, field, annotation, this);
                 }
             }
-            if (field.isAnnotationPresent(Blank.class)) {
+            if (executeAnnotationAble.contains(Blank.class.getSimpleName()) && field.isAnnotationPresent(Blank.class)) {
                 Blank annotation = field.getAnnotation(Blank.class);
                 List<String> groupList = Arrays.asList(annotation.group());
                 if (groupList.contains("0") || groupList.contains(group)) {
@@ -204,7 +184,7 @@ public class AnnotationTest extends CommandLogic {
                     instance.testMethod(method, field, annotation, this);
                 }
             }
-            if (field.isAnnotationPresent(SpecialCharacters.class)) {
+            if (executeAnnotationAble.contains(SpecialCharacters.class.getSimpleName()) && field.isAnnotationPresent(SpecialCharacters.class)) {
                 SpecialCharacters annotation = field.getAnnotation(SpecialCharacters.class);
                 List<String> groupList = Arrays.asList(annotation.group());
                 if (groupList.contains("0") || groupList.contains(group)) {
@@ -215,7 +195,7 @@ public class AnnotationTest extends CommandLogic {
 
             if (field.getType().toString().contains("$")) {
                 rootPath = rootPath + field.getName() + ".";
-                inertClass(method, baseCase, field.getType().getSimpleName());
+                inertClass(method, baseCase, field.getType().getSimpleName(),executeAnnotationAble);
             }
             rootPath = "";
         }
@@ -240,12 +220,12 @@ public class AnnotationTest extends CommandLogic {
 
     }
 
-    private void inertClass(Method method, BaseCase baseCase, String className) {
+    private void inertClass(Method method, BaseCase baseCase, String className, String executeAnnotationAble) {
         Class<?>[] innerClazz = baseCase.getClass().getDeclaredClasses();
         for (Class claszInner : innerClazz) {
             if (className.equals(claszInner.getSimpleName())) {
                 Field[] fields = claszInner.getDeclaredFields();
-                fieldAnnotation(fields, method);
+                fieldAnnotation(fields, method, executeAnnotationAble);
             }
         }
     }
@@ -270,5 +250,30 @@ public class AnnotationTest extends CommandLogic {
     public boolean isInteger(String str) {
         Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
         return pattern.matcher(str).matches();
+    }
+
+    public List<Class<? extends BaseCase>> getBaseCaseName(String scannedPackage) {
+        ClassFinderUtil classFinderUtil = new ClassFinderUtil();
+        return classFinderUtil.scanned(scannedPackage);
+    }
+
+    public List<String> getAnnotationNameOnMethod(Class<? extends BaseCase> baseCase) {
+        List<String> annotations = new ArrayList<>();
+        for (Method method : baseCase.getDeclaredMethods()) {
+            for (Annotation annotation : method.getDeclaredAnnotations()) {
+                annotations.add(annotation.annotationType().getSimpleName());
+            }
+        }
+        return annotations;
+    }
+
+    public List<String> getAnnotationNameOnField(Class<? extends BaseCase> baseCase) {
+        List<String> annotations = new ArrayList<>();
+        for (Field field : baseCase.getFields()) {
+            for (Annotation annotation : field.getAnnotations()) {
+                annotations.add(annotation.annotationType().getSimpleName());
+            }
+        }
+        return annotations;
     }
 }

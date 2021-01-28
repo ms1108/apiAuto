@@ -1,6 +1,6 @@
 package annotation.impl;
 
-import annotation.AnnotationTest;
+import annotation.AnnotationServer;
 import annotation.IAnnotationTestMethod;
 import annotation.annotations.Range;
 import lombok.SneakyThrows;
@@ -18,7 +18,7 @@ public class RangeDefaultImpl implements IAnnotationTestMethod {
 
     @SneakyThrows
     @Override
-    public void testMethod(Method method, Field field, Annotation a, AnnotationTest at) {
+    public void testMethod(Method method, Field field, Annotation a, AnnotationServer at) {
         Range annotation = (Range) a;
         BigDecimal minNum = new BigDecimal(annotation.minNum());
         BigDecimal maxNum = new BigDecimal(annotation.maxNum());

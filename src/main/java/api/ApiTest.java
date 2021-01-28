@@ -28,8 +28,6 @@ public class ApiTest {
     }
 
     public Response apiTest(RequestData requestData) {
-        //换行
-        ReportUtil.log("");
         if (StringUtil.isEmpty(requestData.getStepDes())) {
             ReportUtil.log("Des       :" + requestData.getDes());
         } else {
@@ -82,6 +80,8 @@ public class ApiTest {
             res = "{\"filePath\":\"" + contentPath + "\"}";
         }
         ReportUtil.log("res       :" + res);
+        //换行
+        ReportUtil.log("");
 
         //断言
         if (requestData.isOpenAssert() && requestData.getAssertMethod() != null) {

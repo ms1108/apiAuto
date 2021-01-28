@@ -1,6 +1,6 @@
 package annotation.impl;
 
-import annotation.AnnotationTest;
+import annotation.AnnotationServer;
 import annotation.IAnnotationTestMethod;
 import annotation.annotations.Length;
 import lombok.SneakyThrows;
@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 public class LengthDefaultImpl implements IAnnotationTestMethod {
     @SneakyThrows
     @Override
-    public void testMethod(Method method, Field field, Annotation a, AnnotationTest at) {
+    public void testMethod(Method method, Field field, Annotation a, AnnotationServer at) {
         Length annotation = (Length) a;
         int minLen = annotation.minLen();
         int maxLen = annotation.maxLen();

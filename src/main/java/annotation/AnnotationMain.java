@@ -6,8 +6,8 @@ import org.testng.annotations.Test;
 public class AnnotationMain {
     @Test
     public void annotation(){
-        AnnotationTest annotationTest = new AnnotationTest();
-        annotationTest.annotationTest(LoginCase.class);
+        AnnotationServer annotationServer = new AnnotationServer();
+        annotationServer.annotationServer(LoginCase.class,"MultiRequest");
         //annotationTest.annotationTest("business.loginTest.testcase");
     }
 }

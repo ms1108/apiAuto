@@ -2,7 +2,7 @@
 <suite name="Second suite" verbose="1" >
     <test name = "allTestsInAClass" >
         <classes>
-            <class name="business.loginTest.LoginTest"/>
+            <class name="business.loginTest.LoginServer"/>
         </classes>
     </test>
 </suite>

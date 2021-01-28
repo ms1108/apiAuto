@@ -1,7 +1,7 @@
 package business.loginTest;
 
-import annotation.AnnotationTest;
 import api.RequestData;
+import base.AnnotationTest;
 import business.loginTest.testcase.ConfigCase;
 import business.loginTest.testcase.LoginCase;
 import business.loginTest.testcase.TestUploadCase;
@@ -12,16 +12,15 @@ import org.testng.annotations.Test;
 /**
  * Test类，建议用于多流程，多场景测试
  */
-public class LoginTest extends AnnotationTest {
-    @Test
-    public void annotationTest() {
-        //也可以传入包名
-        annotationTest(LoginCase.class);
+public class LoginServer extends AnnotationTest {
+
+    public LoginServer(String packagePath) {
+        super("business.loginTest.testcase");
     }
 
     //更多断言方法http://testingpai.com/article/1599472747188
     @Test
-    public void test1() {
+    public void test() {
         apiTest(new RequestData(new LoginCase().rightLoginCase())
                 .setStepDes("这是我的测试步骤")
                 .setAssertMethod(new SuccessAssertDefault()

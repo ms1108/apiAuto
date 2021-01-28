@@ -1,6 +1,6 @@
 package annotation.impl;
 
-import annotation.AnnotationTest;
+import annotation.AnnotationServer;
 import annotation.IAnnotationTestMethod;
 import annotation.annotations.Chinese;
 import lombok.SneakyThrows;
@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 public class ChineseDefaultImpl implements IAnnotationTestMethod {
     @SneakyThrows
     @Override
-    public void testMethod(Method method, Field field, Annotation a, AnnotationTest at) {
+    public void testMethod(Method method, Field field, Annotation a, AnnotationServer at) {
         Chinese annotation = (Chinese) a;
         String des =
                 "类名:" + at.baseCase.getClass().getSimpleName() +

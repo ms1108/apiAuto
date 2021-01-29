@@ -29,14 +29,14 @@ public class ApiTest {
 
     public Response apiTest(RequestData requestData) {
         if (StringUtil.isEmpty(requestData.getStepDes())) {
-            ReportUtil.log("Des            : " + requestData.getDes());
+            ReportUtil.log("Des               : " + requestData.getDes());
         } else {
-            ReportUtil.log("StepDes        : " + requestData.getStepDes());
+            ReportUtil.log("StepDes           : " + requestData.getStepDes());
         }
-        ReportUtil.log("Host           : " + requestData.getHost());
-        ReportUtil.log("Uri            : " + requestData.getUri());
-        ReportUtil.log("Method         : " + requestData.getMethodAndRequestType().getApiMethod());
-        ReportUtil.log("ParamMethod    : " + requestData.getMethodAndRequestType().getParamMethod().getClass().getSimpleName());
+        ReportUtil.log("Host              : " + requestData.getHost());
+        ReportUtil.log("Uri               : " + requestData.getUri());
+        ReportUtil.log("Method            : " + requestData.getMethodAndRequestType().getApiMethod());
+        ReportUtil.log("ParamMethod       : " + requestData.getMethodAndRequestType().getParamMethod().getClass().getSimpleName());
 
         RestAssured.baseURI = requestData.getHost();
         RestAssured.useRelaxedHTTPSValidation();
@@ -44,15 +44,15 @@ public class ApiTest {
 
         Map<String, Object> headers = requestData.getHeaders().getHeaders(requestData);
         specification.headers(headers);
-        ReportUtil.log("Header         : " + headers);
+        ReportUtil.log("Header            : " + headers);
 
         specification = requestData.getMethodAndRequestType().getParamMethod().paramMethodBuild(specification, requestData);
 
-        ReportUtil.log("Param          : " + requestData.getParam());
+        ReportUtil.log("Param             : " + requestData.getParam());
 
         if (requestData.getSleep() != null && requestData.getSleep() != 0) {
             try {
-                ReportUtil.log("Sleep          : " + requestData.getSleep());
+                ReportUtil.log("Sleep             : " + requestData.getSleep());
                 TimeUnit.SECONDS.sleep(requestData.getSleep());
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -79,7 +79,7 @@ public class ApiTest {
             Assert.assertTrue(writeFile(response.getBody().asInputStream(), contentPath), "下载文件失败");
             res = "{\"filePath\":\"" + contentPath + "\"}";
         }
-        ReportUtil.log("res            : " + res);
+        ReportUtil.log("res               : " + res);
         //换行
         ReportUtil.log("");
 

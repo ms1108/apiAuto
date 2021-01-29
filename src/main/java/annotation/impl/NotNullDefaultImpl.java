@@ -17,7 +17,6 @@ public class NotNullDefaultImpl implements IAnnotationTestMethod {
         NotNull annotation = (NotNull) a;
         String des =
                 "类名:" + at.baseCase.getClass().getSimpleName() +
-                        ",方法名:" + method.getName() +
                         ",字段名:" + field.getName() +
                         ",输入null值校验";
         at.fieldTest(method, field, null, des, annotation.asserts().newInstance(), annotation.resetAssert());

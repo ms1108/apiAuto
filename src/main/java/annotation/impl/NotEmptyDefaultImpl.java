@@ -17,7 +17,6 @@ public class NotEmptyDefaultImpl implements IAnnotationTestMethod {
         NotEmpty annotation = (NotEmpty) a;
         String des =
                 "类名:" + at.baseCase.getClass().getSimpleName() +
-                ",方法名:" + method.getName() +
                 ",字段名:" + field.getName() +
                 ",空字符串校验";
         at.fieldTest(method, field, "", des, annotation.asserts().newInstance(), annotation.resetAssert());

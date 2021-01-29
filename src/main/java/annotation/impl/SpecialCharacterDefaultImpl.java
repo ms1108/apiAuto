@@ -17,7 +17,6 @@ public class SpecialCharacterDefaultImpl implements IAnnotationTestMethod {
         SpecialCharacters annotation = (SpecialCharacters) a;
         String des =
                 "类名:" + at.baseCase.getClass().getSimpleName() +
-                        ",方法名:" + method.getName() +
                         ",字段名:" + field.getName() +
                         ",特殊字符测试,";
         String value = "";

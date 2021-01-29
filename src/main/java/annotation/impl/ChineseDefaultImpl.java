@@ -17,7 +17,6 @@ public class ChineseDefaultImpl implements IAnnotationTestMethod {
         Chinese annotation = (Chinese) a;
         String des =
                 "类名:" + at.baseCase.getClass().getSimpleName() +
-                        ",方法名:" + method.getName() +
                         ",字段名:" + field.getName() +
                         ",中文字符测试,传入中文值:";
         String value = RandomUtil.getChinese(annotation.chineseLen());

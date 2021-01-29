@@ -17,7 +17,6 @@ public class UniqueDefaultImpl implements IAnnotationTestMethod {
         Unique annotation = (Unique) a;
         String des =
                 "类名:" + at.baseCase.getClass().getSimpleName() +
-                        ",方法名:" + method.getName() +
                         ",字段名:" + field.getName() +
                         ",唯一性校验";
         String uniqueRandom = "Unique" + RandomUtil.getString(8);

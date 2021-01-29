@@ -21,7 +21,7 @@ public class LoginCase extends BaseCase {
     @Unique(assertFail = SuccessAssertDefault.class)
     @NotNull(asserts = SuccessAssertDefault.class)
     @NotEmpty(asserts = SuccessAssertDefault.class)
-    @Chinese
+    @Chinese(group = "1")
     @Blank(assertFail = SuccessAssertDefault.class)
     public String loginName;
 

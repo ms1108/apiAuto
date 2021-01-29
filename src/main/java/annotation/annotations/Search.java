@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Inherited
 public @interface Search {
 
-    int expectListLen() default 1;
+    int expectListLen() default 1;//搜索后列表只有一条数据
 
     //列表根路径可以根据项目写默认的
     String listRootPath() default "data.rows";

@@ -242,11 +242,11 @@ public class AnnotationServer extends CommandLogic {
     }
 
     private boolean isExecuteField(Field field, Class<? extends Annotation> annotation, String executeAnnotationAble) {
-        String[] executeAnnotationAbles = executeAnnotationAble.split(",");
-        String fieldAnnotationAble = executeAnnotationAbles[0];
         return field.isAnnotationPresent(annotation)
                 && executeAnnotationAble.contains(annotation.getSimpleName())
-                && (fieldAnnotationAble.contains(".") ? fieldAnnotationAble.endsWith(field.getName()) : fieldAnnotationAble.equals(field.getName()))
+                && (executeAnnotationAble.split(",")[0].contains(".")
+                ? executeAnnotationAble.split(",")[0].endsWith(field.getName())
+                : executeAnnotationAble.split(",")[0].equals(field.getName()))
                 ;
     }
 

@@ -83,21 +83,21 @@ public class LoginCase extends BaseCase {
         headers = new DefaultHeaders();
         return this;
     }
-
+    @AutoTest
     public LoginCase errorLoginCase() {
         LoginCase loginCase = rightLoginCase();
         loginCase.pwd = "";
         return this;
     }
 
-    //@AutoTest(des = "依赖测试")
+    @AutoTest(des = "依赖测试")
     public LoginCase dependCase() {
         LoginCase loginCase = rightLoginCase();
         //从其他的请求参数中获取值
         loginCase.depend = getRequestValue(LoginService.Config, "depend");
         return this;
     }
-
+    @AutoTest
     public LoginCase dependCase1() {
         LoginCase loginCase = rightLoginCase();
         loginCase.depend = null;

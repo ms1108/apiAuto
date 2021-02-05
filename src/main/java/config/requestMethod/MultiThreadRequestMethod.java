@@ -18,7 +18,7 @@ import static io.restassured.RestAssured.given;
 public class MultiThreadRequestMethod implements Runnable, IRequestMethod {
     private RequestData requestData;
     private List<Response> responses = new ArrayList<>();
-    private Lock lock = new ReentrantLock();//锁要在属性中new，不能再run方法中new，不然锁无效，因为多个线程就new出了多个锁不合理
+    private Lock lock = new ReentrantLock();//锁要在属性中new，不能在run方法中new，不然锁无效，因为多个线程就new出了多个锁不合理
 
     public MultiThreadRequestMethod() {
     }

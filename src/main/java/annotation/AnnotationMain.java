@@ -7,7 +7,7 @@ public class AnnotationMain {
     @Test
     public void annotation(){
         AnnotationServer annotationServer = new AnnotationServer();
-        annotationServer.annotationServer(LoginCase.class,"MultiRequest");
+        annotationServer.annotationServer(LoginCase.class,"isManage,EnumInt,BeforeMethodRun");
         //annotationTest.annotationTest("business.loginTest.testcase");
     }
 }

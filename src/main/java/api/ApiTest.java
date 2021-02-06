@@ -28,6 +28,9 @@ public class ApiTest {
     }
 
     public Response apiTest(RequestData requestData) {
+        ReportUtil.printLog();
+        //因为一个注解可能会发送多个接口所以预置日志打印一遍之后就清除
+        ReportUtil.clearLogs();
         if (StringUtil.isEmpty(requestData.getStepDes())) {
             ReportUtil.log("Des               : " + requestData.getDes());
         } else {

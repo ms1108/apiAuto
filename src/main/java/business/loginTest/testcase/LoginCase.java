@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 import utils.RandomUtil;
 
 import static base.BaseData.*;
+import static business.loginTest.service_constant.LoginConstant.IS_MENAGE;
 import static utils.PropertiesUtil.get;
 
 @Data
@@ -28,6 +29,9 @@ public class LoginCase extends BaseCase {
 
     @Length(minLen = 1, maxLen = 8, assertFail = SuccessAssertDefault.class)
     public String pwd;
+
+    @EnumInt
+    public Integer isManage;
 
     public Type type;
 
@@ -48,6 +52,7 @@ public class LoginCase extends BaseCase {
     @Accessors(fluent = true)
     public static class TypeIn {
         @Range(minNum = "0.1", maxNum = "1", floatValue = "0.1", assertFail = SuccessAssertDefault.class)//测试范围(0,1]
+        @EnumInt
         public Integer TypeIn;
     }
 
@@ -65,7 +70,7 @@ public class LoginCase extends BaseCase {
     public LoginCase rightLoginCase() {
         loginName = get("g_loginName");
         pwd = get("g_loginPwd");
-        type = new Type().role(new TypeIn().TypeIn(LoginConstant.IS_MENAGE));
+        type = new Type().role(new TypeIn().TypeIn(IS_MENAGE));
         depend = "123";
         userName = RandomUtil.getString();
         assertMethod = new SuccessAssertGather(new EqualAssert("res", "test success"));
@@ -83,7 +88,7 @@ public class LoginCase extends BaseCase {
         headers = new DefaultHeaders();
         return this;
     }
-    @AutoTest
+
     public LoginCase errorLoginCase() {
         LoginCase loginCase = rightLoginCase();
         loginCase.pwd = "";
@@ -97,7 +102,7 @@ public class LoginCase extends BaseCase {
         loginCase.depend = getRequestValue(LoginService.Config, "depend");
         return this;
     }
-    @AutoTest
+
     public LoginCase dependCase1() {
         LoginCase loginCase = rightLoginCase();
         loginCase.depend = null;

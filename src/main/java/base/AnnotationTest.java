@@ -22,17 +22,19 @@ public class AnnotationTest extends AnnotationServer {
 
     @DataProvider
     public Object[][] executeAnnotationAble() {
-        return getDataProvider();//bject[][] objects = {{Class<? extends BaseCase>,"beforeMethodName;annotationNameOnField"}};构造成这种格式
+        return getDataProvider();//构造成这种格式:object[][] objects = {{Class<? extends BaseCase>,"beforeMethodName;annotationNameOnField"}};
     }
 
     @Test(dataProvider = "executeAnnotationAble")
     public void annotationTest(String executeAnnotationName, Class<? extends BaseCase> baseCase) {
-        ReportUtil.log("PackagePath       :  " + packagePath);
-        ReportUtil.log("BaseCase          :  " + baseCase.getSimpleName());
-        ReportUtil.log("MethodOrFieldName :  " + executeAnnotationName.split(",")[0]);
-        ReportUtil.log("AnnotationName    :  " + executeAnnotationName.split(",")[1]);
+        //预置日志前先清空，万一该用例空转，也就是没有发送接口，则导致下边的预置日志带到下一个用例中，所以先清空。
+        ReportUtil.clearLogs();
+        ReportUtil.setPreLog("PackagePath       : " + packagePath);
+        ReportUtil.setPreLog("BaseCase          : " + baseCase.getSimpleName());
+        ReportUtil.setPreLog("MethodOrFieldName : " + executeAnnotationName.split(",")[0]);
+        ReportUtil.setPreLog("AnnotationName    : " + executeAnnotationName.split(",")[1]);
         //换行
-        ReportUtil.log("");
+        ReportUtil.setPreLog("");
         annotationServer(baseCase, executeAnnotationName);
     }
 
@@ -99,35 +101,3 @@ public class AnnotationTest extends AnnotationServer {
         return array;
     }
 }
-// Class<? extends BaseCase> baseCaseClass = baseCaseName.get(i);
-//            List<String> annotationNameOnMethod = getAnnotationNameOnMethod(baseCaseClass);
-//            List<String> annotationNameOnField = getAnnotationNameOnField(baseCaseClass);
-//
-//            //BeforeClassRun单独处理
-//            if (annotationNameOnMethod.contains(BeforeClassRun.class.getSimpleName())) {
-//                annotationNameOnMethod.remove(annotationNameOnMethod.indexOf(BeforeClassRun.class.getSimpleName()));
-//                List<Object> baseCaseAndFieldAnnotationName = new ArrayList<>();
-//                baseCaseAndFieldAnnotationName.add(BeforeClassRun.class.getSimpleName());
-//                baseCaseAndFieldAnnotationName.add(baseCaseClass);
-//                allCase.add(baseCaseAndFieldAnnotationName);
-//            }
-//
-//            //BeforeMethodRun名称和字段的注解名称
-//            for (int j = 0; j < annotationNameOnField.size(); j++) {
-//                List<Object> baseCaseAndFieldAnnotationName = new ArrayList<>();
-//                baseCaseAndFieldAnnotationName.add(annotationNameOnField.get(j) + ";" + BeforeMethodRun.class.getSimpleName());
-//                baseCaseAndFieldAnnotationName.add(baseCaseClass);
-//                allCase.add(baseCaseAndFieldAnnotationName);
-//            }
-//
-//            //BeforeMethodRun配合字段使用的，已被处理
-//            if (annotationNameOnMethod.contains(BeforeMethodRun.class.getSimpleName())) {
-//                annotationNameOnMethod.remove(annotationNameOnMethod.indexOf(BeforeMethodRun.class.getSimpleName()));
-//            }
-//
-//            for (int j = 0; j < annotationNameOnMethod.size(); j++) {
-//                List<Object> baseCaseAndFieldAnnotationName = new ArrayList<>();
-//                baseCaseAndFieldAnnotationName.add(annotationNameOnMethod.get(j));
-//                baseCaseAndFieldAnnotationName.add(baseCaseClass);
-//                allCase.add(baseCaseAndFieldAnnotationName);
-//            }

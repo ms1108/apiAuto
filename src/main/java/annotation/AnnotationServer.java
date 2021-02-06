@@ -55,12 +55,14 @@ public class AnnotationServer extends CommandLogic {
             }
         }
         for (Method method : beforeMethod) {
-            ReportUtil.log("------------------------------------------------AnotherBeforeMethodRun------------------------------------------------");
-            ReportUtil.log(BeforeMethodRun.class.getSimpleName() + "   : " + method.getName());
+            String logMethodName = "------------------------------------------------" + method.getName() + BeforeMethodRun.class.getSimpleName() + "------------------------------------------------";
+            ReportUtil.setPreLog(logMethodName);
             baseCaseField(method, executeAnnotationAble);
+            //因为第一个遍历可能不发送接口所以这个logMethodName的预置日志要删掉
+            ReportUtil.deleteLog(logMethodName);
         }
         if (executeAnnotationAble.contains(BeforeMethodRun.class.getSimpleName()) && beforeMethod.size() == 0) {
-            ReportUtil.log(BeforeMethodRun.class.getSimpleName() + "   : " + baseCaseClass.getSimpleName() + "的无参构造方法");
+            ReportUtil.setPreLog("-----------------------------------" + BeforeMethodRun.class.getSimpleName() + "为" + baseCaseClass.getSimpleName() + "的无参构造方法" + "-----------------------------------");
             baseCaseField(null, executeAnnotationAble);
         }
         for (Method method : autoTestMethod) {
@@ -190,6 +192,22 @@ public class AnnotationServer extends CommandLogic {
             }
             if (isExecuteField(field, SpecialCharacters.class, executeAnnotationAble)) {
                 SpecialCharacters annotation = field.getAnnotation(SpecialCharacters.class);
+                List<String> groupList = Arrays.asList(annotation.group());
+                if (groupList.contains("0") || groupList.contains(group)) {
+                    IAnnotationTestMethod instance = annotation.testMethod().newInstance();
+                    instance.testMethod(method, field, annotation, this);
+                }
+            }
+            if (isExecuteField(field, EnumInt.class, executeAnnotationAble)) {
+                EnumInt annotation = field.getAnnotation(EnumInt.class);
+                List<String> groupList = Arrays.asList(annotation.group());
+                if (groupList.contains("0") || groupList.contains(group)) {
+                    IAnnotationTestMethod instance = annotation.testMethod().newInstance();
+                    instance.testMethod(method, field, annotation, this);
+                }
+            }
+            if (isExecuteField(field, EnumString.class, executeAnnotationAble)) {
+                EnumString annotation = field.getAnnotation(EnumString.class);
                 List<String> groupList = Arrays.asList(annotation.group());
                 if (groupList.contains("0") || groupList.contains(group)) {
                     IAnnotationTestMethod instance = annotation.testMethod().newInstance();

@@ -77,15 +77,21 @@ public class AnnotationServer extends CommandLogic {
         }
         for (Method method : multiRequestMethod) {
             MultiRequest annotation = method.getAnnotation(MultiRequest.class);
-            BaseCase baseCaseTest = (BaseCase) method.invoke(baseCase);
+            BaseCase baseCaseMethod = (BaseCase) method.invoke(baseCase);
             String des = "执行@MultiRequest,类名:" + baseCase.getClass().getSimpleName() +
                     ",方法名:" + method.getName() + "，" + annotation.des();
-            apiTest(new RequestData(baseCaseTest)
+            RequestData requestData = new RequestData(baseCaseMethod)
                     .setMultiThreadNum(annotation.multiThreadNum())
                     .setIRequestMethod(annotation.iRequest().newInstance())
                     .setStepDes(des)
                     .setOpenAssert(annotation.isOpenAssert())
-                    .setSleep(annotation.sleep()));
+                    .setSleep(annotation.sleep());
+            String resetAssert = annotation.resetAssert();
+            if (StringUtil.isNotEmpty(resetAssert)) {
+                AssertMethod retAssertMethod = (AssertMethod) baseCaseMethod.getClass().getMethod(resetAssert).invoke(baseCaseMethod);
+                requestData.setAssertMethod(retAssertMethod);
+            }
+            apiTest(requestData);
 
         }
     }
@@ -224,15 +230,15 @@ public class AnnotationServer extends CommandLogic {
     }
 
     @SneakyThrows
-    public void fieldTest(Method method, Field field, Object value, String des, AssertMethod assertMethod, String retAssert) {
+    public void fieldTest(Method method, Field field, Object value, String des, AssertMethod assertMethod, String resetAssert) {
         BaseCase baseCaseMethod = getBaseCaseObject(method);
         RequestData requestData = new RequestData(baseCaseMethod);
         baseCase = baseCase.getClass().newInstance();//因为走了RequestData，serverMap会被置空，所以再new一遍
         String targetPath = rootPath + field.getName();
         requestData.setParam(replaceValue(requestData.getParam(), targetPath, value));
         requestData.setStepDes(des);
-        if (StringUtil.isNotEmpty(retAssert)) {
-            AssertMethod retAssertMethod = (AssertMethod) baseCaseMethod.getClass().getMethod(retAssert).invoke(baseCaseMethod);
+        if (StringUtil.isNotEmpty(resetAssert)) {
+            AssertMethod retAssertMethod = (AssertMethod) baseCaseMethod.getClass().getMethod(resetAssert).invoke(baseCaseMethod);
             requestData.setAssertMethod(retAssertMethod);
         } else {
             requestData.setAssertMethod(assertMethod);

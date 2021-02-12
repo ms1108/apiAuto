@@ -66,16 +66,13 @@ public class MultiThreadRequestMethod implements Runnable, IRequestMethod {
                 e.printStackTrace();
             }
         });
-        if (multiThreadRequest.responses.size() > 1) {
-            for (int i = 1; i < multiThreadRequest.responses.size(); i++) {
-                Response response = multiThreadRequest.responses.get(i);
+        if (requestData.isOpenAssert()){
+            for (Response response : responses) {
                 ReportUtil.log("res               : " + response.getBody().asString());
-                //对非第一个完成请求的response做默认成功断言
-                if (requestData.isOpenAssert()) {
-                    new SuccessAssertDefault().assets(requestData, response);
-                }
-
+                requestData.getAssertMethod().assets(requestData,response);
             }
+            //已经断言了外边不用再断言
+            requestData.setOpenAssert(false);
         }
         return multiThreadRequest.responses.get(0);
     }

@@ -19,4 +19,7 @@ public @interface MultiRequest {
     boolean isOpenAssert() default true;
 
     int sleep() default 0;
+
+    String resetAssert() default "";
+
 }

@@ -1,4 +1,4 @@
 package config.protocol;
 
-public class IProtocol {
+public interface IProtocol {
 }

@@ -7,7 +7,9 @@ import business.loginTest.testcase.LoginCase;
 import business.loginTest.testcase.TestUploadCase;
 import config.asserts.EqualAssert;
 import config.asserts.SuccessAssertDefault;
+import org.testng.Assert;
 import org.testng.annotations.Test;
+import utils.listeners.RetryAnalyzer;
 
 /**
  * Test类，建议用于多流程，多场景测试
@@ -75,4 +77,16 @@ public class LoginServer extends AnnotationTest {
         apiTest(new RequestData(new TestUploadCase().uploadCase()));
     }
 
+    //对该用例开启重试功能
+    @Test(retryAnalyzer = RetryAnalyzer.class)
+    public void retryTest(){
+        System.out.println("start");
+        Assert.fail();
+    }
+    //跳过该用例的执行
+    @Test(enabled = false)
+    public void retryTest1(){
+        System.out.println("start");
+
+    }
 }

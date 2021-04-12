@@ -25,7 +25,7 @@ public class AnnotationTest extends AnnotationServer {
         return getDataProvider();//构造成这种格式:object[][] objects = {{Class<? extends BaseCase>,"beforeMethodName;annotationNameOnField"}};
     }
 
-    @Test(dataProvider = "executeAnnotationAble")
+    //@Test(dataProvider = "executeAnnotationAble")
     public void annotationTest(String executeAnnotationName, Class<? extends BaseCase> baseCase) {
         //预置日志前先清空，万一该用例空转，也就是没有发送接口，则导致下边的预置日志带到下一个用例中，所以先清空。
         ReportUtil.clearLogs();

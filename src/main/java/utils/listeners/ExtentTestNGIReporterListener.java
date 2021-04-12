@@ -1,4 +1,4 @@
-package utils;
+package utils.listeners;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -10,6 +10,9 @@ import com.aventstack.extentreports.reporter.configuration.ChartLocation;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import org.testng.*;
 import org.testng.xml.XmlSuite;
+import utils.PropertiesUtil;
+import utils.SendEmail;
+import utils.StringUtil;
 
 import java.io.File;
 import java.util.*;

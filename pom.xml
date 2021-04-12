@@ -81,6 +81,8 @@
                         <property>
                             <name>listener</name>
                             <value>utils.ExtentTestNGIReporterListener</value>
+                            <!--                            全局添加重试策略-->
+                            <!--                            <value>utils.listener.ExtentTestNGIReporterListener,utils.listener.RetryAnalyzer,utils.listener.RetryListener</value>-->
                         </property>
                     </properties>
                 </configuration>

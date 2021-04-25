@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 
 @Data
 public class BaseCase extends CommandLogic {
-    public String pathParam;
+    public String pathParam;//需要携带斜杠'/'
     public IServiceMap serverMap;
     public AssertMethod assertMethod = new SuccessAssertDefault();
     public IHeaders headers = new DefaultHeaders();

@@ -8,14 +8,11 @@ public class PathIParamMethod implements IParamMethod {
     @Override
     public RequestSpecification paramMethodBuild(RequestSpecification specification, RequestData requestData) {
         String uri = requestData.getUri();
-        String pathParam = requestData.getBaseParam().pathParam;
+        String pathParam = requestData.getPathParam();
         if (uri.endsWith("/")) {
             uri = uri.substring(0, uri.length() - 1);
         }
-        if (pathParam.startsWith("/")) {
-            pathParam = pathParam.substring(0, uri.length() - 1);
-        }
-        requestData.setUri(uri + "/" + pathParam);
+        requestData.setUri(uri + pathParam);
         return specification;
     }
 }

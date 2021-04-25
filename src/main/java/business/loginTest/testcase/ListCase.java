@@ -2,14 +2,12 @@ package business.loginTest.testcase;
 
 import annotation.annotations.BeforeClassRun;
 import annotation.annotations.Search;
-import base.BaseCase;
+import base.BaseListCase;
 import business.loginTest.service_constant.LoginService;
 
-public class ListCase extends BaseCase {
+public class ListCase extends BaseListCase {
     @Search(addDataBaseCase = LoginCase.class, searchValuePath = "loginName")
     public String search;
-    public Integer page = 1;
-    public Integer pageSize = 100;
 
     public ListCase() {
         serverMap = LoginService.List;

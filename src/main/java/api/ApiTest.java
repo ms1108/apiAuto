@@ -20,7 +20,7 @@ import static io.restassured.path.json.JsonPath.from;
 import static utils.FileUtil.writeFile;
 
 public class ApiTest {
-    //该类中的属性一定要写私有的如下
+    //该类中的属性一定要写私有的如下,因为在实体类转json串时公有属性也会被写入json中
     //private Integer test = 1;
 
     public Response apiTest(BaseCase baseCase) {
@@ -63,10 +63,10 @@ public class ApiTest {
         }
         //发送请求
         Response response = requestData.getIRequestMethod().requestMethod(specification, requestData);
-        //存储请求
-        BaseData.req.put(requestData.getUri(), from(requestData.getParam()));
+        //存储请求,因为取出值时是通过severMap中的Uri所以这样存的时候也是用这个存。在pathParam的情况下requestData中的Uri是会被修改的
+        BaseData.req.put(requestData.getServerMap().getUri(), from(requestData.getParam()));
         //存储响应
-        BaseData.res.put(requestData.getUri(), response);
+        BaseData.res.put(requestData.getServerMap().getUri(), response);
 
         //下载文件
         String ContentTypeHeader = response.getHeader("Content-Type");

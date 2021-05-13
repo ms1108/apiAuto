@@ -24,8 +24,10 @@ public class ReportUtil {
 
     //接口调用前调用前将预制日志打印出来
     public static void printLog() {
-        for (String log : logs) {
-            log(log);
+        if (logs != null && logs.size() > 0) {
+            for (String log : logs) {
+                log(log);
+            }
         }
     }
 

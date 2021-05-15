@@ -4,10 +4,7 @@ import annotation.annotations.Module;
 import config.asserts.AssertMethod;
 import config.asserts.SuccessAssertDefault;
 import config.header.IHeaders;
-import config.header.DefaultHeaders;
-import config.host.DefaultHost;
 import config.host.IHost;
-import config.preparamhandle.ParamPreHandleImpl;
 import config.preparamhandle.IParamPreHandle;
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -25,7 +22,7 @@ public class BaseCase extends CommandLogic {
     @SneakyThrows
     public BaseCase(){
         Module annotation = this.getClass().getAnnotation(Module.class);
-        ModuleDefaultImplEnum defaultImplEnum = ModuleDefaultImplEnum.getModuleEnum(annotation.value());
+        ModuleDefaultImpl defaultImplEnum = ModuleDefaultImpl.getModuleEnum(annotation.value());
         iHost = defaultImplEnum.getIHost().newInstance();
         headers = defaultImplEnum.getIHeaders().newInstance();
         iParamPreHandle = defaultImplEnum.getIParamPreHandle().newInstance();

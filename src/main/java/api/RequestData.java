@@ -108,6 +108,10 @@ public class RequestData {
     public String getParam() {
         //之后再调直接返回。
         // 传入paramData是因为注解测试会对数据做修改，正在发送数据是通过调getParam获取请求数据
-        return param == null ? this.iParamPreHandle.paramPreHandle(paramData) : param;
+        return this.param == null ? this.iParamPreHandle.paramPreHandle(paramData) : this.param;
+    }
+
+    public String getHost() {
+        return this.host == null ? this.iHost.getHost() : this.host;
     }
 }

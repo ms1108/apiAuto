@@ -11,22 +11,22 @@ import org.testng.Assert;
 import utils.ReportUtil;
 
 @Getter
-public enum ModuleDefaultImplEnum {
+public enum ModuleDefaultImpl {
     DEMO("demo", DefaultHost.class, DefaultHeaders.class, ParamPreHandleImpl.class);
     private String ModuleName;
     private Class<? extends IHost> iHost;
     private Class<? extends IHeaders> iHeaders;
     private Class<? extends IParamPreHandle> iParamPreHandle;
 
-    ModuleDefaultImplEnum(String ModuleName, Class<? extends IHost> iHost, Class<? extends IHeaders> iHeaders,Class<? extends IParamPreHandle> iParamPreHandle) {
+    ModuleDefaultImpl(String ModuleName, Class<? extends IHost> iHost, Class<? extends IHeaders> iHeaders, Class<? extends IParamPreHandle> iParamPreHandle) {
         this.ModuleName = ModuleName;
         this.iHost = iHost;
         this.iHeaders = iHeaders;
         this.iParamPreHandle = iParamPreHandle;
     }
 
-    public static ModuleDefaultImplEnum getModuleEnum(String ModuleName) {
-        for (ModuleDefaultImplEnum value : ModuleDefaultImplEnum.values()) {
+    public static ModuleDefaultImpl getModuleEnum(String ModuleName) {
+        for (ModuleDefaultImpl value : ModuleDefaultImpl.values()) {
             if (value.getModuleName().equals(ModuleName)) {
                 return value;
             }

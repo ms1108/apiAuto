@@ -26,7 +26,7 @@ import static utils.PropertiesUtil.get;
 @Accessors(chain = true)
 public class RequestData {
 
-    private String host = get("g_host");
+    private String host;
     private String uri;
     //请求的方式
     private ApiMethod methodAndRequestType;
@@ -68,6 +68,7 @@ public class RequestData {
     }
 
     public void requestData(BaseCase param) {
+        this.host = get("g_host");
         this.baseParam = param;
         this.serverMap = param.serverMap;
         this.methodAndRequestType = param.serverMap.getMethodAndRequestType();
@@ -84,11 +85,11 @@ public class RequestData {
         param.headers = null;
         param.pathParam = null;
         param.iParamPreHandle = null;
-        paramData = JSON.toJSONString(param);
+        paramData = this.iParamPreHandle.paramPreHandle(param);
         if (paramData.contains("{\"$ref\":\"@\"}")) {
             Assert.fail("Case类中不能出现以get开头的方法，或者在该方法加上注解：@JSONField(serialize = false)");
         }
-        this.param = this.iParamPreHandle.paramPreHandle(paramData);
+        this.param = paramData;
     }
 
     public RequestData fail() {

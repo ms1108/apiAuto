@@ -62,6 +62,7 @@ public class LoginCase extends BaseCase {
 
     @BeforeClassRun
     public void dependBeforeClass() {
+        //当前置调用链过长时建议封装到CommonLogic类中方便其他接口去使用
         apiTest(new RequestData(new ConfigCase().dependCase()));
     }
 

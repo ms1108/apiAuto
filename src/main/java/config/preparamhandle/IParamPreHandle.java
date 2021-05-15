@@ -1,5 +1,7 @@
 package config.preparamhandle;
 
+import base.BaseCase;
+
 public interface IParamPreHandle {
-    String paramPreHandle(String param);
+    String paramPreHandle(BaseCase param);
 }

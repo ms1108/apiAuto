@@ -1,5 +1,6 @@
 package business.loginTest;
 
+import annotation.annotations.Module;
 import api.RequestData;
 import base.AnnotationTest;
 import business.loginTest.testcase.ConfigCase;

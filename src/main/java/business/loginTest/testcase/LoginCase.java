@@ -17,6 +17,7 @@ import static utils.PropertiesUtil.get;
 
 @Data
 @Accessors(fluent = true)
+@Module("demo")
 public class LoginCase extends BaseCase {
     @SpecialCharacters(allowCharacters = "~!@", denyCharacters = "$%^", assertFail = SuccessAssertDefault.class)
     @Unique(assertFail = SuccessAssertDefault.class)

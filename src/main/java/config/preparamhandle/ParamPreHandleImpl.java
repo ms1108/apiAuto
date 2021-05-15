@@ -2,7 +2,7 @@ package config.preparamhandle;
 
 import com.alibaba.fastjson.JSONObject;
 
-public class ParamPreHandleBlankImpl implements IParamPreHandle {
+public class ParamPreHandleImpl implements IParamPreHandle {
     @Override
     public String paramPreHandle(String param) {
         return JSONObject.toJSONString(param);

@@ -21,7 +21,7 @@ public class AnnotationTest extends AnnotationServer {
 
     @DataProvider
     public Object[][] executeAnnotationAble() {
-        return getDataProvider();//构造成这种格式:object[][] objects = {{Class<? extends BaseCase>,"beforeMethodName;annotationNameOnField"}};
+        return getDataProvider();
     }
 
     @Test(dataProvider = "executeAnnotationAble")
@@ -37,6 +37,7 @@ public class AnnotationTest extends AnnotationServer {
         annotationServer(baseCase, executeAnnotationName);
     }
 
+    //构造成这种格式:object[][] objects = {{"beforeMethodName,annotationNameOnField",Class<? extends BaseCase>}};
     private Object[][] getDataProvider() {
         List<List<Object>> allCase = new ArrayList<>();
         List<Class<? extends BaseCase>> baseCaseName = getBaseCaseName(packagePath);
@@ -45,7 +46,7 @@ public class AnnotationTest extends AnnotationServer {
             Map<String, List<String>> methodNameAndAnnotationName = getMethodNameAndAnnotationName(baseCaseClass);
             Map<String, List<String>> fieldNameAndAnnotationName = getFieldNameAndAnnotationName(baseCaseClass);
 
-            //BeforeClassRun单独处理，每个class的BeforeClassRun率先执行
+            //BeforeClassRun单独处理，每个class的BeforeClassRun率先执行，构造成{方法名，BeforeClassRun，BaseCase}
             methodNameAndAnnotationName.forEach((k, v) -> {
                 if (v.contains(BeforeClassRun.class.getSimpleName())) {
                     List<Object> baseCaseAndFieldAnnotationName = new ArrayList<>();
@@ -55,8 +56,7 @@ public class AnnotationTest extends AnnotationServer {
                 }
             });
 
-
-            //当存在字段类的注解时必然存在BeforeMethodRun
+            //当存在字段类的注解时必然存在BeforeMethodRun,构造成{字段名，注解名，BeforeMethodRun，BeforeMethodRun，BaseCase}
             fieldNameAndAnnotationName.forEach((k, v) -> {
                 for (int j = 0; j < v.size(); j++) {
                     List<Object> baseCaseAndFieldAnnotationName = new ArrayList<>();
@@ -65,7 +65,7 @@ public class AnnotationTest extends AnnotationServer {
                     allCase.add(baseCaseAndFieldAnnotationName);
                 }
             });
-
+            //构造成{方法名，注解名，BaseCase}
             methodNameAndAnnotationName.forEach((k, v) -> {
                 for (int j = 0; j < v.size(); j++) {
                     List<Object> baseCaseAndFieldAnnotationName = new ArrayList<>();

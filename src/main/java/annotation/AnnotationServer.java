@@ -24,6 +24,7 @@ public class AnnotationServer extends CommandLogic {
 
     private String rootPath = "";
     private String rootFieldName = "";
+    private List<String> annotationNames;
     public BaseCase baseCase;
 
 
@@ -235,7 +236,7 @@ public class AnnotationServer extends CommandLogic {
         RequestData requestData = new RequestData(baseCaseMethod);
         baseCase = baseCase.getClass().newInstance();//因为走了RequestData，serverMap会被置空，所以再new一遍
         String targetPath = rootPath + field.getName();
-        requestData.setParam(replaceValue(requestData.getParam(), targetPath, value));
+        requestData.setParamData(replaceValue(requestData.getParamData(), targetPath, value));
         requestData.setStepDes(des);
         if (StringUtil.isNotEmpty(resetAssert)) {
             AssertMethod retAssertMethod = (AssertMethod) baseCaseMethod.getClass().getMethod(resetAssert).invoke(baseCaseMethod);
@@ -298,21 +299,49 @@ public class AnnotationServer extends CommandLogic {
 
     public List<Class<? extends BaseCase>> getBaseCaseName(String scannedPackage) {
         ClassFinderUtil classFinderUtil = new ClassFinderUtil();
-        return classFinderUtil.scanned(scannedPackage);
+        return classFinderUtil.scanBaseCaseClass(scannedPackage);
     }
 
+    /**
+     * 获取自定义的所有注解名称
+     *
+     * @return
+     */
+    public List<String> getAnnotationName() {
+        if (annotationNames == null) {
+            ClassFinderUtil classFinderUtil = new ClassFinderUtil();
+            return classFinderUtil.scanPackage("annotation.annotations");
+        } else {
+            return this.annotationNames;
+        }
+    }
+
+    /**
+     * 获取方法名称和修饰该方法的所有注解名称
+     *
+     * @param baseCase
+     * @return
+     */
     public Map<String, List<String>> getMethodNameAndAnnotationName(Class<? extends BaseCase> baseCase) {
         Map<String, List<String>> methodNameAndAnnotationNames = new HashMap<>();
+        //用于排除非annotations包下的注解
+        List<String> aNames = getAnnotationName();
         for (Method method : baseCase.getDeclaredMethods()) {
             Annotation[] declaredAnnotations = method.getDeclaredAnnotations();
-            //先判断该方法上有没有注解，目的不往Map中放空列表
-            if (declaredAnnotations.length != 0) {
-                List<String> annotationNames = new ArrayList<>();
-                for (Annotation annotation : declaredAnnotations) {
-                    annotationNames.add(annotation.annotationType().getSimpleName());
+            List<String> annotationNames = new ArrayList<>();
+            for (Annotation annotation : declaredAnnotations) {
+                String annotationName = annotation.annotationType().getSimpleName();
+                //当前注解在自定义注解的列表中，则添加
+                if (aNames.contains(annotationName)) {
+                    annotationNames.add(annotationName);
                 }
+            }
+            //判断该方法上有没有自定义注解，目的不往Map中放空列表
+            if (annotationNames.size() != 0) {
+                //将该方法及方法上修饰的自定义注解添加进map中
                 methodNameAndAnnotationNames.put(method.getName(), annotationNames);
             }
+
         }
         return methodNameAndAnnotationNames;
     }
@@ -324,15 +353,30 @@ public class AnnotationServer extends CommandLogic {
         return getFieldNameAndAnnotationName(baseCaseClass.newInstance(), fields, fieldNameAndAnnotationName);
     }
 
+    /**
+     * 获取字段名和注解的名称
+     *
+     * @param baseCase
+     * @param fields
+     * @param fieldNameAndAnnotationName
+     * @return
+     */
     public Map<String, List<String>> getFieldNameAndAnnotationName(BaseCase baseCase, Field[] fields, Map<String, List<String>> fieldNameAndAnnotationName) {
+        //用于排除非annotations包下的注解
+        List<String> aNames = getAnnotationName();
         for (Field field : fields) {
             List<String> annotationNames = new ArrayList<>();
             Annotation[] annotations = field.getAnnotations();
-            //先判断该字段上有没有注解，目的不往Map中放空列表
-            if (annotations.length != 0) {
-                for (Annotation annotation : annotations) {
-                    annotationNames.add(annotation.annotationType().getSimpleName());
+            for (Annotation annotation : annotations) {
+                String annotationName = annotation.annotationType().getSimpleName();
+                //当前注解在自定义注解的列表中，则添加
+                if (aNames.contains(annotationName)) {
+                    annotationNames.add(annotationName);
                 }
+            }
+            //判断该字段上有没有自定义注解，目的不往Map中放空列表
+            if (annotationNames.size() != 0) {
+                //将该字段及方法上修饰的自定义注解添加进map中
                 fieldNameAndAnnotationName.put(rootFieldName + field.getName(), annotationNames);
             }
             //处理内部类

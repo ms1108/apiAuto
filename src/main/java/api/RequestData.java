@@ -3,10 +3,11 @@ package api;
 import base.ApiMethod;
 import base.BaseCase;
 import base.IServiceMap;
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import config.asserts.AssertMethod;
 import config.asserts.FailAssetDefault;
 import config.header.IHeaders;
+import config.host.IHost;
 import config.preparamhandle.IParamPreHandle;
 import config.preparamhandle.ParamPreHandleBlankImpl;
 import config.requestMethod.DefaultRequestMethod;
@@ -15,6 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.testng.Assert;
+import utils.StringUtil;
 
 import java.util.Map;
 
@@ -27,6 +29,7 @@ import static utils.PropertiesUtil.get;
 public class RequestData {
 
     private String host;
+    private IHost iHost;
     private String uri;
     //请求的方式
     private ApiMethod methodAndRequestType;
@@ -42,7 +45,7 @@ public class RequestData {
     private IHeaders headers;
     //经过参数前置处理器处理的请求参数
     private String param;
-    //未经过参数前置处理器处理的请求参数
+    //未经过参数前置处理器处理的请求参数,将会存储到BaseData的map中
     private String paramData;
     //拼接在请求路径后的数据
     private String pathParam;
@@ -68,8 +71,8 @@ public class RequestData {
     }
 
     public void requestData(BaseCase param) {
-        this.host = get("g_host");
         this.baseParam = param;
+        this.iHost = param.iHost;
         this.serverMap = param.serverMap;
         this.methodAndRequestType = param.serverMap.getMethodAndRequestType();
         this.jsonSchemaPath = param.serverMap.getJsonSchemaPath();
@@ -80,16 +83,16 @@ public class RequestData {
         this.pathParam = param.pathParam;
         this.iParamPreHandle = param.iParamPreHandle != null ? param.iParamPreHandle : new ParamPreHandleBlankImpl();
         //param转json串时，以下的字段不需要
+        param.iHost = null;
         param.serverMap = null;
         param.assertMethod = null;
         param.headers = null;
         param.pathParam = null;
         param.iParamPreHandle = null;
-        paramData = this.iParamPreHandle.paramPreHandle(param);
+        this.paramData = JSONObject.toJSONString(param);
         if (paramData.contains("{\"$ref\":\"@\"}")) {
             Assert.fail("Case类中不能出现以get开头的方法，或者在该方法加上注解：@JSONField(serialize = false)");
         }
-        this.param = paramData;
     }
 
     public RequestData fail() {
@@ -102,4 +105,9 @@ public class RequestData {
         return this;
     }
 
+    public String getParam() {
+        //之后再调直接返回。
+        // 传入paramData是因为注解测试会对数据做修改，正在发送数据是通过调getParam获取请求数据
+        return param == null ? this.iParamPreHandle.paramPreHandle(paramData) : param;
+    }
 }

@@ -310,7 +310,12 @@ public class AnnotationServer extends CommandLogic {
     public List<String> getAnnotationName() {
         if (annotationNames == null) {
             ClassFinderUtil classFinderUtil = new ClassFinderUtil();
-            return classFinderUtil.scanPackage("annotation.annotations");
+            Collection<List<String>> values = classFinderUtil.scanPackage("annotation.annotations").values();
+            List<String> annotationNames = new ArrayList<>();
+            for (List<String> value : values) {
+                annotationNames.addAll(value);
+            }
+            return annotationNames;
         } else {
             return this.annotationNames;
         }

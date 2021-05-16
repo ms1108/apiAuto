@@ -1,4 +1,4 @@
-package business.user.service_constant;
+package component.user.service_constant;
 
 import base.ApiMethod;
 import base.IServiceMap;

@@ -16,11 +16,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.testng.Assert;
-import utils.StringUtil;
 
 import java.util.Map;
-
-import static utils.PropertiesUtil.get;
 
 
 @Data

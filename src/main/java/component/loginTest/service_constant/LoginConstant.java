@@ -1,4 +1,4 @@
-package business.loginTest.service_constant;
+package component.loginTest.service_constant;
 
 public class LoginConstant {
     //若想在注解中使用必须写int

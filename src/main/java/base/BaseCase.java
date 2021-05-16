@@ -1,6 +1,5 @@
 package base;
 
-import annotation.annotations.Module;
 import config.asserts.AssertMethod;
 import config.asserts.SuccessAssertDefault;
 import config.header.IHeaders;
@@ -16,15 +15,16 @@ public class BaseCase extends CommandLogic {
     public IServiceMap serverMap;
     public IHeaders headers;
     public IParamPreHandle iParamPreHandle;
-    public AssertMethod assertMethod = new SuccessAssertDefault();
+    public AssertMethod assertMethod;
 
     //根据模块赋默认的实现对象
     @SneakyThrows
-    public BaseCase(){
-        Module annotation = this.getClass().getAnnotation(Module.class);
-        ModuleDefaultImpl defaultImplEnum = ModuleDefaultImpl.getModuleEnum(annotation.value());
+    public BaseCase() {
+        String packageName = this.getClass().getPackage().getName();
+        ComponentDefaultInfo defaultImplEnum = ComponentDefaultInfo.getModuleEnum(packageName.split("\\.")[1]);
         iHost = defaultImplEnum.getIHost().newInstance();
         headers = defaultImplEnum.getIHeaders().newInstance();
         iParamPreHandle = defaultImplEnum.getIParamPreHandle().newInstance();
+        assertMethod = defaultImplEnum.getAssertMethod().newInstance();
     }
 }

@@ -1,23 +1,24 @@
-package business.loginTest.testcase;
+package component.loginTest.testcase;
 
 import annotation.annotations.*;
 import api.RequestData;
 import base.BaseCase;
-import business.loginTest.service_constant.LoginConstant;
-import business.loginTest.service_constant.LoginService;
+import component.loginTest.service_constant.LoginConstant;
+import component.loginTest.service_constant.LoginService;
 import config.asserts.*;
 import config.header.DefaultHeaders;
+import datafactory.annotation.DataFactory;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import utils.RandomUtil;
 
 import static base.BaseData.*;
-import static business.loginTest.service_constant.LoginConstant.IS_MENAGE;
-import static utils.PropertiesUtil.get;
+import static component.loginTest.service_constant.LoginConstant.IS_MENAGE;
+import static component.loginTest.service_constant.LoginService.Login;
+import static utils.set.PropertiesUtil.get;
 
 @Data
 @Accessors(fluent = true)
-@Module("demo")
 public class LoginCase extends BaseCase {
     @SpecialCharacters(allowCharacters = "~!@", denyCharacters = "$%^", assertFail = SuccessAssertDefault.class)
     @Unique(assertFail = SuccessAssertDefault.class)
@@ -58,7 +59,7 @@ public class LoginCase extends BaseCase {
     }
 
     public LoginCase() {
-        serverMap = LoginService.Login;
+        serverMap = Login;
     }
 
     @BeforeClassRun
@@ -69,6 +70,7 @@ public class LoginCase extends BaseCase {
 
     @BeforeMethodRun
     @MultiRequest(multiThreadNum = 10)
+    @DataFactory(listApi = ListCase.class,des = "数据被创建")
     public LoginCase rightLoginCase() {
         loginName = get("g_loginName");
         pwd = get("g_loginPwd");

@@ -1,7 +1,6 @@
 package base;
 
 import api.ApiTest;
-import api.RequestData;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -19,11 +18,6 @@ public class BaseData {
     public static Object defaultAssertValue = 0;
     public static boolean isOpenAnnotation = true;
     public static String DownloadDir = "src/main/resources/download";
-
-    static {
-        MvnArgs mvnArgs = new MvnArgs();
-        mvnArgs.mvnArgs();
-    }
 
     public static <T> T getResponseValue(IServiceMap iServiceMap, String path) {
         Response response = res.get(iServiceMap.getUri());

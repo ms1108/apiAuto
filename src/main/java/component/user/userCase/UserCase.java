@@ -1,10 +1,10 @@
-package business.user.userCase;
+package component.user.userCase;
 
 import api.RequestData;
 import base.BaseCase;
 import base.BaseListCase;
-import business.user.service_constant.UserConstant;
-import business.user.service_constant.UserService;
+import component.user.service_constant.UserConstant;
+import component.user.service_constant.UserService;
 import io.restassured.response.Response;
 import utils.RandomUtil;
 

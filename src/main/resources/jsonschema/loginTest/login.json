@@ -9,7 +9,10 @@
       "type": "string"
     },
     "jsonSchema": {
-      "type": ["null","string"]
+      "type": [
+        "null",
+        "string"
+      ]
     }
   },
   "required": [

@@ -1,6 +1,6 @@
 package config.host;
 
-import static utils.PropertiesUtil.get;
+import static utils.set.PropertiesUtil.get;
 
 public class DefaultHost implements IHost{
     @Override

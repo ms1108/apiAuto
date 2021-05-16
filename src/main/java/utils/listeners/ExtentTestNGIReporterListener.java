@@ -10,14 +10,14 @@ import com.aventstack.extentreports.reporter.configuration.ChartLocation;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import org.testng.*;
 import org.testng.xml.XmlSuite;
-import utils.PropertiesUtil;
+import utils.set.PropertiesUtil;
 import utils.SendEmail;
 import utils.StringUtil;
 
 import java.io.File;
 import java.util.*;
 
-import static base.MvnArgs.email_recipients;
+import static utils.set.MvnArgsUtil.email_recipients;
 
 public class ExtentTestNGIReporterListener implements IReporter {
     //生成的路径以及文件名

@@ -1,10 +1,10 @@
-package business.loginTest.service_constant;
+package component.loginTest.service_constant;
 
 import base.ApiMethod;
 import base.IServiceMap;
 
 public enum LoginService implements IServiceMap {
-    Login("/test", "jsonschema/login/login.json", "business/login"),
+    Login("/test", "jsonschema/loginTest/login.json", "component/login"),
     Config("/depend", "", "depend"),
     Upload("/upload", ApiMethod.UPLOAD, "", "upload"),
     List("/list", ApiMethod.GET, "", "list");

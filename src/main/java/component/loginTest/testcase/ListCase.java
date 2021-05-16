@@ -1,9 +1,9 @@
-package business.loginTest.testcase;
+package component.loginTest.testcase;
 
 import annotation.annotations.BeforeClassRun;
 import annotation.annotations.Search;
 import base.BaseListCase;
-import business.loginTest.service_constant.LoginService;
+import component.loginTest.service_constant.LoginService;
 
 public class ListCase extends BaseListCase {
     @Search(addDataBaseCase = LoginCase.class, searchValuePath = "loginName")

@@ -1,6 +1,5 @@
-package business.user;
+package component.user;
 
-import annotation.AnnotationServer;
 import base.AnnotationTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

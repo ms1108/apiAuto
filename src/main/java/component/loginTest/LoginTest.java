@@ -1,11 +1,10 @@
-package business.loginTest;
+package component.loginTest;
 
-import annotation.annotations.Module;
 import api.RequestData;
 import base.AnnotationTest;
-import business.loginTest.testcase.ConfigCase;
-import business.loginTest.testcase.LoginCase;
-import business.loginTest.testcase.TestUploadCase;
+import component.loginTest.testcase.ConfigCase;
+import component.loginTest.testcase.LoginCase;
+import component.loginTest.testcase.TestUploadCase;
 import config.asserts.EqualAssert;
 import config.asserts.SuccessAssertDefault;
 import org.testng.Assert;
@@ -15,9 +14,9 @@ import utils.listeners.RetryAnalyzer;
 /**
  * Test类，建议用于多流程，多场景测试
  */
-public class LoginServer extends AnnotationTest {
+public class LoginTest extends AnnotationTest {
 
-    public LoginServer(String packagePath) {
+    public LoginTest(String packagePath) {
         super("business.loginTest.testcase");
     }
 

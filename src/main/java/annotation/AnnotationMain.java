@@ -1,7 +1,6 @@
 package annotation;
 
-import business.loginTest.testcase.ListCase;
-import business.loginTest.testcase.LoginCase;
+import component.loginTest.testcase.ListCase;
 import org.testng.annotations.Test;
 import utils.ReportUtil;
 

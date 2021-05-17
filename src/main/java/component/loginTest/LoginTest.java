@@ -17,7 +17,7 @@ import utils.listeners.RetryAnalyzer;
 public class LoginTest extends AnnotationTest {
 
     public LoginTest(String packagePath) {
-        super("business.loginTest.testcase");
+        super("component.loginTest.testcase");
     }
 
     //更多断言方法http://testingpai.com/article/1599472747188

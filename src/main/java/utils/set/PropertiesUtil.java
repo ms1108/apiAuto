@@ -14,15 +14,16 @@ public class PropertiesUtil {
     private static Properties props;
 
     static {
-        if (StringUtil.isNotEmpty(System.getProperty("env"))) {
-            env = System.getProperty("env");
+        String systemEnv = System.getProperty("env");
+        if (StringUtil.isNotEmpty(systemEnv)) {
+            PropertiesUtil.env = systemEnv;
         }
         props = new Properties();
         try {
             //读取propertiesUtil类的配置
             //利用反射加载类信息，获取配置文件的文件流，并指点编码格式
             //当该类与properties不在同级时需要加/
-            props.load(new InputStreamReader(PropertiesUtil.class.getResourceAsStream("/resource-" + env + ".properties"), "UTF-8"));
+            props.load(new InputStreamReader(PropertiesUtil.class.getResourceAsStream("/resource-" + PropertiesUtil.env + ".properties"), "UTF-8"));
         } catch (IOException e) {
             e.printStackTrace();
         }

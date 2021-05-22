@@ -1,17 +1,23 @@
 package component.user.userCase;
 
+import annotation.annotations.BeforeMethodRun;
+import annotation.annotations.Chinese;
+import annotation.annotations.SpecialCharacters;
 import api.RequestData;
 import base.BaseCase;
 import base.BaseListCase;
 import component.user.service_constant.UserConstant;
 import component.user.service_constant.UserService;
+import config.asserts.SuccessAssertDefault;
 import io.restassured.response.Response;
 import utils.RandomUtil;
 
 public class UserCase extends BaseCase {
     public String id;
+    @SpecialCharacters(allowCharacters = "~!@", denyCharacters = "$%^", assertFail = SuccessAssertDefault.class)
     public String name;
     public String sex;
+    @Chinese(group = "1")
     public Integer role;
 
     public UserCase() {
@@ -29,7 +35,7 @@ public class UserCase extends BaseCase {
         apiTest(new RequestData(baseCase));
         return apiTest(new RequestData(new BaseListCase()));
     }
-
+    @BeforeMethodRun(group = "1")
     public UserCase addUser() {
         name = RandomUtil.getString();
         sex = RandomUtil.getString();

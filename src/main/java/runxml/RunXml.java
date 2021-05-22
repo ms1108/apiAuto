@@ -11,7 +11,7 @@ public class RunXml {
         runXml.test();
     }
     public void test(){
-        System.setProperty("env","pre");
+        System.setProperty("env","test");
         TestNG testNG = new TestNG();
         List<String> suites = new ArrayList<>();
         suites.add("src/main/resources/testngxml/testng-login.xml");

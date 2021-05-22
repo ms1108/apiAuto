@@ -1,7 +1,6 @@
 package base;
 
 import config.asserts.AssertMethod;
-import config.asserts.SuccessAssertDefault;
 import config.header.IHeaders;
 import config.host.IHost;
 import config.preparamhandle.IParamPreHandle;
@@ -21,7 +20,7 @@ public class BaseCase extends CommandLogic {
     @SneakyThrows
     public BaseCase() {
         String packageName = this.getClass().getPackage().getName();
-        ComponentDefaultInfo defaultImplEnum = ComponentDefaultInfo.getModuleEnum(packageName.split("\\.")[1]);
+        ComponentDefaultInfo defaultImplEnum = ComponentDefaultInfo.getModuleEnum(packageName);
         iHost = defaultImplEnum.getIHost().newInstance();
         headers = defaultImplEnum.getIHeaders().newInstance();
         iParamPreHandle = defaultImplEnum.getIParamPreHandle().newInstance();

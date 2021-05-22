@@ -10,7 +10,7 @@
 
     <properties>
         <project.restassured.version>4.3.2</project.restassured.version>
-        <g_run_suit_list>src/main/resources/testng-login.xml</g_run_suit_list>
+        <g_run_suit_list>src/main/resources/testngxml/testng-login.xml</g_run_suit_list>
     </properties>
 
     <dependencies>
@@ -80,9 +80,9 @@
                         </property>
                         <property>
                             <name>listener</name>
-                            <value>utils.ExtentTestNGIReporterListener</value>
+                            <value>utils.listeners.ExtentTestNGIReporterListener</value>
                             <!--                            全局添加重试策略-->
-                            <!--                            <value>utils.listener.ExtentTestNGIReporterListener,utils.listener.RetryAnalyzer,utils.listener.RetryListener</value>-->
+<!--                                                        <value>utils.listener.ExtentTestNGIReporterListener,utils.listener.RetryAnalyzer,utils.listener.RetryListener</value>-->
                         </property>
                     </properties>
                 </configuration>

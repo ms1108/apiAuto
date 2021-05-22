@@ -20,11 +20,9 @@ import static utils.set.PropertiesUtil.get;
 @Data
 @Accessors(fluent = true)
 public class LoginCase extends BaseCase {
-    @SpecialCharacters(allowCharacters = "~!@", denyCharacters = "$%^", assertFail = SuccessAssertDefault.class)
     @Unique(assertFail = SuccessAssertDefault.class)
     @NotNull(asserts = SuccessAssertDefault.class)
     @NotEmpty(asserts = SuccessAssertDefault.class)
-    @Chinese(group = "1")
     @Blank(assertFail = SuccessAssertDefault.class)
     public String loginName;
 

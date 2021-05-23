@@ -1,6 +1,6 @@
 package component.user.userCase;
 
-import annotation.annotations.BeforeMethodRun;
+import annotation.annotations.BaseCaseData;
 import annotation.annotations.Chinese;
 import annotation.annotations.SpecialCharacters;
 import api.RequestData;
@@ -35,7 +35,7 @@ public class UserCase extends BaseCase {
         apiTest(new RequestData(baseCase));
         return apiTest(new RequestData(new BaseListCase()));
     }
-    @BeforeMethodRun(group = "1")
+    @BaseCaseData(group = "1")
     public UserCase addUser() {
         name = RandomUtil.getString();
         sex = RandomUtil.getString();

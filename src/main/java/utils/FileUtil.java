@@ -2,7 +2,7 @@ package utils;
 
 import java.io.*;
 
-import static base.BaseData.DownloadDir;
+import static base.DataStore.DownloadDir;
 
 public class FileUtil {
 

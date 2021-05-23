@@ -4,6 +4,7 @@ import api.RequestData;
 import base.AnnotationTest;
 import component.loginTest.testcase.ConfigCase;
 import component.loginTest.testcase.LoginCase;
+import component.loginTest.testcase.LoginCaseExtend;
 import component.loginTest.testcase.TestUploadCase;
 import config.asserts.EqualAssert;
 import config.asserts.SuccessAssertDefault;
@@ -88,5 +89,11 @@ public class LoginTest extends AnnotationTest {
     public void retryTest1(){
         System.out.println("start");
 
+    }
+    @Test
+    public void testextend(){
+        LoginCaseExtend loginCaseExtend = new LoginCaseExtend();
+        loginCaseExtend.rightLoginCaseExtend();
+        apiTest(new RequestData(loginCaseExtend));
     }
 }

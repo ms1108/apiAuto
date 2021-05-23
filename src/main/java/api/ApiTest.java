@@ -1,7 +1,7 @@
 package api;
 
 import base.BaseCase;
-import base.BaseData;
+import base.DataStore;
 import component.loginTest.service_constant.LoginService;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -14,7 +14,7 @@ import utils.StringUtil;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static base.BaseData.*;
+import static base.DataStore.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.path.json.JsonPath.from;
 import static utils.FileUtil.writeFile;
@@ -64,9 +64,9 @@ public class ApiTest {
         //发送请求
         Response response = requestData.getIRequestMethod().requestMethod(specification, requestData);
         //存储请求,因为取出值时是通过severMap中的Uri所以这样存的时候也是用这个存。在pathParam的情况下requestData中的Uri是会被修改的
-        BaseData.req.put(requestData.getServerMap().getUri(), from(requestData.getParamData()));
+        DataStore.req.put(requestData.getServerMap().getUri(), from(requestData.getParamData()));
         //存储响应
-        BaseData.res.put(requestData.getServerMap().getUri(), response);
+        DataStore.res.put(requestData.getServerMap().getUri(), response);
 
         //下载文件
         String ContentTypeHeader = response.getHeader("Content-Type");

@@ -3,7 +3,7 @@ package annotation;
 import annotation.annotations.*;
 import api.RequestData;
 import base.BaseCase;
-import base.BaseData;
+import base.DataStore;
 import base.CommandLogic;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -30,23 +30,23 @@ public class AnnotationServer extends CommandLogic {
 
     @SneakyThrows
     public void annotationServer(Class<? extends BaseCase> baseCaseClass, String executeAnnotationAble) {
-        if (!BaseData.isOpenAnnotation) {
+        if (!DataStore.isOpenAnnotation) {
             ReportUtil.log("------------------------------------------------注解测试已被关闭------------------------------------------------");
             return;
         }
         baseCase = baseCaseClass.newInstance();
-        Method[] methods = baseCaseClass.getDeclaredMethods();
-        List<Method> beforeMethod = new ArrayList<>();
+        Method[] methods = baseCaseClass.getMethods();
+        List<Method> baseCaseData = new ArrayList<>();
         List<Method> autoTestMethod = new ArrayList<>();
         List<Method> multiRequestMethod = new ArrayList<>();
         for (Method method : methods) {
-            //BeforeClass调用前置接口
-            if (isExecuteMethod(method, BeforeClassRun.class, executeAnnotationAble)) {
+            //DataDepend调用前置接口,只会调用一次
+            if (isExecuteMethod(method, DataDepend.class, executeAnnotationAble)) {
                 method.invoke(baseCase);
             }
-            if (executeAnnotationAble.contains(BeforeMethodRun.class.getSimpleName())
-                    && method.isAnnotationPresent(BeforeMethodRun.class)) {
-                beforeMethod.add(method);
+            if (executeAnnotationAble.contains(BaseCaseData.class.getSimpleName())
+                    && method.isAnnotationPresent(BaseCaseData.class)) {
+                baseCaseData.add(method);
             }
             if (isExecuteMethod(method, AutoTest.class, executeAnnotationAble)) {
                 autoTestMethod.add(method);
@@ -55,15 +55,15 @@ public class AnnotationServer extends CommandLogic {
                 multiRequestMethod.add(method);
             }
         }
-        for (Method method : beforeMethod) {
-            String logMethodName = "------------------------------------------------" + method.getName() + BeforeMethodRun.class.getSimpleName() + "------------------------------------------------";
+        for (Method method : baseCaseData) {
+            String logMethodName = "------------------------------------------------" + method.getName() + BaseCaseData.class.getSimpleName() + "------------------------------------------------";
             ReportUtil.setPreLog(logMethodName);
             baseCaseField(method, executeAnnotationAble);
             //因为第一个遍历可能不发送接口所以这个logMethodName的预置日志要删掉
             ReportUtil.deleteLog(logMethodName);
         }
-        if (executeAnnotationAble.contains(BeforeMethodRun.class.getSimpleName()) && beforeMethod.size() == 0) {
-            ReportUtil.setPreLog("-----------------------------------" + BeforeMethodRun.class.getSimpleName() + "为" + baseCaseClass.getSimpleName() + "的无参构造方法" + "-----------------------------------");
+        if (executeAnnotationAble.contains(BaseCaseData.class.getSimpleName()) && baseCaseData.size() == 0) {
+            ReportUtil.setPreLog("-----------------------------------" + BaseCaseData.class.getSimpleName() + "为" + baseCaseClass.getSimpleName() + "的无参构造方法" + "-----------------------------------");
             baseCaseField(null, executeAnnotationAble);
         }
         for (Method method : autoTestMethod) {
@@ -106,11 +106,11 @@ public class AnnotationServer extends CommandLogic {
 
     @SneakyThrows
     private void fieldAnnotation(Field[] fields, Method method, String executeAnnotationAble) {
-        BeforeMethodRun beforeMethodRun;
+        BaseCaseData baseCaseData;
         String group = "0";
         if (method != null) {
-            beforeMethodRun = method.getDeclaredAnnotation(BeforeMethodRun.class);
-            group = beforeMethodRun.group();
+            baseCaseData = method.getDeclaredAnnotation(BaseCaseData.class);
+            group = baseCaseData.group();
         }
 
         for (Field field : fields) {
@@ -259,19 +259,28 @@ public class AnnotationServer extends CommandLogic {
         }
     }
 
+    @SneakyThrows
     private boolean isExecuteMethod(Method method, Class<? extends Annotation> annotation, String executeAnnotationAble) {
-        return method.isAnnotationPresent(annotation)
+        //先判断是否符合executeAnnotationAble的要求
+        if (method.isAnnotationPresent(annotation)
                 && executeAnnotationAble.contains(annotation.getSimpleName())
-                && executeAnnotationAble.contains(method.getName())
-                ;
+                && executeAnnotationAble.contains(method.getName())) {
+            return true;
+        } else if (method.isAnnotationPresent(annotation)
+                && annotation.getSimpleName().equals(DataDepend.class.getSimpleName())) {
+            //如果当前是DataDepend注解，则获取方法注解信息，该信息定义了是否在每个字段注解测试时都执行一遍DataDepend标记的方法
+            DataDepend dataDepend = method.getAnnotation(DataDepend.class);
+            return dataDepend.value();
+        }
+        return false;
     }
 
     private boolean isExecuteField(Field field, Class<? extends Annotation> annotation, String executeAnnotationAble) {
         return field.isAnnotationPresent(annotation)
                 && executeAnnotationAble.contains(annotation.getSimpleName())
-                && (executeAnnotationAble.split(",")[0].contains(".")
+                && (executeAnnotationAble.split(",")[0].contains(".")//含有点说明该字段为内部类的字段
                 ? executeAnnotationAble.split(",")[0].endsWith(field.getName())
-                : executeAnnotationAble.split(",")[0].equals(field.getName()))
+                : executeAnnotationAble.split(",")[0].contains(field.getName()))
                 ;
     }
 

@@ -1,15 +1,15 @@
 package config.asserts;
 
 import api.RequestData;
-import base.BaseData;
+import base.DataStore;
 import io.restassured.response.Response;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 
 public class FailAssetDefault extends AssertMethod {
-    private String assertPath = BaseData.defaultAssertPath;
-    private Object assertValue = BaseData.defaultAssertValue;
+    private String assertPath = DataStore.defaultAssertPath;
+    private Object assertValue = DataStore.defaultAssertValue;
     private int statusCode = 200;
 
     public FailAssetDefault() {

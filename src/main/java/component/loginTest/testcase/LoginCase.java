@@ -12,13 +12,12 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import utils.RandomUtil;
 
-import static base.BaseData.*;
+import static base.DataStore.*;
 import static component.loginTest.service_constant.LoginConstant.IS_MENAGE;
 import static component.loginTest.service_constant.LoginService.Login;
 import static utils.set.PropertiesUtil.get;
 
 @Data
-@Accessors(fluent = true)
 public class LoginCase extends BaseCase {
     @Unique(assertFail = SuccessAssertDefault.class)
     @NotNull(asserts = SuccessAssertDefault.class)
@@ -60,13 +59,14 @@ public class LoginCase extends BaseCase {
         serverMap = Login;
     }
 
-    @BeforeClassRun
+    @DataDepend
     public void dependBeforeClass() {
+        System.out.println("执行了LoginCase.dependBeforeClass");
         //当前置调用链过长时建议封装到CommonLogic类中方便其他接口去使用
         apiTest(new RequestData(new ConfigCase().dependCase()));
     }
 
-    @BeforeMethodRun
+    @BaseCaseData
     @MultiRequest(multiThreadNum = 10)
     @DataFactory(listApi = ListCase.class,des = "数据被创建")
     public LoginCase rightLoginCase() {
@@ -79,7 +79,7 @@ public class LoginCase extends BaseCase {
         return this;
     }
 
-    @BeforeMethodRun(group = "1")
+    @BaseCaseData(group = "1")
     public LoginCase rightLoginCase1() {
         loginName = get("g_loginName");
         pwd = get("g_loginPwd");

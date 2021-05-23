@@ -1,6 +1,6 @@
 package component.loginTest.testcase;
 
-import annotation.annotations.BeforeClassRun;
+import annotation.annotations.DataDepend;
 import annotation.annotations.Search;
 import base.BaseListCase;
 import component.loginTest.service_constant.LoginService;
@@ -13,7 +13,7 @@ public class ListCase extends BaseListCase {
         serverMap = LoginService.List;
     }
 
-    @BeforeClassRun
+    @DataDepend
     public void beforeClass() {
         apiTest(new LoginCase().rightLoginCase());
         apiTest(new LoginCase().rightLoginCase());

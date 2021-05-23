@@ -1,8 +1,9 @@
 package base;
 
 import annotation.AnnotationServer;
-import annotation.annotations.BeforeClassRun;
-import annotation.annotations.BeforeMethodRun;
+import annotation.annotations.DataDepend;
+import annotation.annotations.BaseCaseData;
+import lombok.SneakyThrows;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import utils.ReportUtil;
@@ -37,7 +38,8 @@ public class AnnotationTest extends AnnotationServer {
         annotationServer(baseCase, executeAnnotationName);
     }
 
-    //构造成这种格式:object[][] objects = {{"beforeMethodName,annotationNameOnField",Class<? extends BaseCase>}};
+    //构造成这种格式:object[][] objects = {{"baseCaseData的方法名,annotation名称在该字段上的",Class<? extends BaseCase>}};
+    @SneakyThrows
     private Object[][] getDataProvider() {
         List<List<Object>> allCase = new ArrayList<>();
         List<Class<? extends BaseCase>> baseCaseName = getBaseCaseName(packagePath);
@@ -46,36 +48,40 @@ public class AnnotationTest extends AnnotationServer {
             Map<String, List<String>> methodNameAndAnnotationName = getMethodNameAndAnnotationName(baseCaseClass);
             Map<String, List<String>> fieldNameAndAnnotationName = getFieldNameAndAnnotationName(baseCaseClass);
 
-            //BeforeClassRun单独处理，每个class的BeforeClassRun率先执行，构造成{方法名，BeforeClassRun，BaseCase}
-            methodNameAndAnnotationName.forEach((k, v) -> {
-                if (v.contains(BeforeClassRun.class.getSimpleName())) {
-                    List<Object> baseCaseAndFieldAnnotationName = new ArrayList<>();
-                    baseCaseAndFieldAnnotationName.add(k + "," + BeforeClassRun.class.getSimpleName());
-                    baseCaseAndFieldAnnotationName.add(baseCaseClass);
-                    allCase.add(baseCaseAndFieldAnnotationName);
+            //DataDepend单独处理，每个class的DataDepend率先执行，构造成{方法名，DataDepend，BaseCase}
+            for (Map.Entry<String, List<String>> entry : methodNameAndAnnotationName.entrySet()) {
+                //该方法上有DataDepend注解的话，则先加入列表
+                if (entry.getValue().contains(DataDepend.class.getSimpleName())) {
+                    //如果该注解信息为true则不用在这里将DataDepend信息加入到allCase，也就不用单独调用一次DataDepend方法
+                    if (!baseCaseClass.getMethod(entry.getKey()).getAnnotation(DataDepend.class).value()) {
+                        List<Object> baseCaseAndFieldAnnotationName = new ArrayList<>();
+                        baseCaseAndFieldAnnotationName.add("执行数据依赖方法名称：" + entry.getKey() + "," + "注解名称：" + DataDepend.class.getSimpleName());
+                        baseCaseAndFieldAnnotationName.add(baseCaseClass);
+                        allCase.add(baseCaseAndFieldAnnotationName);
+                    }
                 }
-            });
+            }
 
-            //当存在字段类的注解时必然存在BeforeMethodRun,构造成{字段名，注解名，BeforeMethodRun，BeforeMethodRun，BaseCase}
+            //当存在字段类的注解时必然存在baseCaseData,构造成{字段名，注解名，baseCaseData，BaseCase}
             fieldNameAndAnnotationName.forEach((k, v) -> {
                 for (int j = 0; j < v.size(); j++) {
                     List<Object> baseCaseAndFieldAnnotationName = new ArrayList<>();
-                    baseCaseAndFieldAnnotationName.add(k + "," + v.get(j) + "," + BeforeMethodRun.class.getSimpleName());
+                    baseCaseAndFieldAnnotationName.add("测试的字段名称：" + k + "," + "该字段上的注解名称：" + v.get(j) + "," + "基础数据注解名称：" + BaseCaseData.class.getSimpleName());
                     baseCaseAndFieldAnnotationName.add(baseCaseClass);
                     allCase.add(baseCaseAndFieldAnnotationName);
                 }
             });
-            //构造成{方法名，注解名，BaseCase}
+            //处理其他的注解，如@AutoTest，构造成{方法名，注解名，BaseCase}
             methodNameAndAnnotationName.forEach((k, v) -> {
                 for (int j = 0; j < v.size(); j++) {
                     List<Object> baseCaseAndFieldAnnotationName = new ArrayList<>();
                     String annotationName = v.get(j);
-                    //BeforeClassRun率先处理了，BeforeMethodRun配合字段使用了
-                    if (annotationName.equals(BeforeMethodRun.class.getSimpleName())
-                            || annotationName.equals(BeforeClassRun.class.getSimpleName())) {
+                    //DataDepend率先处理了，baseCaseData配合字段使用了
+                    if (annotationName.equals(BaseCaseData.class.getSimpleName())
+                            || annotationName.equals(DataDepend.class.getSimpleName())) {
                         continue;
                     }
-                    baseCaseAndFieldAnnotationName.add(k + "," + annotationName);
+                    baseCaseAndFieldAnnotationName.add("测试的方法名称："+k + "," + "注解名称："+annotationName);
                     baseCaseAndFieldAnnotationName.add(baseCaseClass);
                     allCase.add(baseCaseAndFieldAnnotationName);
                 }

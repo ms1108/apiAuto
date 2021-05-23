@@ -10,7 +10,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import static base.BaseData.getRequestValue;
+import static base.DataStore.getRequestValue;
 
 public class SearchDefaultImpl implements IAnnotationTestMethod {
     @SneakyThrows

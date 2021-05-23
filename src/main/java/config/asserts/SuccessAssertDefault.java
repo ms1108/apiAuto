@@ -1,7 +1,7 @@
 package config.asserts;
 
 import api.RequestData;
-import base.BaseData;
+import base.DataStore;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import utils.StringUtil;
@@ -10,8 +10,8 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class SuccessAssertDefault extends AssertMethod {
-    private String assertPath = BaseData.defaultAssertPath;
-    private Object assertValue = BaseData.defaultAssertValue;
+    private String assertPath = DataStore.defaultAssertPath;
+    private Object assertValue = DataStore.defaultAssertValue;
 
     public SuccessAssertDefault() {
     }

@@ -10,8 +10,8 @@ public class AnnotationMain {
     public void annotation(){
         ReportUtil.clearLogs();
         AnnotationServer annotationServer = new AnnotationServer();
-        //annotationServer.annotationServer(LoginCase.class,"isManage,EnumInt,BeforeMethodRun");
-        annotationServer.annotationServer(ListCase.class,"search,Search,beforeClass,BeforeMethodRun,BeforeClassRun");
+        //annotationServer.annotationServer(LoginCase.class,"isManage,EnumInt,BaseCaseData");
+        annotationServer.annotationServer(ListCase.class,"search,Search,dataDepend,BaseCaseData,DataDepend");
         //annotationTest.annotationTest("business.loginTest.testcase");
     }
 }

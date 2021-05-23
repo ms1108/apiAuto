@@ -1,6 +1,6 @@
 package datafactory;
 
-import annotation.annotations.BeforeClassRun;
+import annotation.annotations.DataDepend;
 import api.ApiTest;
 import api.RequestData;
 import base.BaseCase;
@@ -19,12 +19,16 @@ import java.util.stream.Collectors;
 import static utils.set.MvnArgsUtil.data_factory_list_api;
 
 public class DataFactoryTest extends ApiTest {
+    public List<DataFactoryEntity> dataFactoryBaseCase;
 
     @Test
     @SneakyThrows
     public void createData() {
+        if (dataFactoryBaseCase == null) {
+            dataFactoryBaseCase = getDataFactoryBaseCase("component");
+        }
         //获取符合条件的实体
-        List<DataFactoryEntity> dataFactoryEntities = getDataFactoryBaseCase("component").stream().filter(d -> {
+        List<DataFactoryEntity> dataFactoryEntities = dataFactoryBaseCase.stream().filter(d -> {
             DataFactory annotationInfo = (DataFactory) d.getAnnotationInfo();
             try {
                 String listApi = PropertiesUtil.get(data_factory_list_api);
@@ -62,7 +66,7 @@ public class DataFactoryTest extends ApiTest {
             List<Method> dataFactoryMethods = new ArrayList<>();
             //先获取该类下所有符合条件的方法
             for (Method method : aClass.getMethods()) {
-                if (method.isAnnotationPresent(BeforeClassRun.class)) {
+                if (method.isAnnotationPresent(DataDepend.class)) {
                     dependMethod = method;
                 }
                 if (method.isAnnotationPresent(DataFactory.class)) {

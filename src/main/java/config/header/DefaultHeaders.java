@@ -1,7 +1,7 @@
 package config.header;
 
 import api.RequestData;
-import base.BaseData;
+import base.DataStore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ public class DefaultHeaders implements IHeaders {
         map.put("referer", requestData.getHost());
         map.put("nonce", UUID.randomUUID().toString());
         map.put("timestamp", System.currentTimeMillis());
-        map.put("cookie", "TOKEN="+BaseData.token);
+        map.put("cookie", "TOKEN="+ DataStore.token);
         return map;
     }
 }

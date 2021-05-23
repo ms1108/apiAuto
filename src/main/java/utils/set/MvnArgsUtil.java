@@ -1,6 +1,6 @@
 package utils.set;
 
-import base.BaseData;
+import base.DataStore;
 import utils.StringUtil;
 
 public class MvnArgsUtil {
@@ -30,7 +30,7 @@ public class MvnArgsUtil {
             PropertiesUtil.set(g_loginPwd, loginPwd);
         }
         if (!StringUtil.isEmpty(isOpenAnnotation)) {
-            BaseData.isOpenAnnotation = "true".equals(isOpenAnnotation);
+            DataStore.isOpenAnnotation = "true".equals(isOpenAnnotation);
         }
         if (!StringUtil.isEmpty(emailRecipients)) {
             PropertiesUtil.set(email_recipients, emailRecipients);
